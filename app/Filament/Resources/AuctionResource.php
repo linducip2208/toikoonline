@@ -24,7 +24,7 @@ class AuctionResource extends Resource
 {
     protected static ?string $model = Auction::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-gavel';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     protected static ?string $navigationGroup = '🎫 Promo';
 
