@@ -51,6 +51,11 @@ class Category extends Model
         return $this->hasMany(SizeChart::class);
     }
 
+    public function categoryDiscount()
+    {
+        return $this->hasOne(CategoryDiscount::class);
+    }
+
     public function scopeActive(Builder $query): void
     {
         //

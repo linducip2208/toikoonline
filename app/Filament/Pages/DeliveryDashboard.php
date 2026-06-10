@@ -69,7 +69,7 @@ class DeliveryDashboard extends Page implements HasTable
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'gray',
                         'picked_up' => 'warning',
-                        'on_the_way' => 'info',
+                        'on_delivery' => 'info',
                         'delivered' => 'success',
                         'cancelled' => 'danger',
                         default => 'gray',
@@ -91,12 +91,12 @@ class DeliveryDashboard extends Page implements HasTable
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
                     ->visible(fn(Order $record) => $record->delivery_status === 'picked_up')
-                    ->action(fn(Order $record) => $record->update(['delivery_status' => 'on_the_way'])),
+                    ->action(fn(Order $record) => $record->update(['delivery_status' => 'on_delivery'])),
                 Action::make('delivered')
                     ->label('Terkirim')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn(Order $record) => in_array($record->delivery_status, ['picked_up', 'on_the_way']))
+                    ->visible(fn(Order $record) => in_array($record->delivery_status, ['picked_up', 'on_delivery']))
                     ->action(fn(Order $record) => $record->update(['delivery_status' => 'delivered'])),
             ])
             ->defaultSort('created_at', 'desc');

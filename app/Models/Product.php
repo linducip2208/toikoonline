@@ -80,6 +80,7 @@ class Product extends Model
             'published' => 'boolean',
             'approved' => 'boolean',
             'todays_deal' => 'boolean',
+            'featured' => 'boolean',
             'digital' => 'boolean',
             'wholesale_product' => 'boolean',
             'gst_enable' => 'boolean',

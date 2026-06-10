@@ -28,7 +28,7 @@ class StatsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-users')
                 ->color('info'),
 
-            Stat::make('Pendapatan', 'Rp ' . number_format(Order::where('status', 'completed')->sum('total'), 0, ',', '.'))
+            Stat::make('Pendapatan', 'Rp ' . number_format(Order::where('payment_status', 'paid')->sum('grand_total'), 0, ',', '.'))
                 ->description('Pesanan selesai')
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->color('success'),
