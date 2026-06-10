@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('TokoOnline')
-            ->login(\App\Filament\Pages\Auth\Login::class)
+            ->login()
             ->colors([
                 'primary' => Color::Indigo,
             ])
