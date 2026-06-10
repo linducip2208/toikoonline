@@ -180,19 +180,9 @@ class Product extends Model
         return $this->hasMany(LastViewedProduct::class);
     }
 
-    public function thumbnail()
-    {
-        return $this->belongsTo(Upload::class, 'thumbnail_img');
-    }
-
     public function warranty()
     {
         return $this->belongsTo(Warranty::class);
-    }
-
-    public function sizeChart()
-    {
-        return $this->belongsTo(SizeChart::class);
     }
 
     public function scopePublished(Builder $query): void

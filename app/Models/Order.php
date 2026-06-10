@@ -90,11 +90,6 @@ class Order extends Model
         return $this->hasMany(AffiliateLog::class);
     }
 
-    public function clubPoint()
-    {
-        return $this->hasMany(ClubPoint::class);
-    }
-
     public function deliveryHistories()
     {
         return $this->hasMany(DeliveryHistory::class);

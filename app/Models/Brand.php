@@ -27,7 +27,7 @@ class Brand extends Model
         return $this->hasMany(Product::class);
     }
 
-    public function logo()
+    public function logoImage()
     {
         return $this->belongsTo(Upload::class, 'logo');
     }

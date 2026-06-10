@@ -22,9 +22,4 @@ class Wallet extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function addedBy()
-    {
-        return $this->belongsTo(User::class, 'added_by');
-    }
 }
