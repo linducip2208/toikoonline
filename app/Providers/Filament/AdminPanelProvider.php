@@ -37,7 +37,6 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->sidebarWidth('15.5rem')
             ->collapsedSidebarWidth('4rem')
-            ->topNavigation()
             ->navigationGroups([
                 NavigationGroup::make('🏪 Toko')->collapsed(false),
                 NavigationGroup::make('📦 Katalog')->collapsed(false),
