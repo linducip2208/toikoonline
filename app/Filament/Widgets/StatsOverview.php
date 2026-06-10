@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\DB;
 
 class StatsOverview extends BaseWidget
 {
@@ -52,8 +53,8 @@ class StatsOverview extends BaseWidget
         return Order::where('payment_status', 'paid')
             ->where('created_at', '>=', now()->subDays(7))
             ->selectRaw('DATE(created_at) as date, SUM(grand_total) as total')
-            ->groupBy('date')
-            ->orderBy('date')
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy(DB::raw('DATE(created_at)'))
             ->get()
             ->pluck('total')
             ->toArray();

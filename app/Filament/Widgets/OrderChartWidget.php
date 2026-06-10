@@ -17,8 +17,8 @@ class OrderChartWidget extends ChartWidget
         $orders = Order::where('payment_status', 'paid')
             ->where('created_at', '>=', now()->subDays(30))
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(grand_total) as total'))
-            ->groupBy('date')
-            ->orderBy('date')
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy(DB::raw('DATE(created_at)'))
             ->get();
 
         return [
