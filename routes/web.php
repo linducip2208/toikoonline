@@ -14,8 +14,9 @@ use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
-// Admin login override — custom two-column branded view
+// Admin login — custom two-column branded view (GET) + manual auth (POST)
 Route::get('/admin/login', [\App\Http\Controllers\Admin\AuthController::class, 'showLoginForm'])->name('filament.admin.auth.login');
+Route::post('/admin/login', [\App\Http\Controllers\Admin\AuthController::class, 'login']);
 
 // Marketing landing page
 Route::get('/', [HomeController::class, 'index'])->name('home');
