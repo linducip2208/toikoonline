@@ -1,5 +1,4 @@
 <div class="min-h-screen grid lg:grid-cols-2" style="background: #f8fafc;">
-    {{-- Left: Hero Brand Panel --}}
     <div class="login-left hidden lg:flex relative p-12 flex-col justify-between overflow-hidden"
          style="background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);">
         <div class="absolute inset-0 opacity-30"
@@ -29,30 +28,21 @@
                 Kelola toko online Anda dengan panel administrasi yang lengkap dan mudah digunakan.
             </p>
             <div class="grid grid-cols-3 gap-3 max-w-md">
+                @php $cards = [['Produk', 'box'], ['Laporan', 'chart-bar'], ['Sistem', 'cog']]; @endphp
+                @foreach($cards as $i => $card)
                 <div class="rounded-xl p-3.5 text-center border cursor-pointer"
                      style="background: rgba(255,255,255,.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,.1);
-                            transition: transform .35s, box-shadow .35s; animation: fadeSlideUp .7s .2s cubic-bezier(.16,1,.3,1) both;"
+                            transition: transform .35s, box-shadow .35s; animation: fadeSlideUp .7s {{ .2 + $i * .08 }}s cubic-bezier(.16,1,.3,1) both;"
                      onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 40px rgba(0,0,0,.15)'"
                      onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow='none'">
-                    <svg class="w-6 h-6 mb-1.5 mx-auto" style="color: #a5b4fc;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
-                    <span class="text-white font-semibold" style="font-size: 11px;">Produk</span>
+                    <svg class="w-6 h-6 mb-1.5 mx-auto" style="color: #a5b4fc;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        @if($card[1] === 'box')<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                        @elseif($card[1] === 'chart-bar')<path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                        @else<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />@endif
+                    </svg>
+                    <span class="text-white font-semibold" style="font-size: 11px;">{{ $card[0] }}</span>
                 </div>
-                <div class="rounded-xl p-3.5 text-center border cursor-pointer"
-                     style="background: rgba(255,255,255,.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,.1);
-                            transition: transform .35s, box-shadow .35s; animation: fadeSlideUp .7s .28s cubic-bezier(.16,1,.3,1) both;"
-                     onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 40px rgba(0,0,0,.15)'"
-                     onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow='none'">
-                    <svg class="w-6 h-6 mb-1.5 mx-auto" style="color: #a5b4fc;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
-                    <span class="text-white font-semibold" style="font-size: 11px;">Laporan</span>
-                </div>
-                <div class="rounded-xl p-3.5 text-center border cursor-pointer"
-                     style="background: rgba(255,255,255,.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,.1);
-                            transition: transform .35s, box-shadow .35s; animation: fadeSlideUp .7s .36s cubic-bezier(.16,1,.3,1) both;"
-                     onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 40px rgba(0,0,0,.15)'"
-                     onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow='none'">
-                    <svg class="w-6 h-6 mb-1.5 mx-auto" style="color: #a5b4fc;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                    <span class="text-white font-semibold" style="font-size: 11px;">Sistem</span>
-                </div>
+                @endforeach
             </div>
         </div>
 
@@ -124,93 +114,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    @keyframes floatSlow {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-16px); }
-    }
-    @keyframes floatPulse {
-        0%, 100% { transform: scale(1) translateY(0); }
-        50% { transform: scale(1.05) translateY(-8px); }
-    }
-    @keyframes fadeSlideUp {
-        0% { transform: translateY(28px); opacity: 0; }
-        100% { transform: translateY(0); opacity: 1; }
-    }
-    @keyframes slideInLeft {
-        0% { transform: translateX(-60px); opacity: 0; }
-        100% { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes scaleInBounce {
-        0% { transform: scale(.85); opacity: 0; }
-        60% { transform: scale(1.02); opacity: 1; }
-        100% { transform: scale(1); opacity: 1; }
-    }
-    @keyframes shimmerGradient {
-        0% { background-position: -200% 0; }
-        100% { background-position: 200% 0; }
-    }
-
-    /* Style Filament form elements */
-    .fi-fo-field-wrp input {
-        border-radius: 12px !important;
-        padding: 12px 16px !important;
-        border: 1.5px solid #d1d5db !important;
-        transition: all .3s !important;
-    }
-    .fi-fo-field-wrp input:focus {
-        border-color: #6366f1 !important;
-        box-shadow: 0 0 0 3px rgba(99,102,241,.12) !important;
-    }
-    .fi-fo-field-wrp label {
-        font-weight: 600 !important;
-        color: #44403c !important;
-        margin-bottom: 6px !important;
-    }
-    .fi-checkbox-input {
-        border-radius: 5px !important;
-        border-color: #d1d5db !important;
-    }
-    .fi-checkbox-input:checked {
-        background-color: #6366f1 !important;
-        border-color: #6366f1 !important;
-    }
-    button[type="submit"] {
-        position: relative !important;
-        overflow: hidden !important;
-        width: 100% !important;
-        padding: 14px 24px !important;
-        font-size: 14px !important;
-        font-weight: 600 !important;
-        background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
-        color: #fff !important;
-        border: none !important;
-        border-radius: 12px !important;
-        cursor: pointer !important;
-        box-shadow: 0 4px 16px rgba(99,102,241,.3) !important;
-        transition: all .3s !important;
-        margin-top: 8px !important;
-    }
-    button[type="submit"]:hover {
-        transform: translateY(-1px) !important;
-        box-shadow: 0 8px 24px rgba(99,102,241,.4) !important;
-    }
-    button[type="submit"]::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.15) 50%, transparent 70%);
-        transform: translateX(-100%);
-        animation: shimmerGradient 3s ease-in-out infinite;
-    }
-    @media (max-width: 1023px) {
-        .login-left { min-height: 240px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-            animation-duration: .01ms !important;
-            transition-duration: .01ms !important;
-        }
-    }
-</style>

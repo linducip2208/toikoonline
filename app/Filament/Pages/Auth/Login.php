@@ -6,9 +6,12 @@ use Filament\Pages\Auth\Login as BaseLogin;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Form;
+use Illuminate\Contracts\Support\Htmlable;
 
 class Login extends BaseLogin
 {
+    protected static string $layout = 'filament.pages.auth.login-layout';
+
     public function form(Form $form): Form
     {
         return $form
@@ -29,5 +32,15 @@ class Login extends BaseLogin
                     ->label('Ingat saya'),
             ])
             ->statePath('data');
+    }
+
+    public function getHeading(): string|Htmlable
+    {
+        return '';
+    }
+
+    protected function getFormActions(): array
+    {
+        return [];
     }
 }
