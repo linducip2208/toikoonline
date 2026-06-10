@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\FlashDealResource\Pages;
-use App\Filament\Resources\FlashDealResource\RelationManagers;
 use App\Models\FlashDeal;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -17,7 +16,11 @@ class FlashDealResource extends Resource
 {
     protected static ?string $model = FlashDeal::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-bolt';
+
+    protected static ?string $navigationGroup = '🎫 Promo';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -11,7 +10,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\RichEditor;
@@ -386,6 +384,7 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->withSum('stocks', 'qty'))
             ->columns([
                 ImageColumn::make('thumbnail_img')
                     ->label('Foto')
@@ -452,7 +451,6 @@ class ProductResource extends Resource
                 SelectFilter::make('featured')
                     ->label('Unggulan')
                     ->options([true => 'Ya', false => 'Tidak']),
-                TrashedFilter::make(),
             ])
             ->headerActions([
                 ImportAction::make()->importer(ProductImporter::class),

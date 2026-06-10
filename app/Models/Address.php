@@ -23,6 +23,7 @@ class Address extends Model
 
     protected $casts = [
         'set_default' => 'boolean',
+        'set_billing' => 'boolean',
     ];
 
     public function user()

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BlogResource\Pages;
-use App\Filament\Resources\BlogResource\RelationManagers;
 use App\Models\Blog;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -17,7 +16,11 @@ class BlogResource extends Resource
 {
     protected static ?string $model = Blog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+
+    protected static ?string $navigationGroup = '📢 Marketing';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

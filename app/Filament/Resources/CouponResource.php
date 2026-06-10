@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CouponResource\Pages;
-use App\Filament\Resources\CouponResource\RelationManagers;
 use App\Models\Coupon;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -17,7 +16,11 @@ class CouponResource extends Resource
 {
     protected static ?string $model = Coupon::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-ticket';
+
+    protected static ?string $navigationGroup = '🎫 Promo';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

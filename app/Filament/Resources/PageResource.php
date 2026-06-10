@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PageResource\Pages;
-use App\Filament\Resources\PageResource\RelationManagers;
 use App\Models\Page;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -17,7 +16,11 @@ class PageResource extends Resource
 {
     protected static ?string $model = Page::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
+    protected static ?string $navigationGroup = '📢 Marketing';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

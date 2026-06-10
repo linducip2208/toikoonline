@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReviewResource\Pages;
-use App\Filament\Resources\ReviewResource\RelationManagers;
 use App\Models\Review;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -17,7 +16,11 @@ class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-star';
+
+    protected static ?string $navigationGroup = '👥 Pelanggan';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

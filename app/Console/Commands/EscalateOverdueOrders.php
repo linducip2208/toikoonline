@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Order;
 use Illuminate\Console\Command;
 
-class EsalateOverdueOrders extends Command
+class EscalateOverdueOrders extends Command
 {
     protected $signature = 'orders:escalate-overdue';
     protected $description = 'Auto-escalate orders that are past delivery estimate';
