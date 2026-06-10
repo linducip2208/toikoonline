@@ -30,21 +30,4 @@ class Login extends BaseLogin
             ])
             ->statePath('data');
     }
-
-    protected function getViewData(): array
-    {
-        return [
-            'demoAccounts' => [
-                ['role' => 'Admin', 'email' => 'admin@tokoonline.test', 'password' => 'password'],
-                ['role' => 'Customer', 'email' => 'customer@tokoonline.test', 'password' => 'password'],
-            ],
-        ];
-    }
-
-    protected function getLayoutData(): array
-    {
-        return array_merge(parent::getLayoutData(), [
-            'hasTopbar' => false,
-        ]);
-    }
 }

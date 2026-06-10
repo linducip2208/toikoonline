@@ -1,157 +1,83 @@
-<!DOCTYPE html>
-<html lang="id" class="fi">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Masuk Admin — {{ config('app.name') }}</title>
-    <link rel="icon" href="{{ asset('favicon.ico') }}">
-    @filamentStyles
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800|jetbrains-mono:400,700" rel="stylesheet">
-    <style>
-        :root {
-            --brand-primary: #6366f1;
-            --brand-dark: #3730a3;
-        }
-        body { margin: 0; background: #f8fafc; }
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-16px); }
-        }
-        @keyframes floatPulse {
-            0%, 100% { transform: scale(1) translateY(0); }
-            50% { transform: scale(1.05) translateY(-8px); }
-        }
-        @keyframes fadeSlideUp {
-            0% { transform: translateY(28px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes fadeSlideRight {
-            0% { transform: translateX(-20px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes scaleInBounce {
-            0% { transform: scale(.85); opacity: 0; }
-            60% { transform: scale(1.02); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes shimmerGradient {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        @keyframes slideInLeft {
-            0% { transform: translateX(-60px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
-        }
-        .animate-float { animation: floatSlow 6s ease-in-out infinite; }
-        .animate-float-pulse { animation: floatPulse 5s ease-in-out infinite; }
-        .animate-fade-up { animation: fadeSlideUp .7s cubic-bezier(.16,1,.3,1) both; }
-        .animate-scale-in { animation: scaleInBounce .6s cubic-bezier(.16,1,.3,1) both; }
-        .animate-slide-left { animation: slideInLeft .7s cubic-bezier(.16,1,.3,1) both; }
-        .stagger-1 { animation-delay: .05s; }
-        .stagger-2 { animation-delay: .12s; }
-        .stagger-3 { animation-delay: .2s; }
-        .stagger-4 { animation-delay: .28s; }
-        .stagger-5 { animation-delay: .36s; }
-        .stagger-6 { animation-delay: .44s; }
-        .stagger-7 { animation-delay: .52s; }
-        .hero-card {
-            transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s;
-        }
-        .hero-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(0,0,0,.15);
-        }
-        .btn-shine {
-            position: relative; overflow: hidden;
-        }
-        .btn-shine::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.15) 50%, transparent 70%);
-            transform: translateX(-100%);
-            animation: shimmerGradient 3s ease-in-out infinite;
-        }
-        @media (max-width: 1023px) {
-            .login-left { min-height: 240px; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: .01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: .01ms !important;
-            }
-        }
-    </style>
-</head>
-<body class="fi-body min-h-screen antialiased">
-<div class="min-h-screen grid lg:grid-cols-2">
+<div class="min-h-screen grid lg:grid-cols-2" style="background: #f8fafc;">
     {{-- Left: Hero Brand Panel --}}
-    <div class="login-left hidden lg:flex relative bg-gradient-to-br from-indigo-600 via-indigo-800 to-stone-900 p-12 flex-col justify-between overflow-hidden">
+    <div class="login-left hidden lg:flex relative p-12 flex-col justify-between overflow-hidden"
+         style="background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);">
         <div class="absolute inset-0 opacity-30"
              style="background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,.15) 0%, transparent 50%),
                                radial-gradient(circle at 80% 70%, rgba(255,255,255,.1) 0%, transparent 50%),
                                radial-gradient(circle at 50% 50%, rgba(99,102,241,.3) 0%, transparent 70%);">
         </div>
-        <div class="absolute top-16 left-8 w-72 h-72 rounded-full bg-white/5 animate-float"></div>
-        <div class="absolute bottom-40 right-12 w-48 h-48 rounded-full bg-indigo-400/10 animate-float-pulse"></div>
-        <div class="absolute bottom-16 right-8 w-56 h-56 rounded-full bg-white/3 animate-float" style="animation-delay: 3s;"></div>
-        <div class="absolute -bottom-20 -right-20 text-[18rem] opacity-10 select-none">⚡</div>
+        <div class="absolute top-16 left-8 w-72 h-72 rounded-full" style="background: rgba(255,255,255,.05); animation: floatSlow 6s ease-in-out infinite;"></div>
+        <div class="absolute bottom-40 right-12 w-48 h-48 rounded-full" style="background: rgba(129,140,248,.1); animation: floatPulse 5s ease-in-out infinite;"></div>
+        <div class="absolute bottom-16 right-8 w-56 h-56 rounded-full" style="background: rgba(255,255,255,.03); animation: floatSlow 6s ease-in-out 3s infinite;"></div>
+        <div class="absolute -bottom-16 -right-16 text-[16rem] opacity-[.06] select-none">⚡</div>
 
-        <div class="relative animate-slide-left">
+        <div class="relative" style="animation: slideInLeft .7s cubic-bezier(.16,1,.3,1) both;">
             <div class="flex items-center gap-2.5 text-white">
-                <div class="w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                    <i class="fas fa-store text-white text-lg"></i>
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: rgba(255,255,255,.2); backdrop-filter: blur(8px);">
+                    <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" /></svg>
                 </div>
-                <span class="font-bold text-2xl tracking-tight" style="font-family: Inter, sans-serif;">TokoOnline</span>
+                <span class="font-bold text-2xl tracking-tight" style="font-family: Inter, sans-serif;">{{ config('app.name') }}</span>
             </div>
         </div>
 
         <div class="relative text-white">
-            <h2 class="font-bold text-4xl lg:text-5xl leading-tight mb-4 animate-fade-up stagger-1" style="font-family: Inter, sans-serif;">
+            <h2 class="font-bold text-4xl lg:text-5xl leading-tight mb-4" style="font-family: Inter, sans-serif; animation: fadeSlideUp .7s .05s cubic-bezier(.16,1,.3,1) both;">
                 Admin Panel
             </h2>
-            <p class="text-indigo-100 text-lg leading-relaxed mb-8 max-w-md animate-fade-up stagger-2">
+            <p class="text-lg leading-relaxed mb-8 max-w-md" style="color: #c7d2fe; animation: fadeSlideUp .7s .12s cubic-bezier(.16,1,.3,1) both;">
                 Kelola toko online Anda dengan panel administrasi yang lengkap dan mudah digunakan.
             </p>
             <div class="grid grid-cols-3 gap-3 max-w-md">
-                <div class="hero-card bg-white/10 backdrop-blur-sm rounded-xl p-3.5 text-center border border-white/10 animate-fade-up stagger-3">
-                    <i class="fas fa-box text-xl mb-1.5 block text-indigo-200"></i>
-                    <span class="text-[11px] font-semibold text-white">Produk</span>
+                <div class="rounded-xl p-3.5 text-center border cursor-pointer"
+                     style="background: rgba(255,255,255,.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,.1);
+                            transition: transform .35s, box-shadow .35s; animation: fadeSlideUp .7s .2s cubic-bezier(.16,1,.3,1) both;"
+                     onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 40px rgba(0,0,0,.15)'"
+                     onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                    <svg class="w-6 h-6 mb-1.5 mx-auto" style="color: #a5b4fc;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
+                    <span class="text-white font-semibold" style="font-size: 11px;">Produk</span>
                 </div>
-                <div class="hero-card bg-white/10 backdrop-blur-sm rounded-xl p-3.5 text-center border border-white/10 animate-fade-up stagger-4">
-                    <i class="fas fa-chart-bar text-xl mb-1.5 block text-indigo-200"></i>
-                    <span class="text-[11px] font-semibold text-white">Laporan</span>
+                <div class="rounded-xl p-3.5 text-center border cursor-pointer"
+                     style="background: rgba(255,255,255,.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,.1);
+                            transition: transform .35s, box-shadow .35s; animation: fadeSlideUp .7s .28s cubic-bezier(.16,1,.3,1) both;"
+                     onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 40px rgba(0,0,0,.15)'"
+                     onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                    <svg class="w-6 h-6 mb-1.5 mx-auto" style="color: #a5b4fc;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+                    <span class="text-white font-semibold" style="font-size: 11px;">Laporan</span>
                 </div>
-                <div class="hero-card bg-white/10 backdrop-blur-sm rounded-xl p-3.5 text-center border border-white/10 animate-fade-up stagger-5">
-                    <i class="fas fa-cog text-xl mb-1.5 block text-indigo-200"></i>
-                    <span class="text-[11px] font-semibold text-white">Sistem</span>
+                <div class="rounded-xl p-3.5 text-center border cursor-pointer"
+                     style="background: rgba(255,255,255,.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,.1);
+                            transition: transform .35s, box-shadow .35s; animation: fadeSlideUp .7s .36s cubic-bezier(.16,1,.3,1) both;"
+                     onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 40px rgba(0,0,0,.15)'"
+                     onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                    <svg class="w-6 h-6 mb-1.5 mx-auto" style="color: #a5b4fc;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    <span class="text-white font-semibold" style="font-size: 11px;">Sistem</span>
                 </div>
             </div>
         </div>
 
-        <div class="relative text-indigo-200/60 text-xs animate-fade-up stagger-7">
-            &copy; {{ date('Y') }} TokoOnline &middot; Powered by Laravel + Filament
+        <div class="relative text-xs" style="color: rgba(199,210,254,.6); animation: fadeSlideUp .7s .52s cubic-bezier(.16,1,.3,1) both;">
+            &copy; {{ date('Y') }} {{ config('app.name') }} &middot; Laravel + Filament
         </div>
     </div>
 
     {{-- Right: Login Form --}}
     <div class="flex items-center justify-center p-6 lg:p-16 bg-white">
         <div class="w-full max-w-md">
-            {{-- Mobile brand --}}
-            <div class="lg:hidden text-center mb-8 animate-scale-in">
-                <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <i class="fas fa-store text-indigo-600 text-2xl"></i>
+            <div class="lg:hidden text-center mb-8">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl flex items-center justify-center" style="background: #eef2ff;">
+                    <svg class="w-6 h-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" /></svg>
                 </div>
-                <h2 class="text-xl font-bold text-stone-900">TokoOnline</h2>
+                <h2 class="text-xl font-bold text-stone-900">{{ config('app.name') }}</h2>
             </div>
 
-            <h1 class="font-bold text-3xl text-stone-900 mb-1 animate-fade-up" style="font-family: Inter, sans-serif;">Masuk Admin</h1>
-            <p class="text-stone-500 mb-8 animate-fade-up stagger-1">Panel administrasi TokoOnline</p>
+            <h1 class="font-bold text-3xl text-stone-900 mb-1" style="font-family: Inter, sans-serif; animation: fadeSlideUp .7s cubic-bezier(.16,1,.3,1) both;">Masuk Admin</h1>
+            <p class="text-stone-500 mb-8" style="animation: fadeSlideUp .7s .05s cubic-bezier(.16,1,.3,1) both;">Panel administrasi {{ config('app.name') }}</p>
 
             @if ($errors->any())
-                <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-700 animate-scale-in">
+                <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-700" style="animation: scaleInBounce .6s cubic-bezier(.16,1,.3,1) both;">
                     <div class="flex items-center gap-2 mb-1">
-                        <i class="fas fa-exclamation-circle text-red-500"></i>
+                        <svg class="w-4 h-4 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
                         <span class="font-semibold">Oops! Ada yang salah</span>
                     </div>
                     <ul class="list-disc list-inside mt-1 space-y-0.5 text-red-600">
@@ -162,73 +88,129 @@
                 </div>
             @endif
 
-            <div class="animate-fade-up stagger-2">
+            <div style="animation: fadeSlideUp .7s .12s cubic-bezier(.16,1,.3,1) both;">
                 {{ $this->form }}
             </div>
 
-            {{-- Divider --}}
-            <div class="flex items-center gap-3 my-6 animate-fade-up stagger-5">
+            <div class="flex items-center gap-3 my-6" style="animation: fadeSlideUp .7s .36s cubic-bezier(.16,1,.3,1) both;">
                 <div class="flex-1 h-px bg-stone-200"></div>
                 <span class="text-xs text-stone-400 font-medium">demo</span>
                 <div class="flex-1 h-px bg-stone-200"></div>
             </div>
 
-            {{-- Demo Login Box --}}
-            <div class="animate-scale-in stagger-6 bg-stone-50 border border-stone-200 rounded-xl p-5 text-sm">
+            <div class="bg-stone-50 border border-stone-200 rounded-xl p-5 text-sm" style="animation: scaleInBounce .6s .44s cubic-bezier(.16,1,.3,1) both;">
                 <div class="flex items-center gap-2 mb-3">
-                    <i class="fas fa-flask text-amber-500"></i>
+                    <svg class="w-4 h-4 text-amber-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>
                     <span class="font-semibold text-stone-800">Demo Login</span>
                 </div>
-                <div class="space-y-1.5 text-stone-600 text-xs font-mono">
-                    @foreach($demoAccounts as $account)
+                <div class="space-y-1.5 text-stone-600 text-xs" style="font-family: JetBrains Mono, monospace;">
                     <div class="flex items-center gap-2">
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 {{ $account['role'] === 'Admin' ? 'bg-indigo-100 text-indigo-700' : 'bg-green-100 text-green-700' }} rounded-md font-semibold text-[10px]">{{ $account['role'] }}</span>
-                        <span class="text-stone-500">{{ $account['email'] }} / {{ $account['password'] }}</span>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-md font-semibold" style="font-size: 10px;">Admin</span>
+                        <span class="text-stone-500">admin@tokoonline.test / password</span>
                     </div>
-                    @endforeach
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-md font-semibold" style="font-size: 10px;">Customer</span>
+                        <span class="text-stone-500">customer@tokoonline.test / password</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="text-center mt-5 animate-fade-up stagger-7">
-                <a href="{{ url('/') }}" class="text-sm text-stone-400 hover:text-stone-600 transition-colors">
-                    <i class="fas fa-arrow-left mr-1"></i> Kembali ke toko
+            <div class="text-center mt-5" style="animation: fadeSlideUp .7s .52s cubic-bezier(.16,1,.3,1) both;">
+                <a href="{{ url('/') }}" class="text-sm text-stone-400 hover:text-stone-600" style="transition: color .2s;">
+                    <svg class="w-3.5 h-3.5 inline mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+                    Kembali ke toko
                 </a>
             </div>
         </div>
     </div>
 </div>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-@filamentScripts
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.fi-fo-field-wrp input, .fi-fo-field-wrp select, .fi-fo-field-wrp textarea')
-            .forEach(el => {
-                el.style.borderRadius = '12px';
-                el.style.borderColor = '#d1d5db';
-                el.style.transition = 'all .3s';
-            });
+<style>
+    @keyframes floatSlow {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-16px); }
+    }
+    @keyframes floatPulse {
+        0%, 100% { transform: scale(1) translateY(0); }
+        50% { transform: scale(1.05) translateY(-8px); }
+    }
+    @keyframes fadeSlideUp {
+        0% { transform: translateY(28px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideInLeft {
+        0% { transform: translateX(-60px); opacity: 0; }
+        100% { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes scaleInBounce {
+        0% { transform: scale(.85); opacity: 0; }
+        60% { transform: scale(1.02); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes shimmerGradient {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
 
-        const submitBtn = document.querySelector('button[type="submit"]');
-        if (submitBtn) {
-            submitBtn.classList.add('btn-shine');
-            submitBtn.style.cssText = `
-                width: 100%; padding: 14px 24px; font-size: 14px; font-weight: 600;
-                background: linear-gradient(135deg, #6366f1, #4f46e5);
-                color: #fff; border: none; border-radius: 12px; cursor: pointer;
-                box-shadow: 0 4px 16px rgba(99,102,241,.3);
-                transition: all .3s; font-family: Inter, sans-serif;
-            `;
-            submitBtn.addEventListener('mouseenter', () => {
-                submitBtn.style.transform = 'translateY(-1px)';
-                submitBtn.style.boxShadow = '0 8px 24px rgba(99,102,241,.4)';
-            });
-            submitBtn.addEventListener('mouseleave', () => {
-                submitBtn.style.transform = 'translateY(0)';
-                submitBtn.style.boxShadow = '0 4px 16px rgba(99,102,241,.3)';
-            });
+    /* Style Filament form elements */
+    .fi-fo-field-wrp input {
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        border: 1.5px solid #d1d5db !important;
+        transition: all .3s !important;
+    }
+    .fi-fo-field-wrp input:focus {
+        border-color: #6366f1 !important;
+        box-shadow: 0 0 0 3px rgba(99,102,241,.12) !important;
+    }
+    .fi-fo-field-wrp label {
+        font-weight: 600 !important;
+        color: #44403c !important;
+        margin-bottom: 6px !important;
+    }
+    .fi-checkbox-input {
+        border-radius: 5px !important;
+        border-color: #d1d5db !important;
+    }
+    .fi-checkbox-input:checked {
+        background-color: #6366f1 !important;
+        border-color: #6366f1 !important;
+    }
+    button[type="submit"] {
+        position: relative !important;
+        overflow: hidden !important;
+        width: 100% !important;
+        padding: 14px 24px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
+        color: #fff !important;
+        border: none !important;
+        border-radius: 12px !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 16px rgba(99,102,241,.3) !important;
+        transition: all .3s !important;
+        margin-top: 8px !important;
+    }
+    button[type="submit"]:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 8px 24px rgba(99,102,241,.4) !important;
+    }
+    button[type="submit"]::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.15) 50%, transparent 70%);
+        transform: translateX(-100%);
+        animation: shimmerGradient 3s ease-in-out infinite;
+    }
+    @media (max-width: 1023px) {
+        .login-left { min-height: 240px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: .01ms !important;
+            transition-duration: .01ms !important;
         }
-    });
-</script>
-</body>
-</html>
+    }
+</style>
