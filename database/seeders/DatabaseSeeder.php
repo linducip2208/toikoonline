@@ -16,8 +16,11 @@ use App\Models\ProductStock;
 use App\Models\Slider;
 use App\Models\Tax;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
@@ -297,6 +300,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->seedPaymentGateways();
+        $this->seedDemoOrders();
     }
 
     protected function seedPaymentGateways(): void
@@ -388,6 +392,60 @@ class DatabaseSeeder extends Seeder
 
         foreach ($gateways as $g) {
             \App\Models\PaymentGatewayConfig::create($g);
+        }
+    }
+
+    protected function seedDemoOrders(): void
+    {
+        $customerId = User::where('user_type', 'customer')->first()?->id ?? 2;
+        $products = Product::take(5)->get();
+
+        $statuses = ['paid', 'paid', 'paid', 'unpaid', 'paid', 'paid', 'paid', 'unpaid'];
+        $deliveryStatuses = ['delivered', 'delivered', 'on_delivery', 'pending', 'delivered', 'delivered', 'delivered', 'pending'];
+
+        for ($i = 0; $i < 12; $i++) {
+            $daysAgo = rand(0, 30);
+            $product = $products->random();
+            $price = $product->unit_price - ($product->discount ?? 0);
+            $qty = rand(1, 3);
+            $total = $price * $qty;
+
+            $order = Order::create([
+                'user_id' => $customerId,
+                'code' => date('Ymd', strtotime("-{$daysAgo} days")) . '-' . strtoupper(Str::random(6)),
+                'date' => strtotime("-{$daysAgo} days"),
+                'grand_total' => $total,
+                'payment_status' => $statuses[$i % count($statuses)],
+                'delivery_status' => $deliveryStatuses[$i % count($deliveryStatuses)],
+                'payment_type' => 'midtrans-snap',
+                'shipping_method' => 'home_delivery',
+                'shipping_address' => json_encode(['city' => 'Jakarta', 'address' => 'Jl. Sudirman No. ' . rand(1, 100)]),
+                'tax_amount' => 0,
+                'discount' => 0,
+                'coupon_discount' => 0,
+                'additional_info' => '',
+                'view' => false,
+                'delivery_viewed' => false,
+                'payment_status_viewed' => false,
+                'commission_calculated' => false,
+                'manual_payment' => false,
+                'order_from' => 'web',
+                'created_at' => now()->subDays($daysAgo),
+                'updated_at' => now()->subDays($daysAgo),
+            ]);
+
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'seller_id' => 1,
+                'product_id' => $product->id,
+                'price' => $price,
+                'quantity' => $qty,
+                'tax' => 0,
+                'shipping_cost' => 0,
+                'payment_status' => $order->payment_status,
+                'delivery_status' => $order->delivery_status,
+                'shipping_type' => 'home_delivery',
+            ]);
         }
     }
 }
