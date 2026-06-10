@@ -1,0 +1,181 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament';
+@source '../../../../resources/views/filament';
+@source '../../../../vendor/filament/**/*.blade.php';
+
+:root {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Sidebar */
+.fi-sidebar {
+    background-color: #1a1a2e;
+}
+
+.fi-sidebar .fi-sidebar-item a {
+    transition: transform 0.2s ease;
+}
+
+.fi-sidebar .fi-sidebar-item a:hover {
+    transform: translateX(2px);
+}
+
+.fi-sidebar .fi-sidebar-item-active a {
+    border-left: 3px solid #6366f1;
+    background: rgba(99, 102, 241, 0.08);
+}
+
+/* Sidebar section labels */
+.fi-sidebar .fi-sidebar-group-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    padding: 0.75rem 1rem 0.25rem;
+}
+
+/* Topbar glass effect */
+.fi-topbar {
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+}
+
+/* Cards */
+.fi-section {
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.35s;
+}
+
+.fi-section:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Stats widget */
+.fi-wi-stats-overview-stat-value {
+    font-weight: 800;
+}
+
+/* Tables */
+.fi-ta-header-cell {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.fi-ta-row:hover {
+    background-color: rgba(99, 102, 241, 0.04);
+}
+
+/* Forms */
+.fi-fo-field-wrp-input input,
+.fi-fo-field-wrp-input select,
+.fi-fo-field-wrp-input textarea {
+    border-width: 1.5px;
+}
+
+.fi-fo-field-wrp-input input:focus,
+.fi-fo-field-wrp-input select:focus,
+.fi-fo-field-wrp-input textarea:focus {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* Badges */
+.fi-badge {
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 11px;
+}
+
+/* Primary buttons */
+.fi-btn.fi-btn-color-primary {
+    background-image: linear-gradient(135deg, #4f46e5, #6d28d9);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+}
+
+.fi-btn.fi-btn-color-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+}
+
+/* Scrollbar */
+.fi-sidebar::-webkit-scrollbar,
+.fi-main-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.fi-sidebar::-webkit-scrollbar-track,
+.fi-main-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.fi-sidebar::-webkit-scrollbar-thumb,
+.fi-main-content::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 8px;
+}
+
+.fi-sidebar::-webkit-scrollbar-thumb:hover,
+.fi-main-content::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* Tablet — 1024px */
+@media (max-width: 1023px) {
+    .fi-section {
+        border-radius: 10px;
+    }
+    .fi-section-content {
+        padding: 14px;
+    }
+    .fi-ta-cell {
+        padding: 10px 12px;
+        font-size: 12.5px;
+    }
+    .fi-wi-stats-overview-stat-value {
+        font-size: 22px;
+    }
+}
+
+/* Mobile — 640px */
+@media (max-width: 640px) {
+    .fi-topbar {
+        padding: 10px 12px;
+    }
+    .fi-page-header-heading {
+        font-size: 20px;
+    }
+    .fi-btn {
+        min-height: 38px;
+    }
+    .fi-ac-action {
+        width: 100%;
+        justify-content: center;
+    }
+    .fi-sidebar {
+        width: 280px;
+    }
+}
+
+/* Print mode */
+@media print {
+    .fi-sidebar,
+    .fi-topbar {
+        display: none;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
