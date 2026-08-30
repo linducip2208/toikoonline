@@ -102,34 +102,38 @@
     $totalStock = $variantStocks->sum('qty') ?: 0;
     $mainImage = $product->thumbnail_img;
     $additionalImages = is_array($product->photos) ? $product->photos : json_decode($product->photos ?? '[]', true);
-    $allImages = array_filter(array_merge($mainImage ? [$mainImage] : [], $additionalImages));
+    $allImages = array_values(array_filter(array_merge($mainImage ? [$mainImage] : [], $additionalImages)));
+
+    // Build the Alpine payload here: @json() with closures/nested brackets
+    // inside an HTML attribute breaks the Blade directive parser.
+    $detailPayload = [
+        'id' => $product->id,
+        'name' => $product->name,
+        'price' => $effectivePrice,
+        'originalPrice' => $product->unit_price,
+        'variantProduct' => (bool) $product->variant_product,
+        'stocks' => $variantStocks->map(fn ($s) => [
+            'id' => $s->id,
+            'variant' => $s->variant,
+            'sku' => $s->sku,
+            'price' => $s->price ?: $effectivePrice,
+            'qty' => $s->qty,
+            'image' => $s->image,
+            'color_code' => $s->color_code,
+        ])->toArray(),
+        'images' => $allImages,
+    ];
 @endphp
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 py-6" x-data="productDetail(@json([
-    'id' => $product->id,
-    'name' => $product->name,
-    'price' => $effectivePrice,
-    'originalPrice' => $product->unit_price,
-    'variantProduct' => $product->variant_product,
-    'stocks' => $variantStocks->map(fn($s) => [
-        'id' => $s->id,
-        'variant' => $s->variant,
-        'sku' => $s->sku,
-        'price' => $s->price ?: $effectivePrice,
-        'qty' => $s->qty,
-        'image' => $s->image,
-        'color_code' => $s->color_code,
-    ])->toArray(),
-    'images' => $allImages,
-]))">
+<div class="max-w-7xl mx-auto px-4 py-6" x-data="productDetail(@json($detailPayload))">
 
     {{-- Breadcrumb --}}
     <nav class="flex items-center gap-2 text-xs text-stone-400 mb-6 flex-wrap">
         <a href="{{ route('home') }}" class="hover:text-brand-600 transition-colors">Home</a>
         <i class="fas fa-chevron-right text-[8px]"></i>
         @if($product->category)
-            <a href="{{ route('products.category', $product->category->slug) }}" class="hover:text-brand-600 transition-colors">{{ $product->category->name }}</a>
+            <a href="{{ route('categories.show', $product->category->slug) }}" class="hover:text-brand-600 transition-colors">{{ $product->category->name }}</a>
             <i class="fas fa-chevron-right text-[8px]"></i>
         @endif
         <span class="text-stone-600 font-medium truncate max-w-[200px]">{{ $product->name }}</span>
@@ -317,7 +321,7 @@
                         <p class="text-xs font-semibold text-stone-800">{{ $product->brand->name }}</p>
                         <p class="text-[10px] text-stone-400">Brand Resmi</p>
                     </div>
-                    <a href="{{ route('products.brand', $product->brand->slug) }}" class="ml-auto text-[10px] text-brand-600 font-semibold hover:underline shrink-0">Lihat</a>
+                    <a href="{{ route('brands.show', $product->brand->slug) }}" class="ml-auto text-[10px] text-brand-600 font-semibold hover:underline shrink-0">Lihat</a>
                 </div>
                 @endif
                 <div class="bg-green-50 rounded-xl p-4 flex items-center gap-3 border border-green-100">
@@ -375,6 +379,34 @@
 
             {{-- Reviews Tab --}}
             <div x-show="tab === 'reviews'" id="reviews">
+                @auth
+                <div class="bg-stone-50 rounded-xl p-5 mb-6">
+                    <h4 class="font-semibold text-sm text-stone-700 mb-3">Tulis Ulasan</h4>
+                    <form action="{{ route('review.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <div class="flex items-center gap-1 mb-3" x-data="{ rating: 5 }">
+                            <span class="text-xs text-stone-500 mr-2">Rating:</span>
+                            <template x-for="i in 5">
+                                <button type="button" @click="rating = i" class="text-xl transition-colors">
+                                    <i :class="i <= rating ? 'fas fa-star review-star' : 'far fa-star text-stone-300'"></i>
+                                </button>
+                            </template>
+                            <input type="hidden" name="rating" :value="rating">
+                        </div>
+                        <textarea name="comment" rows="3" placeholder="Bagikan pengalaman Anda dengan produk ini..." required minlength="5"
+                                  class="w-full px-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400 mb-3 resize-none"></textarea>
+                        <button type="submit" class="px-5 py-2 bg-gradient-to-r from-brand-500 to-brand-600 text-white text-xs font-semibold rounded-lg hover:shadow-md transition-all">
+                            <i class="fas fa-paper-plane mr-1"></i> Kirim Ulasan
+                        </button>
+                    </form>
+                </div>
+                @else
+                <div class="bg-stone-50 rounded-xl p-5 mb-6 text-center">
+                    <p class="text-sm text-stone-500"><a href="{{ route('login') }}" class="text-brand-600 font-semibold hover:underline">Masuk</a> untuk menulis ulasan.</p>
+                </div>
+                @endauth
+
                 @if($reviewCount > 0)
                 @php
                     $ratingDistribution = [];
@@ -506,7 +538,7 @@
 {{-- JSON-LD Product Schema --}}
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
+    "@@context": "https://schema.org",
     "@type": "Product",
     "name": "{{ $product->name }}",
     "description": "{{ \Illuminate\Support\Str::limit(strip_tags($product->description ?? ''), 300) }}",
