@@ -171,4 +171,26 @@ class ProductController extends Controller
 
         return view('storefront.product-listing', compact('products', 'categories', 'brands', 'sort', 'title', 'query'));
     }
+
+    public function suggest(Request $request)
+    {
+        $query = $request->query('q', '');
+
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $products = Product::published()->approved()
+            ->where('name', 'like', "%{$query}%")
+            ->take(8)
+            ->get(['id', 'name', 'slug', 'thumbnail_img', 'unit_price']);
+
+        $products = $products->map(function ($p) {
+            $p->thumbnail_url = $p->thumbnail_img ? asset($p->thumbnail_img) : null;
+            $p->price_formatted = 'Rp ' . number_format($p->unit_price, 0, ',', '.');
+            return $p;
+        });
+
+        return response()->json($products);
+    }
 }

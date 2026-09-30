@@ -42,7 +42,7 @@
                             <p class="text-xs text-stone-500 mb-0.5">Total</p>
                             <p class="text-lg font-extrabold text-stone-900" x-text="'Rp ' + formatRupiah(order.total)"></p>
                         </div>
-                        <a :href="'/customer/pesanan/' + order.code"
+                        <a :href="'{{ route('customer.orders') }}/' + order.code"
                             class="px-5 py-2.5 text-sm font-bold text-brand-700 bg-brand-50 border border-brand-200 rounded-xl hover:bg-brand-100 hover:border-brand-300 transition">
                             Lihat Detail
                         </a>

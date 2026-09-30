@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClubPoint;
+use App\Models\ClubPointDetail;
+use App\Models\Coupon;
+use App\Models\CouponUsage;
+use App\Models\DeliveryHistory;
 use App\Models\Order;
 use App\Models\PaymentGatewayConfig;
 use App\Services\Payment\PaymentGatewayService;
@@ -66,10 +71,39 @@ class WebhookController extends Controller
 
             $mappedStatus = $paymentStatusMap[$transactionStatus] ?? 'unpaid';
 
+            $wasPaid = $order->payment_status === 'paid';
             $order->update([
                 'payment_status' => $mappedStatus,
                 'payment_details' => json_encode($payload),
             ]);
+
+            // Efek samping saat pertama kali lunas (idempoten via $wasPaid)
+            if ($mappedStatus === 'paid' && ! $wasPaid) {
+                // 1. Catat pemakaian kupon
+                if ($order->coupon_code) {
+                    $coupon = Coupon::where('code', $order->coupon_code)->first();
+                    if ($coupon) {
+                        CouponUsage::firstOrCreate(['user_id' => $order->user_id, 'coupon_id' => $coupon->id]);
+                    }
+                }
+                // 2. Poin loyalty: 1 poin per Rp10.000
+                $points = (int) floor(((float) $order->grand_total) / 10000);
+                if ($points > 0) {
+                    $club = ClubPoint::firstOrCreate(['user_id' => $order->user_id], ['points' => 0, 'converted' => false]);
+                    $detail = ClubPointDetail::firstOrCreate(
+                        ['order_id' => $order->id],
+                        ['club_point_id' => $club->id, 'user_id' => $order->user_id, 'points' => $points, 'converted' => false]
+                    );
+                    if ($detail->wasRecentlyCreated) {
+                        $club->increment('points', $points);
+                    }
+                }
+                // 3. Jejak awal pengiriman
+                DeliveryHistory::firstOrCreate(
+                    ['order_id' => $order->id, 'delivery_status' => 'confirmed'],
+                    ['status' => 'Pembayaran diterima — pesanan dikonfirmasi', 'note' => 'Kode: '.$order->code]
+                );
+            }
 
             Log::info('Payment webhook: order updated', [
                 'order_code' => $orderCode,

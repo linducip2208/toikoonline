@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="refresh" content="4; url=/">
 <title>Aktivasi Berhasil</title>
-<script src="https://cdn.tailwindcss.com"></script>
+{{-- CSS lokal (Vite) --}}
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 <style>
   body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial }
   @keyframes check-pop { 0% { transform: scale(0); opacity: 0 } 50% { transform: scale(1.2) } 100% { transform: scale(1); opacity: 1 } }

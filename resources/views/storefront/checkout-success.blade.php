@@ -4,22 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pesanan Berhasil — {{ config('app.name', 'TokoOnline') }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- CSS lokal (Vite). Catatan: brand disatukan ke indigo (dulu emerald khusus halaman ini) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-                    colors: {
-                        brand: { 50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b' }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         @keyframes scaleIn {
             0% { transform: scale(0); opacity: 0; }
@@ -102,7 +91,12 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 justify-center animate-fade-up delay-500">
-                <a href="/customer/pesanan" class="px-6 py-3.5 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                @if(!empty($snapToken))
+                <button @click="payNow()" class="px-6 py-3.5 bg-gradient-to-r from-brand-600 to-violet-600 text-white font-bold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                    <i class="fas fa-qrcode mr-1"></i> Bayar Sekarang (QRIS/VA/E-wallet)
+                </button>
+                @endif
+                <a href="{{ route('customer.orders') }}" class="px-6 py-3.5 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
                     Lihat Pesanan Saya
                 </a>
                 <a href="/customer/pesanan/bayar?order=" x-bind:href="'/customer/pesanan/bayar?order=' + orderCode" class="px-6 py-3.5 bg-white border-2 border-brand-200 text-brand-700 font-bold rounded-xl hover:bg-brand-50 hover:border-brand-400 transition-all duration-200">
@@ -119,16 +113,27 @@
         &copy; {{ date('Y') }} {{ config('app.name', 'TokoOnline') }}. Semua hak cipta dilindungi.
     </footer>
 
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key', env('MIDTRANS_CLIENT_KEY')) }}"></script>
     <script>
         function successPage() {
-            const params = new URLSearchParams(window.location.search);
             return {
-                orderCode: params.get('order') || 'ORD-MZ9XK4L2',
-                totalPaid: 1410800,
-                bankName: 'Bank BCA',
-                bankAccount: '8721 1234 5678 9012',
+                orderCode: @json($order->code),
+                totalPaid: {{ (int) $order->grand_total }},
+                bankName: 'QRIS / VA / E-wallet',
+                bankAccount: @json($order->code),
                 bankHolder: 'PT TokoOnline Indonesia',
                 copied: false,
+                snapToken: @json($snapToken ?? null),
+
+                init() {
+                    // Auto-buka Snap jika ada token (pembayaran online)
+                    if (this.snapToken && window.snap) {
+                        setTimeout(() => window.snap.pay(this.snapToken), 800);
+                    }
+                },
+                payNow() {
+                    if (this.snapToken && window.snap) window.snap.pay(this.snapToken);
+                },
 
                 copyOrderCode() {
                     navigator.clipboard.writeText(this.orderCode).then(() => {

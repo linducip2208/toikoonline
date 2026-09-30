@@ -275,16 +275,35 @@
                     <input type="hidden" name="variation" :value="selectedVariant?.variant || ''">
                     <input type="hidden" name="quantity" x-model="qty">
                     <button type="submit"
-                            class="w-full py-3.5 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold rounded-xl
-                                   hover:from-brand-600 hover:to-brand-700 transition-all hover:shadow-xl hover:shadow-brand-500/30 text-sm">
+                            class="w-full py-3.5 min-h-[44px] bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold rounded-xl
+                                   hover:from-brand-600 hover:to-brand-700 transition-all hover:shadow-xl hover:shadow-brand-500/30 text-sm focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none"
+                            aria-label="Tambah {{ $product->name }} ke keranjang">
                         <i class="fas fa-shopping-cart mr-2"></i> Tambah ke Keranjang
                     </button>
                 </form>
                 <button @click="toggleWishlist()"
-                        class="px-5 py-3.5 border-2 border-stone-200 text-stone-600 hover:text-red-500 hover:border-red-200 rounded-xl
-                               font-semibold text-sm transition-colors">
+                        class="px-5 py-3.5 min-h-[44px] border-2 border-stone-200 text-stone-600 hover:text-red-500 hover:border-red-200 rounded-xl
+                               font-semibold text-sm transition-colors focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:outline-none"
+                        aria-label="Simpan ke wishlist">
                     <i class="far fa-heart mr-1.5"></i> Wishlist
                 </button>
+            </div>
+
+            @include('storefront.partials.shipping-checker', ['freeOngkirMin' => true])
+
+            {{-- Sticky ATC mobile --}}
+            <div class="lg:hidden fixed bottom-14 left-0 right-0 z-30 bg-white/95 backdrop-blur border-t border-stone-200 px-4 py-2.5 flex items-center gap-3">
+                <div class="flex-1 min-w-0">
+                    <p class="text-[11px] text-stone-500 truncate">{{ $product->name }}</p>
+                    <p class="font-extrabold text-brand-600 text-sm">Rp {{ number_format($effectivePrice, 0, ',', '.') }}</p>
+                </div>
+                <form action="{{ route('cart.add') }}" method="POST" class="shrink-0">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="hidden" name="price" value="{{ $effectivePrice }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button class="px-6 py-3 min-h-[44px] bg-brand-600 text-white text-sm font-bold rounded-xl">+ Keranjang</button>
+                </form>
             </div>
 
             {{-- Share --}}

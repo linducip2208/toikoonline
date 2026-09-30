@@ -56,8 +56,39 @@ Route::middleware(['auth'])->prefix('account')->name('customer.')->group(functio
 
 // Search
 Route::get('/search', [ProductController::class, 'search'])->name('search');
+Route::get('/api/search/suggest', [ProductController::class, 'suggest'])->name('search.suggest');
 
-// Auth routes (Laravel Breeze or custom)
+// Storefront AJAX APIs
+Route::get('/api/product/{product}/quick-view', [\App\Http\Controllers\Storefront\StorefrontApiController::class, 'quickView'])->name('api.quick-view');
+Route::post('/api/wishlist/toggle', [\App\Http\Controllers\Storefront\StorefrontApiController::class, 'wishlistToggle'])->name('api.wishlist.toggle');
+Route::get('/api/wishlist/status', [\App\Http\Controllers\Storefront\StorefrontApiController::class, 'wishlistStatus'])->name('api.wishlist.status');
+Route::post('/api/compare/toggle', [\App\Http\Controllers\Storefront\StorefrontApiController::class, 'compareToggle'])->name('api.compare.toggle');
+Route::get('/api/compare/status', [\App\Http\Controllers\Storefront\StorefrontApiController::class, 'compareStatus'])->name('api.compare.status');
+Route::post('/review/store', [\App\Http\Controllers\Storefront\StorefrontApiController::class, 'reviewStore'])->name('review.store');
+
+// Flash Deals
+Route::get('/flash-deals/{slug}', [App\Http\Controllers\Storefront\FlashDealController::class, 'show'])->name('flash-deals.show');
+
+// Coupons
+Route::get('/coupons', [App\Http\Controllers\Storefront\CouponController::class, 'index'])->name('coupons.index');
+Route::post('/coupons/claim', [App\Http\Controllers\Storefront\CouponController::class, 'claim'])->name('coupons.claim');
+Route::post('/api/coupon/validate', [App\Http\Controllers\Storefront\CouponController::class, 'validate'])->name('api.coupon.validate')->middleware('auth');
+
+// Compare
+Route::get('/compare', [App\Http\Controllers\Storefront\CompareController::class, 'index'])->name('compare.index');
+Route::post('/compare/toggle', [App\Http\Controllers\Storefront\CompareController::class, 'toggle'])->name('compare.toggle')->middleware('auth');
+Route::post('/compare/remove', [App\Http\Controllers\Storefront\CompareController::class, 'remove'])->name('compare.remove');
+
+// Newsletter
+Route::post('/newsletter/subscribe', [App\Http\Controllers\Storefront\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+// All Brands
+Route::get('/brands', [App\Http\Controllers\Storefront\BrandController::class, 'index'])->name('brands.index');
+
+// All Categories
+Route::get('/categories', [App\Http\Controllers\Storefront\CategoryController::class, 'index'])->name('categories.index');
+
+// Auth routes
 require __DIR__.'/auth.php';
 
 // PSEO Routes
@@ -90,6 +121,7 @@ Route::get('/iklan/{slug}', [App\Http\Controllers\Storefront\ClassifiedControlle
 
 // Shipping API
 Route::get('/api/shipping/cost', [App\Http\Controllers\Api\ShippingController::class, 'cost'])->name('api.shipping.cost');
+Route::get('/api/shipping/areas', [App\Http\Controllers\Api\ShippingController::class, 'areas'])->name('api.shipping.areas');
 Route::get('/api/shipping/track/{waybill}', [App\Http\Controllers\Api\ShippingController::class, 'track'])->name('api.shipping.track');
 
 // License pairing

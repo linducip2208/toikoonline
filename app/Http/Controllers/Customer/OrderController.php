@@ -26,6 +26,15 @@ class OrderController extends Controller
 
         $order->load('orderDetails.product', 'deliveryHistories', 'refundRequests');
 
-        return view('customer.orders.show', compact('order'));
+        // Timeline live: gabung delivery_histories DB (sumber: admin / webhook Biteship)
+        $trackingTimeline = $order->deliveryHistories->sortBy('created_at')->map(fn($h) => [
+            'label' => $h->status ?? 'Update',
+            'date' => $h->created_at?->format('d M Y H:i'),
+            'note' => $h->note ?? '',
+        ])->values();
+
+        $view = view()->exists('customer.orders.show') ? 'customer.orders.show' : 'customer.order-detail';
+
+        return view($view, compact('order', 'trackingTimeline'));
     }
 }

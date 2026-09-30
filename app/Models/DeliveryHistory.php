@@ -11,6 +11,8 @@ class DeliveryHistory extends Model
         'order_detail_id',
         'delivery_boy_id',
         'delivery_status',
+        'status',
+        'note',
     ];
 
     public function order()

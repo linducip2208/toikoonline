@@ -2,13 +2,17 @@
 
 namespace Database\Seeders;
 
+use App\Models\Banner;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\Brand;
 use App\Models\BusinessSetting;
 use App\Models\Category;
+use App\Models\Coupon;
 use App\Models\Currency;
 use App\Models\EmailTemplate;
+use App\Models\FlashDeal;
+use App\Models\FlashDealProduct;
 use App\Models\Language;
 use App\Models\Page;
 use App\Models\Product;
@@ -108,84 +112,63 @@ class DatabaseSeeder extends Seeder
             Brand::create($brand);
         }
 
-        $products = [
-            [
-                'name' => 'Samsung Galaxy S24',
-                'category_id' => 1,
-                'brand_id' => 1,
-                'unit_price' => 14999000,
-                'description' => 'Smartphone flagship Samsung terbaru dengan AI.',
-                'slug' => 'samsung-galaxy-s24',
-                'published' => 1,
-                'approved' => 1,
-                'tags' => 'samsung,galaxy,smartphone',
-                'unit' => 'pcs',
-            ],
-            [
-                'name' => 'iPhone 15 Pro',
-                'category_id' => 1,
-                'brand_id' => 2,
-                'unit_price' => 19999000,
-                'description' => 'iPhone terbaru dengan chip A17 Pro.',
-                'slug' => 'iphone-15-pro',
-                'published' => 1,
-                'approved' => 1,
-                'tags' => 'iphone,apple,smartphone',
-                'unit' => 'pcs',
-            ],
-            [
-                'name' => 'Nike Air Max',
-                'category_id' => 2,
-                'brand_id' => 3,
-                'unit_price' => 2199000,
-                'description' => 'Sepatu Nike Air Max original.',
-                'slug' => 'nike-air-max',
-                'published' => 1,
-                'approved' => 1,
-                'tags' => 'nike,sepatu,sneakers',
-                'unit' => 'pasang',
-            ],
-            [
-                'name' => 'Blender Philips',
-                'category_id' => 3,
-                'brand_id' => 6,
-                'unit_price' => 499000,
-                'description' => 'Blender serbaguna Philips.',
-                'slug' => 'blender-philips',
-                'published' => 1,
-                'approved' => 1,
-                'tags' => 'blender,philips,dapur',
-                'unit' => 'pcs',
-            ],
-            [
-                'name' => 'Raket Badminton',
-                'category_id' => 5,
-                'brand_id' => 4,
-                'unit_price' => 350000,
-                'description' => 'Raket badminton ringan.',
-                'slug' => 'raket-badminton',
-                'published' => 1,
-                'approved' => 1,
-                'tags' => 'raket,badminton,olahraga',
-                'unit' => 'pcs',
-            ],
+        $productsData = [
+            ['name' => 'Samsung Galaxy S24', 'category_id' => 1, 'brand_id' => 1, 'unit_price' => 14999000, 'discount' => 1500000, 'discount_type' => 'amount', 'slug' => 'samsung-galaxy-s24', 'tags' => 'samsung,galaxy,smartphone', 'todays_deal' => false, 'featured' => true, 'unit' => 'pcs', 'num_of_sale' => 450, 'rating' => 4.8],
+            ['name' => 'iPhone 15 Pro', 'category_id' => 1, 'brand_id' => 2, 'unit_price' => 19999000, 'discount' => 0, 'discount_type' => 'amount', 'slug' => 'iphone-15-pro', 'tags' => 'iphone,apple,smartphone', 'todays_deal' => false, 'featured' => true, 'unit' => 'pcs', 'num_of_sale' => 320, 'rating' => 4.9],
+            ['name' => 'Nike Air Max', 'category_id' => 2, 'brand_id' => 3, 'unit_price' => 2199000, 'discount' => 10, 'discount_type' => 'percent', 'slug' => 'nike-air-max', 'tags' => 'nike,sepatu,sneakers', 'todays_deal' => false, 'featured' => true, 'unit' => 'pasang', 'num_of_sale' => 1200, 'rating' => 4.6],
+            ['name' => 'Blender Philips', 'category_id' => 3, 'brand_id' => 6, 'unit_price' => 499000, 'discount' => 50000, 'discount_type' => 'amount', 'slug' => 'blender-philips', 'tags' => 'blender,philips,dapur', 'todays_deal' => true, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 890, 'rating' => 4.5],
+            ['name' => 'Raket Badminton', 'category_id' => 5, 'brand_id' => 4, 'unit_price' => 350000, 'discount' => 0, 'discount_type' => 'amount', 'slug' => 'raket-badminton', 'tags' => 'raket,badminton,olahraga', 'todays_deal' => false, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 670, 'rating' => 4.4],
+            ['name' => 'TWS Samsung Galaxy Buds3', 'category_id' => 1, 'brand_id' => 1, 'unit_price' => 2199000, 'discount' => 400000, 'discount_type' => 'amount', 'slug' => 'samsung-galaxy-buds3', 'tags' => 'samsung,earbuds,audio', 'todays_deal' => true, 'featured' => true, 'unit' => 'pcs', 'num_of_sale' => 780, 'rating' => 4.7],
+            ['name' => 'MacBook Air M3', 'category_id' => 1, 'brand_id' => 2, 'unit_price' => 17999000, 'discount' => 2000000, 'discount_type' => 'amount', 'slug' => 'macbook-air-m3', 'tags' => 'apple,macbook,laptop', 'todays_deal' => false, 'featured' => true, 'unit' => 'pcs', 'num_of_sale' => 210, 'rating' => 4.9],
+            ['name' => 'Adidas Ultraboost', 'category_id' => 5, 'brand_id' => 4, 'unit_price' => 2899000, 'discount' => 25, 'discount_type' => 'percent', 'slug' => 'adidas-ultraboost', 'tags' => 'adidas,sepatu,running', 'todays_deal' => true, 'featured' => false, 'unit' => 'pasang', 'num_of_sale' => 1560, 'rating' => 4.7],
+            ['name' => 'Sony WH-1000XM5', 'category_id' => 1, 'brand_id' => 5, 'unit_price' => 4499000, 'discount' => 500000, 'discount_type' => 'amount', 'slug' => 'sony-wh1000xm5', 'tags' => 'sony,headphone,noise-cancelling', 'todays_deal' => false, 'featured' => true, 'unit' => 'pcs', 'num_of_sale' => 540, 'rating' => 4.8],
+            ['name' => 'Panasonic Kulkas 2 Pintu', 'category_id' => 3, 'brand_id' => 6, 'unit_price' => 3999000, 'discount' => 15, 'discount_type' => 'percent', 'slug' => 'panasonic-kulkas-2-pintu', 'tags' => 'panasonic,kulkas,elektronik-rumah', 'todays_deal' => false, 'featured' => true, 'unit' => 'pcs', 'num_of_sale' => 190, 'rating' => 4.6],
+            ['name' => 'Nike Dri-FIT Jersey', 'category_id' => 2, 'brand_id' => 3, 'unit_price' => 499000, 'discount' => 0, 'discount_type' => 'amount', 'slug' => 'nike-drifit-jersey', 'tags' => 'nike,jersey,olahraga', 'todays_deal' => false, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 2340, 'rating' => 4.5],
+            ['name' => 'Apple Watch Series 9', 'category_id' => 1, 'brand_id' => 2, 'unit_price' => 6999000, 'discount' => 700000, 'discount_type' => 'amount', 'slug' => 'apple-watch-series-9', 'tags' => 'apple,watch,smartwatch', 'todays_deal' => true, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 380, 'rating' => 4.8],
+            ['name' => 'Samsung Smart TV 55"', 'category_id' => 1, 'brand_id' => 1, 'unit_price' => 8499000, 'discount' => 1000000, 'discount_type' => 'amount', 'slug' => 'samsung-smart-tv-55', 'tags' => 'samsung,tv,smart-tv', 'todays_deal' => false, 'featured' => true, 'unit' => 'pcs', 'num_of_sale' => 160, 'rating' => 4.7],
+            ['name' => 'Setrika Philips', 'category_id' => 3, 'brand_id' => 6, 'unit_price' => 299000, 'discount' => 0, 'discount_type' => 'amount', 'slug' => 'setrika-philips', 'tags' => 'philips,setrika,rumah-tangga', 'todays_deal' => false, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 1890, 'rating' => 4.4],
+            ['name' => 'Adidas Predator Boots', 'category_id' => 5, 'brand_id' => 4, 'unit_price' => 1899000, 'discount' => 20, 'discount_type' => 'percent', 'slug' => 'adidas-predator-boots', 'tags' => 'adidas,sepatu-bola,sepakbola', 'todays_deal' => false, 'featured' => false, 'unit' => 'pasang', 'num_of_sale' => 920, 'rating' => 4.6],
+            ['name' => 'Sony PlayStation 5', 'category_id' => 8, 'brand_id' => 5, 'unit_price' => 9999000, 'discount' => 0, 'discount_type' => 'amount', 'slug' => 'sony-playstation-5', 'tags' => 'sony,ps5,gaming', 'todays_deal' => false, 'featured' => true, 'unit' => 'pcs', 'num_of_sale' => 780, 'rating' => 4.9],
+            ['name' => 'Dumbbell Set 20kg', 'category_id' => 5, 'brand_id' => 3, 'unit_price' => 599000, 'discount' => 100000, 'discount_type' => 'amount', 'slug' => 'dumbbell-set-20kg', 'tags' => 'dumbbell,fitness,gym', 'todays_deal' => true, 'featured' => false, 'unit' => 'set', 'num_of_sale' => 1450, 'rating' => 4.5],
+            ['name' => 'Buku Atomic Habits', 'category_id' => 7, 'brand_id' => null, 'unit_price' => 129000, 'discount' => 30, 'discount_type' => 'percent', 'slug' => 'buku-atomic-habits', 'tags' => 'buku,pengembangan-diri', 'todays_deal' => false, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 3450, 'rating' => 4.8],
+            ['name' => 'Panasonic AC 1 PK', 'category_id' => 3, 'brand_id' => 6, 'unit_price' => 3599000, 'discount' => 10, 'discount_type' => 'percent', 'slug' => 'panasonic-ac-1pk', 'tags' => 'panasonic,ac,elektronik', 'todays_deal' => false, 'featured' => true, 'unit' => 'pcs', 'num_of_sale' => 280, 'rating' => 4.6],
+            ['name' => 'Board Game Monopoly', 'category_id' => 8, 'brand_id' => null, 'unit_price' => 249000, 'discount' => 0, 'discount_type' => 'amount', 'slug' => 'board-game-monopoly', 'tags' => 'boardgame,mainan,keluarga', 'todays_deal' => false, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 560, 'rating' => 4.4],
+            ['name' => 'Oli Motor Castrol 1L', 'category_id' => 6, 'brand_id' => null, 'unit_price' => 85000, 'discount' => 0, 'discount_type' => 'amount', 'slug' => 'oli-motor-castrol-1l', 'tags' => 'castrol,oli,otomotif', 'todays_deal' => true, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 4200, 'rating' => 4.5],
+            ['name' => 'Samsung Galaxy Tab S9', 'category_id' => 1, 'brand_id' => 1, 'unit_price' => 11999000, 'discount' => 15, 'discount_type' => 'percent', 'slug' => 'samsung-galaxy-tab-s9', 'tags' => 'samsung,tablet,galaxy', 'todays_deal' => false, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 195, 'rating' => 4.7],
+            ['name' => 'Masker Wajah 10pcs', 'category_id' => 4, 'brand_id' => null, 'unit_price' => 49000, 'discount' => 0, 'discount_type' => 'amount', 'slug' => 'masker-wajah-10pcs', 'tags' => 'masker,skincare,kecantikan', 'todays_deal' => false, 'featured' => false, 'unit' => 'paket', 'num_of_sale' => 5600, 'rating' => 4.3],
+            ['name' => 'Air Fryer Low Watt', 'category_id' => 3, 'brand_id' => 6, 'unit_price' => 799000, 'discount' => 20, 'discount_type' => 'percent', 'slug' => 'air-fryer-low-watt', 'tags' => 'air-fryer,dapur,elektronik', 'todays_deal' => false, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 1100, 'rating' => 4.5],
+            ['name' => 'iPhone 14 Pro', 'category_id' => 1, 'brand_id' => 2, 'unit_price' => 14999000, 'discount' => 2500000, 'discount_type' => 'amount', 'slug' => 'iphone-14-pro', 'tags' => 'iphone,apple,smartphone', 'todays_deal' => false, 'featured' => false, 'unit' => 'pcs', 'num_of_sale' => 2900, 'rating' => 4.8],
         ];
-        foreach ($products as $p) {
+        $productIds = [];
+        foreach ($productsData as $idx => $p) {
+            $numOfSale = $p['num_of_sale'];
+            $rating = $p['rating'];
+            $discount = $p['discount'];
+            $discountType = $p['discount_type'];
+            unset($p['discount'], $p['discount_type'], $p['num_of_sale'], $p['rating']);
             $product = Product::create($p + [
                 'user_id' => 1,
                 'added_by' => 'admin',
                 'photos' => '[]',
                 'attributes' => '[]',
                 'meta_title' => $p['name'],
+                'description' => 'Produk berkualitas tinggi: ' . $p['name'] . '. Tersedia dengan garansi resmi dan pengiriman cepat ke seluruh Indonesia.',
+                'published' => 1,
+                'approved' => 1,
+                'discount' => $discount,
+                'discount_type' => $discountType,
+                'num_of_sale' => $numOfSale,
+                'rating' => $rating,
             ]);
             $product->categories()->attach($p['category_id']);
             ProductStock::create([
                 'product_id' => $product->id,
                 'variant' => 'Default',
-                'sku' => strtoupper(substr($p['slug'], 0, 4)) . '-001',
+                'sku' => strtoupper(substr($p['slug'], 0, 4)) . '-' . str_pad($product->id, 3, '0', STR_PAD_LEFT),
                 'price' => $p['unit_price'],
-                'qty' => rand(10, 100),
+                'qty' => rand(10, 200),
             ]);
+            $productIds[] = $product->id;
         }
 
         Slider::create([
@@ -203,6 +186,11 @@ class DatabaseSeeder extends Seeder
             'position' => 2,
             'status' => 1,
         ]);
+
+        $this->seedFlashDeals($productIds);
+        $this->seedBanners();
+        $this->seedCoupons();
+        $this->seedStorefrontSettings();
 
         Page::create([
             'type' => 'about',
@@ -301,6 +289,104 @@ class DatabaseSeeder extends Seeder
 
         $this->seedPaymentGateways();
         $this->seedDemoOrders();
+    }
+
+    protected function seedFlashDeals(array $productIds): void
+    {
+        $deals = [
+            [
+                'title' => 'Flash Sale Spesial',
+                'start_date' => now()->subDays(2)->timestamp,
+                'end_date' => now()->addDays(2)->timestamp,
+                'featured' => true,
+                'background_color' => '#ff4444',
+                'text_color' => '#ffffff',
+                'slug' => 'flash-sale-spesial',
+            ],
+            [
+                'title' => 'Promo Akhir Pekan',
+                'start_date' => now()->timestamp,
+                'end_date' => now()->addDays(1)->timestamp,
+                'featured' => false,
+                'background_color' => '#4f46e5',
+                'text_color' => '#ffffff',
+                'slug' => 'promo-akhir-pekan',
+            ],
+        ];
+
+        foreach ($deals as $d) {
+            $deal = FlashDeal::create($d + ['status' => true]);
+            $dealProducts = collect($productIds)->random(min(6, count($productIds)));
+            foreach ($dealProducts as $pid) {
+                FlashDealProduct::create([
+                    'flash_deal_id' => $deal->id,
+                    'product_id' => $pid,
+                    'discount' => rand(10, 50),
+                    'discount_type' => 'percent',
+                ]);
+            }
+        }
+    }
+
+    protected function seedBanners(): void
+    {
+        $banners = [
+            ['title' => 'Banner 1a', 'type' => 'banner1', 'position' => 1, 'link' => '/products?category=elektronik'],
+            ['title' => 'Banner 1b', 'type' => 'banner1', 'position' => 2, 'link' => '/products?category=fashion'],
+            ['title' => 'Banner 2a', 'type' => 'banner2', 'position' => 1, 'link' => '/products?category=rumah-tangga'],
+            ['title' => 'Banner 2b', 'type' => 'banner2', 'position' => 2, 'link' => '/products?category=olahraga'],
+            ['title' => 'Banner 3a', 'type' => 'banner3', 'position' => 1, 'link' => '/products'],
+            ['title' => 'Banner 3b', 'type' => 'banner3', 'position' => 2, 'link' => '/blog'],
+        ];
+
+        foreach ($banners as $b) {
+            Banner::create($b + ['status' => true]);
+        }
+    }
+
+    protected function seedCoupons(): void
+    {
+        $coupons = [
+            ['type' => 'product_base', 'code' => 'WELCOME50', 'discount' => 50000, 'discount_type' => 'amount', 'min_buy' => 100000, 'max_discount' => 50000],
+            ['type' => 'product_base', 'code' => 'HEMAT20', 'discount' => 20, 'discount_type' => 'percent', 'min_buy' => 200000, 'max_discount' => 100000],
+            ['type' => 'product_base', 'code' => 'GRATISONGKIR', 'discount' => 25, 'discount_type' => 'percent', 'min_buy' => 150000, 'max_discount' => 50000],
+            ['type' => 'product_base', 'code' => 'NEWYEAR2025', 'discount' => 10, 'discount_type' => 'percent', 'min_buy' => 500000, 'max_discount' => 200000],
+            ['type' => 'product_base', 'code' => 'SPECIAL30', 'discount' => 30, 'discount_type' => 'percent', 'min_buy' => 300000, 'max_discount' => 75000],
+        ];
+
+        foreach ($coupons as $c) {
+            Coupon::create($c + [
+                'user_id' => 1,
+                'details' => 'Kupon berlaku untuk semua produk',
+                'start_date' => now()->timestamp,
+                'end_date' => now()->addMonths(3)->timestamp,
+                'status' => true,
+            ]);
+        }
+    }
+
+    protected function seedStorefrontSettings(): void
+    {
+        $settings = [
+            ['type' => 'storefront', 'key' => 'best_selling', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'coupon_system', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'classified_product', 'value' => '0'],
+            ['type' => 'storefront', 'key' => 'flash_deal', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'todays_deal', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'featured_products', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'featured_categories', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'newsletter', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'top_brands', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'new_products', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'home_banner1', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'home_banner2', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'home_banner3', 'value' => '1'],
+            ['type' => 'storefront', 'key' => 'category_products', 'value' => '1'],
+        ];
+
+        foreach ($settings as $s) {
+            BusinessSetting::create($s);
+        }
     }
 
     protected function seedPaymentGateways(): void

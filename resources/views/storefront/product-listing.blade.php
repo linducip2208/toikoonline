@@ -66,7 +66,7 @@
                 <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">Kategori</h4>
                 <div class="space-y-1">
                     @foreach($categories as $cat)
-                    <a href="{{ route('products.category', $cat->slug) }}"
+                    <a href="{{ route('categories.show', $cat->slug) }}"
                        class="flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer hover:bg-stone-50 text-sm transition-colors
                               {{ (isset($category) && $category->id === $cat->id) ? 'text-brand-600 bg-brand-50 font-medium' : 'text-stone-700' }}">
                         <span class="flex-1">{{ $cat->name }}</span>
@@ -100,7 +100,7 @@
                 <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">Brand</h4>
                 <div class="space-y-1 max-h-44 overflow-y-auto">
                     @foreach($brands as $br)
-                    <a href="{{ route('products.brand', $br->slug) }}"
+                    <a href="{{ route('brands.show', $br->slug) }}"
                        class="flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer hover:bg-stone-50 text-sm transition-colors
                               {{ (isset($brand) && $brand->id === $br->id) ? 'text-brand-600 bg-brand-50 font-medium' : 'text-stone-700' }}">
                         <span>{{ $br->name }}</span>

@@ -18,9 +18,9 @@ class PageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationGroup = '📢 Marketing';
+    protected static ?string $navigationGroup = '🧩 CMS';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -28,17 +28,64 @@ class PageResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('type')
                     ->required()
-                    ->maxLength(50),
+                    ->maxLength(50)
+                    ->default('custom'),
                 Forms\Components\TextInput::make('title')
-                    ->maxLength(255),
+                    ->required()
+                    ->maxLength(255)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(fn($state, Forms\Set $set) => $set('slug', \Illuminate\Support\Str::slug($state))),
                 Forms\Components\TextInput::make('slug')
+                    ->required()
+                    ->unique(ignoreRecord: true)
                     ->maxLength(255),
-                Forms\Components\Textarea::make('content')
+                Forms\Components\Toggle::make('status')->label('Tampil?')->default(true),
+                Forms\Components\Toggle::make('show_in_footer')->label('Tampilkan di footer?')->default(false),
+                Forms\Components\RichEditor::make('content')
+                    ->label('Konten utama (fallback jika blocks kosong)')
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('meta_title')
+                Forms\Components\Builder::make('blocks')
+                    ->label('Page Builder — susun blok konten')
+                    ->columnSpanFull()
+                    ->collapsible()
+                    ->blocks([
+                        Forms\Components\Builder\Block::make('hero')
+                            ->label('Hero')
+                            ->schema([
+                                Forms\Components\TextInput::make('heading')->required(),
+                                Forms\Components\Textarea::make('subheading')->rows(2),
+                                Forms\Components\TextInput::make('cta_text'),
+                                Forms\Components\TextInput::make('cta_url'),
+                                Forms\Components\FileUpload::make('image')->image()->directory('cms-pages'),
+                            ]),
+                        Forms\Components\Builder\Block::make('html')
+                            ->label('HTML bebas')
+                            ->schema([
+                                Forms\Components\RichEditor::make('html')->required()->columnSpanFull(),
+                            ]),
+                        Forms\Components\Builder\Block::make('banner_grid')
+                            ->label('Grid banner (2 kolom)')
+                            ->schema([
+                                Forms\Components\TextInput::make('title'),
+                                Forms\Components\Repeater::make('items')
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('image')->image()->directory('cms-pages'),
+                                        Forms\Components\TextInput::make('link'),
+                                        Forms\Components\TextInput::make('caption'),
+                                    ])->columns(3)->columnSpanFull(),
+                            ]),
+                        Forms\Components\Builder\Block::make('product_grid')
+                            ->label('Grid produk (otomatis)')
+                            ->schema([
+                                Forms\Components\TextInput::make('title')->placeholder('Produk Pilihan'),
+                                Forms\Components\Select::make('source')->options(['featured' => 'Featured', 'best_seller' => 'Terlaris', 'latest' => 'Terbaru', 'category' => 'Per kategori'])->default('featured'),
+                                Forms\Components\TextInput::make('limit')->numeric()->default(8),
+                            ]),
+                    ]),
+                Forms\Components\TextInput::make('meta_title')
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('meta_description')
-                    ->maxLength(1000),
+                    ->maxLength(1000)->columnSpanFull(),
                 Forms\Components\TextInput::make('keywords')
                     ->maxLength(1000),
                 Forms\Components\FileUpload::make('meta_image')
@@ -50,21 +97,14 @@ class PageResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('type')
-                    ->searchable(),
+                Tables\Columns\IconColumn::make('status')->boolean()->label('Tampil'),
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
+                    ->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('meta_description')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('keywords')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('meta_image'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->searchable()->toggleable(),
+                Tables\Columns\IconColumn::make('show_in_footer')->boolean()->label('Footer'),
+                Tables\Columns\TextColumn::make('type')
+                    ->badge(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

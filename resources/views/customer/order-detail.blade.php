@@ -5,7 +5,7 @@
 @section('content')
 <div x-data="orderDetailPage()">
     <div class="mb-6">
-        <a href="/customer/pesanan" class="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-brand-600 transition mb-4">
+        <a href="{{ route('customer.orders') }}" class="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-brand-600 transition mb-4">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             Kembali ke Daftar Pesanan
         </a>
@@ -135,6 +135,36 @@
                         <span class="font-semibold font-mono text-stone-800" x-text="order.paymentInfo.accountNumber"></span>
                     </div>
                 </div>
+            </div>
+
+            {{-- Lacak pengiriman live (delivery_histories DB + API Biteship/RajaOngkir) --}}
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm">
+                <h3 class="font-bold text-stone-900 mb-1 flex items-center gap-2">
+                    <i class="fas fa-truck text-brand-500"></i> Lacak Pengiriman
+                </h3>
+                <p class="text-xs text-stone-500 mb-4">Riwayat dari admin & kurir (diperbarui otomatis via webhook).</p>
+                @if(isset($trackingTimeline) && $trackingTimeline->count())
+                <ol class="relative border-l border-stone-200 ml-2 space-y-4">
+                    @foreach($trackingTimeline as $t)
+                    <li class="ml-4">
+                        <span class="absolute -left-[7px] mt-1 w-3 h-3 rounded-full bg-brand-500 ring-4 ring-brand-100"></span>
+                        <p class="text-sm font-semibold text-stone-800">{{ $t['label'] }}</p>
+                        <p class="text-[11px] text-stone-400">{{ $t['date'] }}</p>
+                        @if($t['note'])<p class="text-xs text-stone-500 mt-0.5">{{ $t['note'] }}</p>@endif
+                    </li>
+                    @endforeach
+                </ol>
+                @else
+                <div x-data="{ waybill: '', courier: 'jne', result: null, loading: false, err: '' }" class="text-sm">
+                    <div class="flex gap-2">
+                        <input x-model="waybill" placeholder="No. resi…" class="flex-1 px-3 py-2.5 min-h-[44px] border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400" aria-label="Nomor resi">
+                        <button @click="loading=true; err=''; fetch(`/api/shipping/track/${waybill}?courier=${courier}`).then(r=>r.json()).then(d=>{result=d.data; if(!d.success) err=d.message||'Tidak ditemukan'}).catch(e=>err=e.message).finally(()=>loading=false)" class="px-4 min-h-[44px] bg-stone-900 text-white text-sm font-semibold rounded-xl" :disabled="!waybill">Lacak</button>
+                    </div>
+                    <p x-show="err" x-text="err" class="text-xs text-red-600 mt-2"></p>
+                    <pre x-show="result" x-text="JSON.stringify(result,null,2)" class="text-[11px] bg-stone-50 border rounded-xl p-3 mt-2 overflow-auto max-h-48"></pre>
+                    <p class="text-[11px] text-stone-400 mt-2">Belum ada riwayat? Resi muncul setelah admin input no. resi.</p>
+                </div>
+                @endif
             </div>
         </div>
     </div>

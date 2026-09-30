@@ -18,6 +18,8 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use App\Models\PaymentGatewayConfig;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Exports\OrderExporter;
 
 class OrderResource extends Resource
 {
@@ -79,6 +81,23 @@ class OrderResource extends Resource
                             ->disabled()
                             ->columnSpanFull(),
                     ])->columns(2),
+                Section::make('Pengiriman (Resi)')
+                    ->description('Isi resi → timeline "Lacak Pengiriman" pelanggan terisi otomatis.')
+                    ->schema([
+                        Select::make('courier')
+                            ->label('Kurir')
+                            ->options(['jne' => 'JNE', 'jnt' => 'J&T', 'sicepat' => 'SiCepat', 'anteraja' => 'AnterAja', 'paxel' => 'Paxel', 'gosend' => 'GoSend'])
+                            ->searchable()
+                            ->nullable(),
+                        TextInput::make('tracking_number')
+                            ->label('Nomor Resi')
+                            ->maxLength(100)
+                            ->placeholder('cth: 882512000123'),
+                        TextInput::make('shipping_cost')
+                            ->prefix('Rp')
+                            ->numeric()
+                            ->disabled(),
+                    ])->columns(3),
             ]);
     }
 
@@ -136,6 +155,9 @@ class OrderResource extends Resource
                         'paid' => 'Dibayar',
                         'refunded' => 'Direfund',
                     ]),
+            ])
+            ->headerActions([
+                ExportAction::make()->exporter(OrderExporter::class),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

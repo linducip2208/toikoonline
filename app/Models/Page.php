@@ -11,9 +11,23 @@ class Page extends Model
         'title',
         'slug',
         'content',
+        'blocks',
+        'status',
+        'show_in_footer',
         'meta_title',
         'meta_description',
         'keywords',
         'meta_image',
     ];
+
+    protected $casts = [
+        'blocks' => 'array',
+        'status' => 'boolean',
+        'show_in_footer' => 'boolean',
+    ];
+
+    public function scopeActive($q)
+    {
+        return $q->where('status', true);
+    }
 }

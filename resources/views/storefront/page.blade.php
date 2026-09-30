@@ -83,6 +83,8 @@
 <div class="max-w-3xl mx-auto px-4 py-12">
     <h1 class="font-display text-3xl sm:text-4xl font-bold text-stone-900 mb-8">{{ $page->title }}</h1>
 
+    @include('storefront.partials.page-blocks', ['blocks' => $page->blocks ?? []])
+
     <div class="page-content text-stone-700 leading-relaxed text-[15px] bg-white border border-stone-200 rounded-2xl p-8 shadow-sm">
         {!! $page->content !!}
     </div>

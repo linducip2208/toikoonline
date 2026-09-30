@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Indigo,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
-            ->darkMode(true)
+            ->darkMode(false)
             ->sidebarCollapsibleOnDesktop()
             ->sidebarWidth('15.5rem')
             ->collapsedSidebarWidth('4rem')
@@ -41,6 +41,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('🏪 Toko')->collapsed(false),
                 NavigationGroup::make('📦 Katalog')->collapsed(false),
                 NavigationGroup::make('🛒 Pesanan')->collapsed(false),
+                NavigationGroup::make('📊 Laporan')->collapsed(false),
                 NavigationGroup::make('💳 Pembayaran')->collapsed(true),
                 NavigationGroup::make('🚚 Pengiriman')->collapsed(true),
                 NavigationGroup::make('👥 Pelanggan')->collapsed(true),
@@ -57,8 +58,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
+                \App\Filament\Widgets\QuickStatsWidget::class,
                 \App\Filament\Widgets\StatsOverview::class,
                 \App\Filament\Widgets\OrderChartWidget::class,
+                \App\Filament\Widgets\OrderStatusChart::class,
+                \App\Filament\Widgets\TopProductsChart::class,
                 \App\Filament\Widgets\RecentOrdersWidget::class,
             ])
             ->databaseNotifications()

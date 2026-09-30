@@ -15,9 +15,14 @@ class ShippingService
     public function setConfig(ShippingConfig $config): static
     {
         $this->config = $config;
-        $this->apiKey = $config->api_key_encrypted ? Crypt::decryptString($config->api_key_encrypted) : '';
+        $this->apiKey = $config->api_key_encrypted ? $config->api_key_encrypted : '';
         $this->baseUrl = $config->base_url ?? '';
         return $this;
+    }
+
+    public function isBiteship(): bool
+    {
+        return $this->config && in_array($this->config->provider_format, ['biteship-api', 'biteship']);
     }
 
     public function getProvinces(): array
@@ -32,8 +37,14 @@ class ShippingService
         return $response['rajaongkir']['results'] ?? $response['data'] ?? $response['cities'] ?? [];
     }
 
-    public function getCost(int $originCityId, int $destinationCityId, int $weight, string $courier = ''): array
+    public function getCost(int|string $originCityId, int|string $destinationCityId, int $weight, string $courier = ''): array
     {
+        // Biteship memakai area_id string (ex: JKT-...), RajaOngkir memakai city id int
+        if ($this->isBiteship()) {
+            $adapter = new BiteshipAdapter($this->config);
+            return $adapter->getRates((string) $originCityId, (string) $destinationCityId, $weight, $courier);
+        }
+
         $payload = [
             'origin' => $originCityId,
             'destination' => $destinationCityId,
@@ -60,6 +71,10 @@ class ShippingService
 
     public function getTracking(string $waybill, string $courier = ''): array
     {
+        if ($this->isBiteship()) {
+            return (new BiteshipAdapter($this->config))->track($waybill, $courier);
+        }
+
         $response = $this->makeRequest('POST', '/waybill', [
             'waybill' => $waybill,
             'courier' => $courier,

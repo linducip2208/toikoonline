@@ -1,3 +1,131 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ============================================================
+   TokoOnline — komponen & utilitas custom (pindahan dari
+   <style> inline + cdn.tailwindcss.com di 9 blade).
+   Aturan: spacing skala 4px, radius konsisten, transisi 150-250ms.
+   ============================================================ */
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        font-family: 'Inter', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    /* Alpine.js: sembunyikan elemen ber-cloak sebelum init */
+    [x-cloak] {
+        display: none !important;
+    }
+    /* Aksesibilitas: focus terlihat di semua elemen interaktif */
+    :focus-visible {
+        outline: 2px solid #6366f1;
+        outline-offset: 2px;
+    }
+}
+
+@layer components {
+    .font-display {
+        font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    /* Kartu produk: angkat + bayangan saat hover */
+    .card-lift {
+        transition: transform .35s cubic-bezier(.16, 1, .3, 1), box-shadow .35s cubic-bezier(.16, 1, .3, 1);
+    }
+    .card-lift:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 24px 48px -12px rgba(0, 0, 0, .18);
+    }
+
+    /* Scroll reveal (dipicu IntersectionObserver) */
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity .7s ease, transform .7s cubic-bezier(.16, 1, .3, 1);
+    }
+    .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Navbar kaca */
+    .backdrop-blur-nav {
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+    }
+
+    /* Sembunyikan scrollbar untuk rail horizontal (voucher, nav kategori) */
+    .scrollbar-none {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Efek shimmer loading */
+    .animate-shimmer {
+        background: linear-gradient(90deg, transparent 25%, rgba(255, 255, 255, .15) 50%, transparent 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.8s ease-in-out infinite;
+    }
+
+    /* Ping lambat untuk badge notifikasi */
+    .animate-ping-slow {
+        animation: ping 2s ease-out infinite;
+    }
+
+    /* Bintang rating emas */
+    .star-gold {
+        color: #f59e0b;
+    }
+
+    /* Tombol gradien primer */
+    .btn-gradient {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        transition: transform .2s, box-shadow .2s;
+    }
+    .btn-gradient:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px -6px rgba(99, 102, 241, .45);
+    }
+
+    /* Badge diskon */
+    .discount-badge {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+
+    /* Kotak timer flash-deal */
+    .flash-timer-box {
+        background: rgba(239, 68, 68, .15);
+        border: 1px solid rgba(239, 68, 68, .3);
+    }
+
+    /* Hero gradient + glow */
+    .hero-gradient {
+        background: linear-gradient(135deg, #312e81 0%, #4338ca 30%, #6366f1 60%, #a21caf 100%);
+    }
+    .hero-gradient::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 20% 80%, rgba(168, 85, 247, .2) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(99, 102, 241, .25) 0%, transparent 50%),
+            radial-gradient(circle at 50% 50%, rgba(236, 72, 153, .1) 0%, transparent 60%);
+        pointer-events: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

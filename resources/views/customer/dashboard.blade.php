@@ -62,7 +62,7 @@
             </div>
         </a>
 
-        <a href="/customer/pesanan" class="flex items-center gap-4 p-5 bg-white border border-stone-200 rounded-2xl hover:border-brand-300 hover:shadow-md transition-all duration-200 group">
+        <a href="{{ route('customer.orders') }}" class="flex items-center gap-4 p-5 bg-white border border-stone-200 rounded-2xl hover:border-brand-300 hover:shadow-md transition-all duration-200 group">
             <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition">
                 <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
             </div>
@@ -88,7 +88,7 @@
             <div class="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-stone-200 flex items-center justify-between">
                     <h2 class="font-bold text-stone-900">Pesanan Terbaru</h2>
-                    <a href="/customer/pesanan" class="text-sm text-brand-600 hover:text-brand-700 font-semibold">Lihat Semua →</a>
+                    <a href="{{ route('customer.orders') }}" class="text-sm text-brand-600 hover:text-brand-700 font-semibold">Lihat Semua →</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
@@ -111,7 +111,7 @@
                                     </td>
                                     <td class="px-4 py-3 text-right font-semibold" x-text="'Rp ' + formatRupiah(order.total)"></td>
                                     <td class="px-4 py-3 text-right">
-                                        <a :href="'/customer/pesanan/' + order.code" class="text-brand-600 hover:text-brand-700 text-xs font-bold">Detail</a>
+                                        <a :href="'{{ route('customer.orders') }}/' + order.code" class="text-brand-600 hover:text-brand-700 text-xs font-bold">Detail</a>
                                     </td>
                                 </tr>
                             </template>
@@ -128,7 +128,7 @@
             <div class="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-stone-200 flex items-center justify-between">
                     <h2 class="font-bold text-stone-900">Wishlist</h2>
-                    <a href="/customer/wishlist" class="text-sm text-brand-600 hover:text-brand-700 font-semibold">Lihat Semua →</a>
+                    <a href="{{ route('customer.wishlist') }}" class="text-sm text-brand-600 hover:text-brand-700 font-semibold">Lihat Semua →</a>
                 </div>
                 <div class="p-4 space-y-3">
                     <template x-for="item in wishlistItems" :key="item.name">
@@ -153,12 +153,12 @@
 <script>
     function customerDashboard() {
         return {
-            userName: 'Budi Santoso',
+            userName: @json($user->name ?? 'Pelanggan'),
             stats: {
-                totalOrders: 24,
-                activeOrders: 3,
-                walletBalance: 850000,
-                loyaltyPoints: 1250
+                totalOrders: {{ (int) $totalOrders }},
+                activeOrders: {{ (int) $pendingOrders }},
+                walletBalance: 0,
+                loyaltyPoints: {{ (int) ($loyaltyPoints ?? 0) }}
             },
             recentOrders: [
                 { code: 'ORD-MZ9XK4L2', date: '10 Jun 2026', status: 'Menunggu Pembayaran', total: 1410800 },

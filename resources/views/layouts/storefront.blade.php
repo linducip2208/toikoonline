@@ -18,125 +18,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                        display: ['Playfair Display', 'Georgia', 'serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            200: '#c7d2fe',
-                            300: '#a5b4fc',
-                            400: '#818cf8',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            800: '#3730a3',
-                            900: '#312e81',
-                            950: '#1e1b4b',
-                        },
-                        accent: {
-                            50: '#fdf4ff',
-                            100: '#fae8ff',
-                            200: '#f5d0fe',
-                            300: '#f0abfc',
-                            400: '#e879f9',
-                            500: '#d946ef',
-                            600: '#c026d3',
-                            700: '#a21caf',
-                            800: '#86198f',
-                        },
-                        warm: {
-                            50: '#fffbeb',
-                            100: '#fef3c7',
-                            200: '#fde68a',
-                            300: '#fcd34d',
-                            400: '#fbbf24',
-                            500: '#f59e0b',
-                        },
-                    },
-                }
-            }
-        }
-    </script>
+    {{-- CSS lokal (Vite): gantikan cdn.tailwindcss.com — token di tailwind.config.js --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
-
     @stack('styles')
-
-    <style>
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-        @keyframes fadeSlideUp {
-            0% { transform: translateY(40px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes scaleIn {
-            0% { transform: scale(.85); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes slideInRight {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(0); }
-        }
-        @keyframes pingSlow {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.8); opacity: 0; }
-        }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        .animate-float-slow { animation: floatSlow 5s ease-in-out infinite; }
-        .animate-float-slow-delayed { animation: floatSlow 5s ease-in-out 1.5s infinite; }
-        .animate-float-slow-delayed-2 { animation: floatSlow 5s ease-in-out 3s infinite; }
-        .animate-fade-slide-up { animation: fadeSlideUp .7s cubic-bezier(.16,1,.3,1) forwards; }
-        .animate-scale-in { animation: scaleIn .6s cubic-bezier(.16,1,.3,1) forwards; }
-        .animate-slide-in-right { animation: slideInRight .35s cubic-bezier(.16,1,.3,1) forwards; }
-        .animate-ping-slow { animation: pingSlow 2s ease-out infinite; }
-        .animate-shimmer {
-            background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,.15) 50%, transparent 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.8s ease-in-out infinite;
-        }
-        .card-lift {
-            transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s cubic-bezier(.16,1,.3,1);
-        }
-        .card-lift:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 24px 48px -12px rgba(0,0,0,.18);
-        }
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1);
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        .font-display { font-family: 'Playfair Display', Georgia, serif; }
-        .backdrop-blur-nav {
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-        }
-    </style>
 </head>
-<body class="bg-stone-50 text-stone-900 antialiased">
+<body class="bg-stone-50 text-stone-900 antialiased lg:pb-0" style="padding-bottom: 3.5rem;">
 
     {{-- Top Navbar --}}
     <header x-data="{ mobileMenu: false, searchOpen: false }"
@@ -157,16 +46,47 @@
                     <span class="font-display font-bold text-xl text-stone-900 hidden sm:block">TokoOnline</span>
                 </a>
 
-                {{-- Search bar desktop --}}
-                <form action="{{ route('products.index') }}" class="hidden md:flex flex-1 max-w-lg relative">
+                {{-- Search bar desktop with autocomplete --}}
+                <div class="hidden md:flex flex-1 max-w-lg relative" x-data="liveSearch()">
                     <div class="relative w-full">
-                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-                        <input type="search" name="q" placeholder="Cari produk... (contoh: sepatu, tas, baju)"
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm z-10"></i>
+                        <input type="search" x-model="query" @input.debounce.300ms="search" @focus="open = results.length > 0"
+                               @keydown.escape="open = false" @keydown.arrow-down.prevent="focusNext" @keydown.arrow-up.prevent="focusPrev"
+                               @keydown.enter.prevent="selectFocused"
+                               placeholder="Cari produk... (contoh: sepatu, tas, baju)"
                                class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm
                                       focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400
                                       transition-all placeholder:text-stone-400">
+                        <button x-show="query" @click="query = ''; results = []; open = false" class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 z-10">
+                            <i class="fas fa-times text-xs"></i>
+                        </button>
                     </div>
-                </form>
+                    <div x-show="open && results.length > 0" x-cloak @click.outside="open = false"
+                         class="absolute top-full mt-2 left-0 right-0 bg-white rounded-xl shadow-xl border border-stone-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+                        <template x-for="(product, idx) in results" :key="product.id">
+                            <a :href="'/products/' + product.slug"
+                               :class="{ 'bg-brand-50': focused === idx }"
+                               class="flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors border-b border-stone-50 last:border-0 cursor-pointer">
+                                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-50 to-accent-50 flex items-center justify-center shrink-0 overflow-hidden">
+                                    <img :src="product.thumbnail_url" :alt="product.name" class="w-full h-full object-cover" x-show="product.thumbnail_url">
+                                    <i class="fas fa-box text-brand-300" x-show="!product.thumbnail_url"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-stone-800 truncate" x-text="product.name"></p>
+                                    <p class="text-xs text-brand-600 font-semibold" x-text="product.price_formatted"></p>
+                                </div>
+                                <i class="fas fa-arrow-right text-stone-300 text-xs"></i>
+                            </a>
+                        </template>
+                    </div>
+                    <div x-show="open && results.length === 0 && query.length >= 2" x-cloak @click.outside="open = false"
+                         class="absolute top-full mt-2 left-0 right-0 bg-white rounded-xl shadow-xl border border-stone-200 overflow-hidden z-50">
+                        <div class="px-4 py-6 text-center text-stone-400 text-sm">
+                            <i class="fas fa-search text-2xl mb-2 block"></i>
+                            Tidak ditemukan untuk "<span x-text="query" class="font-semibold text-stone-600"></span>"
+                        </div>
+                    </div>
+                </div>
 
                 {{-- Right icons --}}
                 <div class="flex items-center gap-1 sm:gap-3">
@@ -174,10 +94,16 @@
                         <i class="fas fa-search text-lg"></i>
                     </button>
 
-                    <a href="#" class="relative text-stone-600 hover:text-brand-600 p-2 transition-colors">
+                    <a href="{{ auth()->check() ? route('customer.wishlist') : route('login') }}" class="relative text-stone-600 hover:text-brand-600 p-2 transition-colors">
                         <i class="far fa-heart text-xl"></i>
-                        <span class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold
-                                     rounded-full flex items-center justify-center leading-none">0</span>
+                        <span x-show="$store.wishlist.count > 0" x-text="$store.wishlist.count"
+                              class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none"></span>
+                    </a>
+
+                    <a href="{{ auth()->check() ? route('compare.index') : route('login') }}" class="relative text-stone-600 hover:text-brand-600 p-2 transition-colors hidden sm:block">
+                        <i class="fas fa-balance-scale text-lg"></i>
+                        <span x-show="$store.compare.count > 0" x-text="$store.compare.count"
+                              class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-blue-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none"></span>
                     </a>
 
                     <button @click="$store.cart.open = true" class="relative text-stone-600 hover:text-brand-600 p-2 transition-colors">
@@ -195,33 +121,47 @@
                         </button>
                         <div x-show="open" @click.outside="open = false" x-cloak
                              class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-stone-200 py-2 z-50">
+                            @auth
+                            <a href="{{ route('customer.dashboard') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Dashboard</a>
+                            <a href="{{ route('customer.orders') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Pesanan Saya</a>
+                            <a href="{{ route('customer.wishlist') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Wishlist</a>
+                            <hr class="my-1 border-stone-100">
+                            <form method="POST" action="{{ route('logout') }}" class="block">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">Keluar</button>
+                            </form>
+                            @else
                             <a href="{{ route('login') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Masuk</a>
                             <a href="{{ route('register') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Daftar</a>
                             <hr class="my-1 border-stone-100">
-                            <a href="#" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Pesanan Saya</a>
-                            <a href="#" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Pengaturan</a>
+                            <a href="{{ route('compare.index') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Bandingkan</a>
+                            <a href="{{ route('coupons.index') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Kupon</a>
+                            @endauth
                         </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Category navbar desktop --}}
-            <nav class="hidden lg:flex items-center gap-1 pb-2 overflow-x-auto scrollbar-none">
-                <a href="#" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">Elektronik</a>
-                <a href="#" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">Fashion Pria</a>
-                <a href="#" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">Fashion Wanita</a>
-                <a href="#" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">Rumah Tangga</a>
-                <a href="#" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">Kesehatan</a>
-                <a href="#" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">Olahraga</a>
-                <a href="#" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">Makanan & Minuman</a>
-                <a href="#" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">Otomotif</a>
-                <a href="#" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">Buku & Alat Tulis</a>
-                <a href="#" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">Mainan & Hobi</a>
+            {{-- Category navbar desktop (CMS: menus lokasi header, fallback kategori) --}}
+            <nav class="hidden lg:flex items-center gap-1 pb-2 overflow-x-auto scrollbar-none" aria-label="Navigasi utama">
+                @if(isset($headerMenus) && $headerMenus->count())
+                    @foreach($headerMenus as $m)
+                    <a href="{{ $m->url }}" @if($m->open_new_tab) target="_blank" rel="noopener" @endif class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 min-h-[32px] inline-flex items-center rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">@if($m->icon)<i class="fas fa-{{ $m->icon }} mr-1 text-[10px]"></i>@endif{{ $m->label }}</a>
+                    @endforeach
+                @else
+                    @php
+                        $navCategories = \App\Models\Category::where('top', true)->orderBy('name')->get();
+                    @endphp
+                    @foreach($navCategories as $cat)
+                    <a href="{{ route('categories.show', $cat->slug) }}" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">{{ $cat->name }}</a>
+                    @endforeach
+                    <a href="{{ route('categories.index') }}" class="text-xs font-medium text-brand-600 hover:text-brand-700 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap font-semibold">Semua <i class="fas fa-chevron-right text-[9px] ml-0.5"></i></a>
+                @endif
             </nav>
 
             {{-- Mobile search --}}
             <div x-show="searchOpen" x-cloak class="md:hidden pb-3">
-                <form action="{{ route('products.index') }}" class="relative">
+                <form action="{{ route('search') }}" class="relative">
                     <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
                     <input type="search" name="q" placeholder="Cari produk..." autofocus
                            class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm
@@ -241,30 +181,19 @@
                         </button>
                     </div>
                     <div class="p-4 space-y-1">
-                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-700 hover:bg-brand-50 hover:text-brand-600">
-                            <i class="fas fa-laptop w-5 text-center text-brand-400"></i> Elektronik
+                        @if(isset($mobileMenus) && $mobileMenus->count())
+                            @foreach($mobileMenus as $m)
+                            <a href="{{ $m->url }}" @if($m->open_new_tab) target="_blank" rel="noopener" @endif class="flex items-center gap-3 px-3 py-2.5 min-h-[44px] rounded-lg text-sm font-medium text-stone-700 hover:bg-brand-50 hover:text-brand-600">
+                                <i class="fas fa-{{ $m->icon ?: 'chevron-right' }} w-5 text-center text-brand-400"></i> {{ $m->label }}
+                            </a>
+                            @endforeach
+                            <div class="border-t border-stone-100 my-2"></div>
+                        @endif
+                        @foreach(\App\Models\Category::where('top', true)->orderBy('name')->get() as $cat)
+                        <a href="{{ route('categories.show', $cat->slug) }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-700 hover:bg-brand-50 hover:text-brand-600">
+                            <i class="fas fa-{{ $cat->icon ?: 'folder' }} w-5 text-center text-brand-400"></i> {{ $cat->name }}
                         </a>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-700 hover:bg-brand-50 hover:text-brand-600">
-                            <i class="fas fa-tshirt w-5 text-center text-brand-400"></i> Fashion Pria
-                        </a>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-700 hover:bg-brand-50 hover:text-brand-600">
-                            <i class="fas fa-female w-5 text-center text-brand-400"></i> Fashion Wanita
-                        </a>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-700 hover:bg-brand-50 hover:text-brand-600">
-                            <i class="fas fa-home w-5 text-center text-brand-400"></i> Rumah Tangga
-                        </a>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-700 hover:bg-brand-50 hover:text-brand-600">
-                            <i class="fas fa-heartbeat w-5 text-center text-brand-400"></i> Kesehatan
-                        </a>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-700 hover:bg-brand-50 hover:text-brand-600">
-                            <i class="fas fa-running w-5 text-center text-brand-400"></i> Olahraga
-                        </a>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-700 hover:bg-brand-50 hover:text-brand-600">
-                            <i class="fas fa-utensils w-5 text-center text-brand-400"></i> Makanan & Minuman
-                        </a>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-700 hover:bg-brand-50 hover:text-brand-600">
-                            <i class="fas fa-car w-5 text-center text-brand-400"></i> Otomotif
-                        </a>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -303,11 +232,85 @@
                         <span class="text-stone-500">Total (0 item)</span>
                         <span class="font-bold text-lg">Rp 0</span>
                     </div>
-                    <button disabled
-                            class="w-full py-3 bg-stone-300 text-stone-500 rounded-xl text-sm font-semibold cursor-not-allowed">
-                        Keranjang Kosong
-                    </button>
+                    <button disabled class="w-full py-3 bg-stone-300 text-stone-500 rounded-xl text-sm font-semibold cursor-not-allowed">Keranjang Kosong</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Quick View Modal --}}
+    <div x-data x-show="$store.quickView.open" x-cloak class="fixed inset-0 z-50 overflow-y-auto"
+         x-effect="document.body.style.overflow = $store.quickView.open ? 'hidden' : ''">
+        <div class="absolute inset-0 bg-stone-900/60" @click="$store.quickView.open = false; $store.quickView.product = null"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-2xl max-w-2xl w-full shadow-2xl animate-scale-in overflow-hidden">
+                <button @click="$store.quickView.open = false; $store.quickView.product = null"
+                        class="absolute top-4 right-4 z-10 w-8 h-8 bg-stone-100 hover:bg-stone-200 rounded-full flex items-center justify-center text-stone-500">
+                    <i class="fas fa-times text-sm"></i></button>
+                <div x-show="$store.quickView.loading" class="p-12 text-center">
+                    <i class="fas fa-spinner fa-spin text-3xl text-brand-400"></i>
+                </div>
+                <template x-if="$store.quickView.product && !$store.quickView.loading">
+                <div class="grid md:grid-cols-2 gap-0">
+                    <div class="bg-gradient-to-br from-brand-50 to-accent-50 flex items-center justify-center p-8 min-h-[300px]">
+                        <img :src="$store.quickView.product.thumbnail" :alt="$store.quickView.product.name"
+                             class="max-w-full max-h-64 object-contain" x-show="$store.quickView.product.thumbnail">
+                        <i class="fas fa-box text-6xl text-brand-200" x-show="!$store.quickView.product.thumbnail"></i>
+                    </div>
+                    <div class="p-6 lg:p-8 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs text-stone-400" x-text="$store.quickView.product.category"></span>
+                            <template x-if="$store.quickView.product.brand"><span class="text-xs text-brand-600 font-medium" x-text="' · '+$store.quickView.product.brand"></span></template>
+                            <h3 class="font-bold text-lg text-stone-900 mt-1 mb-2" x-text="$store.quickView.product.name"></h3>
+                            <div class="flex items-baseline gap-2 mb-3">
+                                <span class="text-2xl font-extrabold text-brand-600" x-text="$store.quickView.formatPrice"></span>
+                                <template x-if="$store.quickView.product.has_discount">
+                                    <span class="text-sm text-stone-400 line-through" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format($store.quickView.product.price)"></span>
+                                </template>
+                                <template x-if="$store.quickView.product.has_discount">
+                                    <span class="text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded-md" x-text="'-'+$store.quickView.product.discount_percent+'%'"></span>
+                                </template>
+                            </div>
+                            <div class="flex items-center gap-1 mb-3">
+                                <template x-for="i in 5">
+                                    <i class="fas fa-star text-xs" :class="i <= Math.round($store.quickView.product.rating) ? 'star-gold' : 'text-stone-300'"></i>
+                                </template>
+                                <span class="text-xs text-stone-400 ml-1" x-text="'| '+$store.quickView.product.num_of_sale+' terjual'"></span>
+                            </div>
+                            <template x-if="$store.quickView.product.variant_product && $store.quickView.product.stocks.length">
+                                <div class="mb-3">
+                                    <p class="text-xs font-semibold text-stone-600 mb-1.5">Varian:</p>
+                                    <div class="flex gap-1.5 flex-wrap">
+                                        <template x-for="stock in $store.quickView.product.stocks" :key="stock.id">
+                                            <button @click="$store.quickView.selectedVariant = stock"
+                                                    :class="$store.quickView.selectedVariant?.id === stock.id ? 'border-brand-500 bg-brand-50 text-brand-700' : 'border-stone-200 text-stone-600'"
+                                                    class="px-3 py-1.5 border-2 rounded-lg text-xs font-medium" :disabled="stock.qty <= 0"
+                                                    x-text="stock.variant"></button>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="flex items-center gap-2 mt-4" x-data="{ qvQty: 1 }">
+                            <div class="flex items-center border border-stone-200 rounded-lg">
+                                <button @click="qvQty = Math.max(1, qvQty - 1)" class="px-3 py-2 text-stone-500 hover:bg-stone-50">−</button>
+                                <input type="number" x-model="qvQty" min="1" class="w-12 text-center text-sm font-semibold border-x border-stone-200 py-2 focus:outline-none">
+                                <button @click="qvQty++" class="px-3 py-2 text-stone-500 hover:bg-stone-50">+</button>
+                            </div>
+                            <form action="{{ route('cart.add') }}" method="POST" class="flex-1">
+                                @csrf
+                                <input type="hidden" name="product_id" :value="$store.quickView.product.id">
+                                <input type="hidden" name="price" :value="$store.quickView.effectivePrice">
+                                <input type="hidden" name="quantity" :value="qvQty">
+                                <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-brand-500 to-brand-600 text-white text-sm font-semibold rounded-lg hover:shadow-lg transition-all">
+                                    <i class="fas fa-cart-plus mr-1"></i> Keranjang
+                                </button>
+                            </form>
+                        </div>
+                        <a :href="'/products/' + $store.quickView.product.slug" class="block text-center text-xs text-brand-600 hover:underline mt-3">Lihat Detail Lengkap →</a>
+                    </div>
+                </div>
+                </template>
             </div>
         </div>
     </div>
@@ -343,42 +346,53 @@
                     </div>
                 </div>
 
-                {{-- Bantuan --}}
+                {{-- Bantuan (CMS: footerPages dari DB) --}}
                 <div>
                     <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Bantuan</h4>
                     <ul class="space-y-2.5 text-sm">
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Pusat Bantuan</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">FAQ</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Cara Berbelanja</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Cara Pembayaran</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Pengiriman</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Pengembalian & Refund</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Kontak Kami</a></li>
+                        <li><a href="{{ route('docs') }}" class="text-stone-400 hover:text-white transition-colors">Pusat Bantuan</a></li>
+                        @if(isset($footerPages) && $footerPages->count())
+                            @foreach($footerPages as $fp)
+                            <li><a href="{{ route('page.show', $fp->slug) }}" class="text-stone-400 hover:text-white transition-colors">{{ $fp->title }}</a></li>
+                            @endforeach
+                        @else
+                            <li><a href="{{ route('page.show', 'tentang-kami') }}" class="text-stone-400 hover:text-white transition-colors">Tentang Kami</a></li>
+                            <li><a href="{{ route('page.show', 'syarat-ketentuan') }}" class="text-stone-400 hover:text-white transition-colors">Syarat & Ketentuan</a></li>
+                            <li><a href="{{ route('page.show', 'kebijakan-privasi') }}" class="text-stone-400 hover:text-white transition-colors">Kebijakan Privasi</a></li>
+                        @endif
                     </ul>
                 </div>
 
-                {{-- Kategori --}}
+                {{-- Kategori (CMS: footer_shop atau kategori top) --}}
                 <div>
                     <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Kategori</h4>
                     <ul class="space-y-2.5 text-sm">
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Elektronik</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Fashion Pria</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Fashion Wanita</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Rumah Tangga</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Kesehatan & Kecantikan</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Olahraga & Outdoor</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Lihat Semua</a></li>
+                        @if(isset($footerShopMenus) && $footerShopMenus->count())
+                            @foreach($footerShopMenus as $m)
+                            <li><a href="{{ $m->url }}" @if($m->open_new_tab) target="_blank" rel="noopener" @endif class="text-stone-400 hover:text-white transition-colors">{{ $m->label }}</a></li>
+                            @endforeach
+                        @else
+                            @foreach(\App\Models\Category::where('top', true)->orderBy('name')->take(6)->get() as $cat)
+                            <li><a href="{{ route('categories.show', $cat->slug) }}" class="text-stone-400 hover:text-white transition-colors">{{ $cat->name }}</a></li>
+                            @endforeach
+                            <li><a href="{{ route('categories.index') }}" class="text-stone-400 hover:text-white transition-colors">Lihat Semua</a></li>
+                        @endif
                     </ul>
                 </div>
 
-                {{-- Kebijakan --}}
+                {{-- Halaman (CMS: footer_help + tautan toko) --}}
                 <div>
-                    <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Kebijakan</h4>
+                    <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Halaman</h4>
                     <ul class="space-y-2.5 text-sm">
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Syarat & Ketentuan</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Kebijakan Privasi</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Kebijakan Cookie</a></li>
-                        <li><a href="#" class="text-stone-400 hover:text-white transition-colors">Kebijakan Pengembalian</a></li>
+                        @if(isset($footerHelpMenus) && $footerHelpMenus->count())
+                            @foreach($footerHelpMenus as $m)
+                            <li><a href="{{ $m->url }}" @if($m->open_new_tab) target="_blank" rel="noopener" @endif class="text-stone-400 hover:text-white transition-colors">{{ $m->label }}</a></li>
+                            @endforeach
+                        @endif
+                        <li><a href="{{ route('products.index') }}" class="text-stone-400 hover:text-white transition-colors">Semua Produk</a></li>
+                        <li><a href="{{ route('brands.index') }}" class="text-stone-400 hover:text-white transition-colors">Brand</a></li>
+                        <li><a href="{{ route('blog.index') }}" class="text-stone-400 hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="{{ route('coupons.index') }}" class="text-stone-400 hover:text-white transition-colors">Kupon</a></li>
                     </ul>
                     <h4 class="text-white font-semibold text-sm mt-6 mb-3 uppercase tracking-wider">Pembayaran</h4>
                     <div class="flex gap-1.5 flex-wrap">
@@ -392,6 +406,42 @@
                 </div>
             </div>
 
+            {{-- Policy Icons --}}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 pt-8 border-t border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-stone-800 flex items-center justify-center shrink-0">
+                        <i class="fas fa-file-contract text-stone-400 text-sm"></i>
+                    </div>
+                    <div>
+                        <a href="{{ route('page.show', 'syarat-ketentuan') }}" class="text-stone-300 hover:text-white text-sm font-semibold transition-colors">Syarat & Ketentuan</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-stone-800 flex items-center justify-center shrink-0">
+                        <i class="fas fa-undo-alt text-stone-400 text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="text-stone-300 text-sm font-semibold">Garansi Pengembalian</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-stone-800 flex items-center justify-center shrink-0">
+                        <i class="fas fa-headset text-stone-400 text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="text-stone-300 text-sm font-semibold">Support 24/7</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-stone-800 flex items-center justify-center shrink-0">
+                        <i class="fas fa-shield-alt text-stone-400 text-sm"></i>
+                    </div>
+                    <div>
+                        <a href="{{ route('page.show', 'kebijakan-privasi') }}" class="text-stone-300 hover:text-white text-sm font-semibold transition-colors">Kebijakan Privasi</a>
+                    </div>
+                </div>
+            </div>
+
             <div class="border-t border-stone-800 pt-8 text-center text-xs text-stone-500">
                 <p>&copy; {{ date('Y') }} TokoOnline. Seluruh hak cipta dilindungi.</p>
                 <p class="mt-1">Dibangun dengan <span class="text-red-400">&hearts;</span> di Indonesia &middot; Powered by Laravel</p>
@@ -399,10 +449,11 @@
         </div>
     </footer>
 
-    {{-- Floating WhatsApp CTA --}}
-    <a href="https://wa.me/6281234567890?text=Halo%20TokoOnline%2C%20saya%20butuh%20bantuan"
+    {{-- Floating WhatsApp CTA (konteks per-produk) --}}
+    <a href="https://wa.me/6281234567890?text={{ urlencode('Halo TokoOnline, saya tanya stok ' . (isset($product) ? $product->name . ' ' . url()->current() : 'saya butuh bantuan')) }}"
        target="_blank" rel="noopener"
-       class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full
+       aria-label="Chat WhatsApp CS"
+       class="fixed bottom-24 lg:bottom-6 right-6 z-40 w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full
               shadow-lg hover:shadow-xl flex items-center justify-center text-2xl
               transition-all hover:scale-110 card-lift">
         <i class="fab fa-whatsapp"></i>
@@ -410,9 +461,154 @@
         <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 rounded-full animate-ping-slow"></span>
     </a>
 
+    {{-- Mobile Bottom Nav --}}
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+        <div class="flex items-center justify-around h-14 px-2">
+            <a href="{{ route('home') }}" class="flex flex-col items-center gap-0.5 text-brand-600 min-w-0 px-2">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[10px] font-semibold">Home</span>
+            </a>
+            <a href="{{ route('categories.index') }}" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-brand-600 min-w-0 px-2">
+                <i class="fas fa-th-large text-lg"></i>
+                <span class="text-[10px] font-medium">Kategori</span>
+            </a>
+            <button @click="$store.cart.open = true" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-brand-600 min-w-0 px-2 relative">
+                <i class="fas fa-shopping-cart text-lg"></i>
+                <span x-text="$store.cart.count" class="absolute -top-1 right-0 min-w-[18px] h-[18px] bg-brand-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none px-1" x-show="$store.cart.count > 0">0</span>
+                <span class="text-[10px] font-medium">Keranjang</span>
+            </button>
+            <a href="{{ auth()->check() ? route('customer.wishlist') : route('login') }}" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-brand-600 min-w-0 px-2">
+                <i class="far fa-heart text-lg"></i>
+                <span class="text-[10px] font-medium">Wishlist</span>
+            </a>
+            <a href="{{ auth()->check() ? route('customer.dashboard') : route('login') }}" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-brand-600 min-w-0 px-2">
+                <i class="far fa-user text-lg"></i>
+                <span class="text-[10px] font-medium">Akun</span>
+            </a>
+        </div>
+    </nav>
+
     {{-- Alpine.js Cart Store --}}
     <script>
+        function liveSearch() {
+            return {
+                query: '',
+                results: [],
+                open: false,
+                focused: -1,
+
+                async search() {
+                    if (this.query.length < 2) { this.results = []; this.open = false; return; }
+                    try {
+                        const res = await fetch(`/api/search/suggest?q=${encodeURIComponent(this.query)}`);
+                        this.results = await res.json();
+                        this.open = this.results.length >= 0;
+                        this.focused = -1;
+                    } catch (e) { this.results = []; }
+                },
+
+                focusNext() {
+                    if (this.focused < this.results.length - 1) this.focused++;
+                },
+
+                focusPrev() {
+                    if (this.focused > 0) this.focused--;
+                },
+
+                selectFocused() {
+                    if (this.focused >= 0 && this.results[this.focused]) {
+                        window.location = '/products/' + this.results[this.focused].slug;
+                    } else if (this.query.length >= 2) {
+                        window.location = '/search?q=' + encodeURIComponent(this.query);
+                    }
+                }
+            }
+        }
+
         document.addEventListener('alpine:init', () => {
+            // Wishlist & Compare stores
+            Alpine.store('wishlist', {
+                ids: [],
+                count: 0,
+                async init() {
+                    try { const r = await fetch('/api/wishlist/status'); const d = await r.json(); this.ids = d.ids || []; this.count = d.count || 0; } catch(e) {}
+                }
+            });
+
+            Alpine.store('compare', {
+                ids: [],
+                count: 0,
+                async init() {
+                    try { const r = await fetch('/api/compare/status'); const d = await r.json(); this.ids = d.ids || []; this.count = d.count || 0; } catch(e) {}
+                }
+            });
+
+            // Quick view modal
+            Alpine.store('quickView', {
+                open: false,
+                product: null,
+                loading: false,
+                selectedVariant: null,
+                qty: 1,
+                async load(id) {
+                    this.loading = true; this.open = true;
+                    try { const r = await fetch(`/api/product/${id}/quick-view`); this.product = await r.json(); } catch(e) { this.product = null; }
+                    this.loading = false;
+                },
+                get effectivePrice() {
+                    if (!this.product) return 0;
+                    if (this.selectedVariant && this.selectedVariant.price) return this.selectedVariant.price;
+                    return this.product.effective_price;
+                },
+                get formatPrice() {
+                    return 'Rp ' + new Intl.NumberFormat('id-ID').format(this.effectivePrice);
+                }
+            });
+
+            // Global helpers for product cards
+            window.wishlisted = (id) => Alpine.store('wishlist').ids.includes(id);
+            window.compared = (id) => Alpine.store('compare').ids.includes(id);
+
+            window.toggleWishlist = async (id) => {
+                try {
+                    const r = await fetch('/api/wishlist/toggle', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content},
+                        body: JSON.stringify({product_id: id})
+                    });
+                    const d = await r.json();
+                    if (d.wishlisted) {
+                        Alpine.store('wishlist').ids.push(id);
+                    } else {
+                        Alpine.store('wishlist').ids = Alpine.store('wishlist').ids.filter(i => i !== id);
+                    }
+                    Alpine.store('wishlist').count = d.count;
+                } catch(e) {}
+            };
+
+            window.toggleCompare = async (id) => {
+                try {
+                    const r = await fetch('/api/compare/toggle', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content},
+                        body: JSON.stringify({product_id: id})
+                    });
+                    const d = await r.json();
+                    if (d.compared) {
+                        Alpine.store('compare').ids.push(id);
+                    } else {
+                        Alpine.store('compare').ids = Alpine.store('compare').ids.filter(i => i !== id);
+                    }
+                    Alpine.store('compare').count = d.count;
+                } catch(e) {}
+            };
+
+            window.openQuickView = (id) => Alpine.store('quickView').load(id);
+
+            Alpine.store('wishlist').init();
+            Alpine.store('compare').init();
+
+            // Cart store
             Alpine.store('cart', {
                 items: JSON.parse(localStorage.getItem('tokoonline_cart') || '[]'),
                 open: false,
@@ -469,6 +665,7 @@
 
     {{-- Scroll reveal --}}
     <script>
+    
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -484,5 +681,72 @@
     </script>
 
     @stack('scripts')
+
+    @include('storefront.partials.trust-bar')
+    @include('storefront.partials.social-proof')
+
+    {{-- Dynamic Popup (dari DB dynamic_popups, fallback WELCOME20) --}}
+    @php
+        $cmsPopup = $popup ?? null;
+        $popupTitle = $cmsPopup?->title ?? 'Diskon 20%!';
+        $popupSummary = $cmsPopup?->summary ?? 'Untuk pembelanjaan pertama Anda';
+        $popupBtnText = $cmsPopup?->btn_text ?? 'Salin Kode';
+        $popupBtnLink = $cmsPopup?->btn_link ?? '';
+        $popupBanner = $cmsPopup?->banner ?? null;
+    @endphp
+    <div x-data="{ show: false, dismissed: sessionStorage.getItem('popup_dismissed') }"
+         x-init="if(!dismissed) setTimeout(() => show = true, 8000)"
+         x-show="show" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4"
+         x-effect="document.body.style.overflow = show ? 'hidden' : ''">
+        <div class="absolute inset-0 bg-stone-900/60" @click="show = false"></div>
+        <div class="relative bg-white rounded-2xl max-w-sm w-full shadow-2xl animate-scale-in overflow-hidden">
+            <button @click="show = false; sessionStorage.setItem('popup_dismissed', '1')" class="absolute top-3 right-3 z-10 w-7 h-7 min-w-[28px] min-h-[28px] bg-stone-100 hover:bg-stone-200 rounded-full flex items-center justify-center text-stone-400 text-xs" aria-label="Tutup popup">
+                <i class="fas fa-times"></i>
+            </button>
+            @if($popupBanner)
+            <img src="{{ asset('storage/'.$popupBanner) }}" alt="{{ $popupTitle }}" class="w-full h-40 object-cover">
+            @else
+            <div class="bg-gradient-to-r from-brand-600 to-accent-600 p-6 text-white text-center">
+                <i class="fas fa-gift text-4xl mb-3 block animate-float-slow"></i>
+                <h3 class="font-display text-2xl font-bold mb-1">{{ $popupTitle }}</h3>
+                <p class="text-white/80 text-sm">{{ $popupSummary }}</p>
+            </div>
+            @endif
+            @if($popupBanner)
+            <div class="p-5 text-center">
+                <h3 class="font-display text-xl font-bold mb-1">{{ $popupTitle }}</h3>
+                <p class="text-sm text-stone-500 mb-4">{{ $popupSummary }}</p>
+            @else
+            <div class="p-5 text-center">
+            @endif
+                <p class="text-sm text-stone-600 mb-4">Gunakan kode kupon saat checkout:</p>
+                <div class="bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 mb-4">
+                    <span class="font-mono font-bold text-brand-600 text-lg tracking-wider">WELCOME20</span>
+                </div>
+                @if($popupBtnLink)
+                <a href="{{ $popupBtnLink }}" class="block w-full py-2.5 min-h-[44px] mb-2 text-center font-semibold text-sm rounded-xl text-white" style="background:{{ $cmsPopup->btn_background_color ?? '#4f46e5' }};color:{{ $cmsPopup->btn_text_color ?? '#fff' }}">{{ $popupBtnText }}</a>
+                @endif
+                <button @click="navigator.clipboard.writeText('WELCOME20'); $el.innerHTML='<i class=\'fas fa-check mr-1\'></i>Tersalin!'; setTimeout(() => { show = false; sessionStorage.setItem('popup_dismissed', '1') }, 1000)"
+                        class="w-full py-2.5 min-h-[44px] bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold text-sm rounded-xl hover:shadow-lg transition-all">
+                    <i class="fas fa-copy mr-1"></i> Salin Kode
+                </button>
+                <button @click="show = false; sessionStorage.setItem('popup_dismissed', '1')" class="text-xs text-stone-400 hover:text-stone-600 mt-3 min-h-[44px] px-4">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Last Viewed Tracking --}}
+    <script>
+        (function() {
+            const pid = {{ isset($product) ? $product->id : 'null' }};
+            if (pid) {
+                let viewed = JSON.parse(localStorage.getItem('tokoonline_viewed') || '[]');
+                viewed = viewed.filter(id => id !== pid);
+                viewed.unshift(pid);
+                viewed = viewed.slice(0, 10);
+                localStorage.setItem('tokoonline_viewed', JSON.stringify(viewed));
+            }
+        })();
+    </script>
 </body>
 </html>
