@@ -1,6 +1,6 @@
 @extends('layouts.storefront')
 
-@section('title', request('q') ? 'Hasil Pencarian: ' . request('q') . ' — TokoOnline' : 'Cari Produk — TokoOnline')
+@section('title', request('q') ? __('search.title_results') . request('q') . ' — TokoOnline' : __('search.title_default') . ' — TokoOnline')
 @section('meta_description', 'Cari produk impian Anda di TokoOnline. Temukan berbagai produk berkualitas dari ribuan penjual terpercaya.')
 
 @push('styles')
@@ -32,7 +32,7 @@
         <nav class="flex items-center gap-2 text-sm text-stone-500" aria-label="Breadcrumb">
             <a href="{{ route('home') }}" class="hover:text-brand-600 transition-colors">Home</a>
             <i class="fas fa-chevron-right text-[10px]" aria-hidden="true"></i>
-            <span class="text-stone-800 font-medium" aria-current="page">Pencarian</span>
+            <span class="text-stone-800 font-medium" aria-current="page">{{ __('search.breadcrumb') }}</span>
         </nav>
     </div>
 </div>
@@ -42,26 +42,26 @@
     <div class="mb-8">
         <form action="{{ url()->current() }}" class="relative max-w-2xl" role="search" aria-label="Pencarian produk">
             <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-stone-400 text-lg" aria-hidden="true"></i>
-            <label for="q" class="sr-only">Kata kunci pencarian</label>
+            <label for="q" class="sr-only">{{ __('search.keyword_label') }}</label>
             <input id="q" type="search" name="q" value="{{ request('q') }}"
-                   placeholder="Cari produk, brand, atau kategori..."
+                   placeholder="{{ __('search.placeholder') }}"
                    class="w-full pl-14 pr-6 py-4 rounded-2xl border border-stone-300 bg-white text-lg
                           focus:outline-none focus:ring-3 focus:ring-brand-500/20 focus:border-brand-400
                           shadow-sm transition-all">
             <button type="submit"
                     class="absolute right-3 top-1/2 -translate-y-1/2 btn-gradient text-white px-6 py-2.5 rounded-xl text-sm font-semibold">
-                Cari
+                {{ __('search.submit') }}
             </button>
         </form>
     </div>
 
     @if(request('q'))
         <h1 class="font-display text-2xl sm:text-3xl font-bold text-stone-900 mb-2">
-            Hasil pencarian untuk: <span class="text-brand-600">"{{ request('q') }}"</span>
+            {{ __('search.results_for') }} <span class="text-brand-600">"{{ request('q') }}"</span>
         </h1>
 
         @if(isset($products) && $products->count() > 0)
-            <p class="text-stone-500 mb-6">Ditemukan <strong class="text-stone-700">{{ $products->total() }}</strong> produk</p>
+            <p class="text-stone-500 mb-6">{{ __('search.found') }} <strong class="text-stone-700">{{ $products->total() }}</strong> {{ __('search.products_count') }}</p>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                 @foreach($products as $product)
@@ -113,7 +113,7 @@
                                 </button>
                             </div>
                             @if($product->num_of_sale > 0)
-                                <p class="text-[10px] text-stone-400 mt-1.5">{{ number_format($product->num_of_sale, 0, ',', '.') }} terjual</p>
+                                <p class="text-[10px] text-stone-400 mt-1.5">{{ number_format($product->num_of_sale, 0, ',', '.') }} {{ __('search.sold') }}</p>
                             @endif
                         </div>
                     </div>
@@ -128,11 +128,11 @@
                 <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-stone-100 flex items-center justify-center">
                     <i class="fas fa-search text-4xl text-stone-300"></i>
                 </div>
-                <h3 class="text-lg font-semibold text-stone-700 mb-2">Tidak ada hasil untuk "{{ request('q') }}"</h3>
-                <p class="text-stone-400 text-sm mb-8">Coba kata kunci lain atau jelajahi kategori di bawah ini.</p>
+                <h3 class="text-lg font-semibold text-stone-700 mb-2">{{ __('search.no_result_for') }} "{{ request('q') }}"</h3>
+                <p class="text-stone-400 text-sm mb-8">{{ __('search.no_result_hint') }}</p>
 
                 <div class="max-w-md mx-auto">
-                    <p class="text-sm font-medium text-stone-700 mb-3">Saran pencarian:</p>
+                    <p class="text-sm font-medium text-stone-700 mb-3">{{ __('search.suggestions') }}</p>
                     <div class="flex flex-wrap justify-center gap-2">
                         <a href="?q=smartphone" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                             Smartphone
@@ -154,7 +154,7 @@
 
                 <div class="mt-10">
                     <a href="{{ route('products.index') }}" class="btn-gradient text-white px-8 py-3 rounded-xl text-sm font-semibold inline-block">
-                        <i class="fas fa-th-large mr-2"></i>Lihat Semua Produk
+                        <i class="fas fa-th-large mr-2"></i>{{ __('search.view_all_products') }}
                     </a>
                 </div>
             </div>
@@ -164,11 +164,11 @@
             <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-brand-50 flex items-center justify-center">
                 <i class="fas fa-search text-4xl text-brand-300"></i>
             </div>
-            <h3 class="text-lg font-semibold text-stone-700 mb-2">Cari produk impian Anda</h3>
-            <p class="text-stone-400 text-sm mb-8">Ketik kata kunci di atas untuk mulai mencari produk.</p>
+            <h3 class="text-lg font-semibold text-stone-700 mb-2">{{ __('search.empty_title') }}</h3>
+            <p class="text-stone-400 text-sm mb-8">{{ __('search.empty_hint') }}</p>
 
             <div class="max-w-md mx-auto">
-                <p class="text-sm font-medium text-stone-700 mb-3">Pencarian populer:</p>
+                <p class="text-sm font-medium text-stone-700 mb-3">{{ __('search.popular') }}</p>
                 <div class="flex flex-wrap justify-center gap-2">
                     <a href="?q=smartphone" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                         Smartphone

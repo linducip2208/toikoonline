@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout — {{ config('app.name', 'TokoOnline') }}</title>
+    <title>{{ __('checkout.title') }} — {{ config('app.name', 'TokoOnline') }}</title>
     {{-- CSS lokal (Vite). Catatan: brand disatukan ke indigo (dulu emerald khusus halaman ini) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -14,12 +14,12 @@
     <header class="bg-white border-b border-stone-200 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <a href="/" class="text-2xl font-extrabold text-brand-600 tracking-tight">{{ config('app.name', 'TokoOnline') }}</a>
-            <a href="{{ route('cart.index') }}" class="text-sm text-stone-600 hover:text-brand-600 transition">← Kembali ke Keranjang</a>
+            <a href="{{ route('cart.index') }}" class="text-sm text-stone-600 hover:text-brand-600 transition">← {{ __('checkout.back_to_cart') }}</a>
         </div>
     </header>
 
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 class="text-3xl font-extrabold text-stone-900 mb-8">Checkout</h1>
+        <h1 class="text-3xl font-extrabold text-stone-900 mb-8">{{ __('checkout.title') }}</h1>
 
         @if(session('error'))
         <div class="mb-6 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">{{ session('error') }}</div>
@@ -66,7 +66,7 @@
             <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-8 shadow-sm">
 
             <div x-show="currentStep === 0" x-cloak>
-                <h2 class="text-xl font-bold text-stone-900 mb-6">📍 Alamat Pengiriman</h2>
+                <h2 class="text-xl font-bold text-stone-900 mb-6">{{ __('checkout.address_title') }}</h2>
 
                 <div x-show="savedAddresses.length > 0" class="mb-6 space-y-3">
                     <template x-for="(addr, idx) in savedAddresses" :key="addr.id">
@@ -85,32 +85,32 @@
                     <label class="flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition"
                         :class="addressType === 'new' ? 'border-brand-500 bg-brand-50/30' : 'border-stone-200'">
                         <input type="radio" name="addressType" value="new" x-model="addressType" class="w-5 h-5 text-brand-600 focus:ring-brand-500">
-                        <span class="font-semibold text-stone-800" x-text="savedAddresses.length ? 'Gunakan Alamat Baru' : 'Alamat Pengiriman'"></span>
+                        <span class="font-semibold text-stone-800" x-text="savedAddresses.length ? '{{ __('checkout.use_new_address') }}' : '{{ __('checkout.address_title_plain') }}'"></span>
                     </label>
                 </div>
 
                 <div x-show="addressType === 'new'" class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold text-stone-700 mb-1.5">Nama Penerima *</label>
+                            <label class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('checkout.recipient') }} *</label>
                             <input type="text" x-model="form.name" class="w-full px-4 py-2.5 min-h-[44px] border border-stone-300 rounded-xl outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-stone-700 mb-1.5">Nomor Telepon *</label>
+                            <label class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('checkout.phone') }} *</label>
                             <input type="tel" x-model="form.phone" class="w-full px-4 py-2.5 min-h-[44px] border border-stone-300 rounded-xl outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-stone-700 mb-1.5">Alamat Lengkap *</label>
-                        <textarea x-model="form.address" rows="3" placeholder="Jalan, RT/RW, kelurahan, kecamatan" class="w-full px-4 py-2.5 border border-stone-300 rounded-xl outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"></textarea>
+                        <label class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('checkout.full_address') }} *</label>
+                        <textarea x-model="form.address" rows="3" placeholder="{{ __('checkout.address_ph') }}" class="w-full px-4 py-2.5 border border-stone-300 rounded-xl outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"></textarea>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold text-stone-700 mb-1.5">Kota / Kabupaten</label>
+                            <label class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('checkout.city') }}</label>
                             <input type="text" x-model="form.city" class="w-full px-4 py-2.5 min-h-[44px] border border-stone-300 rounded-xl outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-stone-700 mb-1.5">Kode Pos</label>
+                            <label class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('checkout.postal') }}</label>
                             <input type="text" x-model="form.postal" class="w-full px-4 py-2.5 min-h-[44px] border border-stone-300 rounded-xl outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                         </div>
                     </div>
@@ -119,13 +119,13 @@
             </div>
 
             <div x-show="currentStep === 1" x-cloak>
-                <h2 class="text-xl font-bold text-stone-900 mb-2">🚚 Metode Pengiriman</h2>
-                <p class="text-sm text-stone-500 mb-6">Ongkir live dari kurir (berat total <span x-text="(weight/1000).toFixed(1)"></span> kg).</p>
+                <h2 class="text-xl font-bold text-stone-900 mb-2">{{ __('checkout.shipping_title') }}</h2>
+                <p class="text-sm text-stone-500 mb-6">{{ __('checkout.shipping_live') }} <span x-text="(weight/1000).toFixed(1)"></span> {{ __('checkout.kg_unit') }}).</p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
                     <div class="relative">
-                        <label class="block text-sm font-semibold text-stone-700 mb-1.5">Kecamatan / Kota Tujuan *</label>
-                        <input type="text" x-model="destQuery" @input.debounce.500ms="lookupArea()" placeholder="Ketik cth: Coblong, Bandung" autocomplete="off"
+                        <label class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('checkout.destination') }} *</label>
+                        <input type="text" x-model="destQuery" @input.debounce.500ms="lookupArea()" placeholder="{{ __('checkout.dest_ph') }}" autocomplete="off"
                             class="w-full px-4 py-2.5 min-h-[44px] border border-stone-300 rounded-xl outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
                         <div x-show="areas.length" class="absolute z-10 left-0 right-0 mt-1 bg-white border border-stone-200 rounded-xl shadow-lg overflow-hidden">
                             <template x-for="a in areas.slice(0,6)" :key="a.id">
@@ -136,9 +136,9 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-stone-700 mb-1.5">Kurir</label>
+                        <label class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('storefront.courier') }}</label>
                         <select x-model="courier" @change="fetchShipping()" class="w-full px-4 py-2.5 min-h-[44px] border border-stone-300 rounded-xl bg-white outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
-                            <option value="">Semua kurir</option>
+                            <option value="">{{ __('storefront.all_couriers') }}</option>
                             <option value="jne">JNE</option>
                             <option value="jnt">J&T</option>
                             <option value="sicepat">SiCepat</option>
@@ -149,10 +149,10 @@
                 </div>
 
                 <div x-show="!shipOptions.length" class="border border-dashed border-stone-300 rounded-xl p-6 text-center text-sm text-stone-500">
-                    <span x-show="!loadingShip">Pilih tujuan lalu klik <b>Cek Ongkir</b> — atau otomatis dicek saat alamat tersimpan dipilih.</span>
-                    <span x-show="loadingShip">Menghitung ongkir…</span>
+                    <span x-show="!loadingShip">{{ __('checkout.ship_hint_a') }} <b>{{ __('checkout.check_shipping_btn') }}</b> {{ __('checkout.ship_hint_b') }}</span>
+                    <span x-show="loadingShip">{{ __('storefront.calculating') }}</span>
                 </div>
-                <button type="button" @click="fetchShipping()" :disabled="loadingShip" class="mb-4 px-6 py-2.5 min-h-[44px] bg-stone-900 text-white text-sm font-semibold rounded-xl disabled:opacity-50">Cek Ongkir</button>
+                <button type="button" @click="fetchShipping()" :disabled="loadingShip" class="mb-4 px-6 py-2.5 min-h-[44px] bg-stone-900 text-white text-sm font-semibold rounded-xl disabled:opacity-50">{{ __('checkout.check_shipping_btn') }}</button>
                 <p x-show="shipError" x-text="shipError" class="text-xs text-red-600 mb-3"></p>
 
                 <div class="space-y-4" x-show="shipOptions.length">
@@ -173,7 +173,7 @@
             </div>
 
             <div x-show="currentStep === 2" x-cloak>
-                <h2 class="text-xl font-bold text-stone-900 mb-6">💳 Metode Pembayaran</h2>
+                <h2 class="text-xl font-bold text-stone-900 mb-6">{{ __('checkout.payment_title') }}</h2>
 
                 <div class="space-y-4 mb-6">
                     <template x-for="(method, idx) in channels" :key="idx">
@@ -186,37 +186,37 @@
                                 <p class="text-xs text-stone-500 mt-0.5" x-text="method.desc"></p>
                             </div>
                             <template x-if="(method.fee || 0) > 0">
-                                <span class="text-xs text-stone-500" x-text="'Biaya: Rp ' + formatRupiah(method.fee)"></span>
+                                <span class="text-xs text-stone-500" x-text="'{{ __('checkout.fee_label') }} ' + formatRupiah(method.fee)"></span>
                             </template>
                             <template x-if="!(method.fee > 0)">
-                                <span class="text-xs text-green-600 font-semibold">Gratis</span>
+                                <span class="text-xs text-green-600 font-semibold">{{ __('checkout.free') }}</span>
                             </template>
                         </label>
                     </template>
                 </div>
 
                 <div class="border border-stone-200 rounded-xl p-4">
-                    <label class="block text-sm font-semibold text-stone-700 mb-2">Punya kode kupon?</label>
+                    <label class="block text-sm font-semibold text-stone-700 mb-2">{{ __('checkout.have_coupon') }}</label>
                     <div class="flex gap-2">
-                        <input type="text" x-model="couponCode" placeholder="cth: WELCOME20" class="flex-1 px-4 py-2.5 min-h-[44px] border border-stone-300 rounded-xl uppercase font-mono outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
-                        <button type="button" @click="applyCoupon()" :disabled="couponLoading || !couponCode" class="px-5 min-h-[44px] bg-brand-600 text-white text-sm font-bold rounded-xl disabled:opacity-50">Pakai</button>
+                        <input type="text" x-model="couponCode" placeholder="{{ __('checkout.coupon_ph') }}" class="flex-1 px-4 py-2.5 min-h-[44px] border border-stone-300 rounded-xl uppercase font-mono outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
+                        <button type="button" @click="applyCoupon()" :disabled="couponLoading || !couponCode" class="px-5 min-h-[44px] bg-brand-600 text-white text-sm font-bold rounded-xl disabled:opacity-50">{{ __('checkout.apply_coupon') }}</button>
                     </div>
-                    <p x-show="couponOk" class="text-xs text-green-700 font-semibold mt-2">Kupon <span x-text="couponCode"></span> aktif — hemat Rp <span x-text="formatRupiah(couponDiscount)"></span></p>
+                    <p x-show="couponOk" class="text-xs text-green-700 font-semibold mt-2">{{ __('checkout.coupon') }} <span x-text="couponCode"></span> {{ __('checkout.coupon_active') }} <span x-text="formatRupiah(couponDiscount)"></span></p>
                     <p x-show="couponError" x-text="couponError" class="text-xs text-red-600 mt-2"></p>
                 </div>
             </div>
 
             <div x-show="currentStep === 3" x-cloak>
-                <h2 class="text-xl font-bold text-stone-900 mb-6">✅ Konfirmasi Pesanan</h2>
+                <h2 class="text-xl font-bold text-stone-900 mb-6">{{ __('checkout.confirm_title') }}</h2>
 
                 <div class="border border-stone-200 rounded-xl overflow-hidden mb-6">
                     <table class="w-full text-sm">
                         <thead class="bg-stone-50 border-b border-stone-200">
                             <tr>
-                                <th class="text-left px-4 py-3 font-semibold text-stone-600">Produk</th>
-                                <th class="text-center px-4 py-3 font-semibold text-stone-600">Qty</th>
-                                <th class="text-right px-4 py-3 font-semibold text-stone-600">Harga</th>
-                                <th class="text-right px-4 py-3 font-semibold text-stone-600">Subtotal</th>
+                                <th class="text-left px-4 py-3 font-semibold text-stone-600">{{ __('checkout.col_product') }}</th>
+                                <th class="text-center px-4 py-3 font-semibold text-stone-600">{{ __('checkout.col_qty') }}</th>
+                                <th class="text-right px-4 py-3 font-semibold text-stone-600">{{ __('checkout.col_price') }}</th>
+                                <th class="text-right px-4 py-3 font-semibold text-stone-600">{{ __('checkout.col_subtotal') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -236,37 +236,37 @@
                 </div>
 
                 <div class="bg-stone-50 border border-stone-200 rounded-xl p-4 mb-6 text-sm space-y-1.5">
-                    <p><span class="text-stone-500">Kirim ke:</span> <b x-text="addrName"></b> (<span x-text="addrPhone"></span>)</p>
+                    <p><span class="text-stone-500">{{ __('checkout.send_to') }}:</span> <b x-text="addrName"></b> (<span x-text="addrPhone"></span>)</p>
                     <p class="text-stone-600" x-text="addrAddress + ', ' + addrCity"></p>
-                    <p><span class="text-stone-500">Kurir:</span> <b x-text="shipLabel || '-'"></b> · <span class="text-stone-500">Bayar via:</span> <b x-text="channels[selectedPayment]?.name"></b></p>
+                    <p><span class="text-stone-500">{{ __('checkout.courier_label') }}:</span> <b x-text="shipLabel || '{{ __('checkout.dash') }}'"></b> · <span class="text-stone-500">{{ __('checkout.pay_via') }}:</span> <b x-text="channels[selectedPayment]?.name"></b></p>
                 </div>
 
                 <div class="space-y-2 mb-6">
                     <div class="flex justify-between text-sm">
-                        <span class="text-stone-500">Subtotal</span>
+                        <span class="text-stone-500">{{ __('checkout.col_subtotal') }}</span>
                         <span class="font-semibold" x-text="'Rp ' + formatRupiah(subtotal)"></span>
                     </div>
                     <div class="flex justify-between text-sm">
-                        <span class="text-stone-500">Ongkos Kirim</span>
+                        <span class="text-stone-500">{{ __('checkout.shipping_cost') }}</span>
                         <span class="font-semibold" x-text="'Rp ' + formatRupiah(shippingCost)"></span>
                     </div>
                     <div class="flex justify-between text-sm" x-show="paymentFee > 0">
-                        <span class="text-stone-500">Biaya layanan</span>
+                        <span class="text-stone-500">{{ __('checkout.service_fee') }}</span>
                         <span class="font-semibold" x-text="'Rp ' + formatRupiah(paymentFee)"></span>
                     </div>
                     <div class="flex justify-between text-sm" x-show="couponDiscount > 0">
-                        <span class="text-stone-500">Diskon kupon</span>
+                        <span class="text-stone-500">{{ __('checkout.coupon_discount') }}</span>
                         <span class="font-semibold text-green-600" x-text="'-Rp ' + formatRupiah(couponDiscount)"></span>
                     </div>
                     <div class="flex justify-between text-base border-t border-stone-200 pt-2 mt-2">
-                        <span class="font-bold text-stone-800">Total Pembayaran</span>
+                        <span class="font-bold text-stone-800">{{ __('checkout.grand_total') }}</span>
                         <span class="font-extrabold text-brand-600 text-xl" x-text="'Rp ' + formatRupiah(grandTotal)"></span>
                     </div>
                 </div>
 
                 <label class="flex items-start gap-3 text-sm text-stone-600 cursor-pointer">
                     <input type="checkbox" x-model="agreedTerms" class="w-4 h-4 mt-0.5 rounded text-brand-600 focus:ring-brand-500">
-                    <span>Saya setuju dengan <a href="/page/syarat-ketentuan" class="text-brand-600 font-semibold hover:underline">Syarat &amp; Ketentuan</a> yang berlaku</span>
+                    <span>{{ __('checkout.agree_a') }} <a href="/page/syarat-ketentuan" class="text-brand-600 font-semibold hover:underline">{{ __('storefront.terms') }}</a> {{ __('checkout.agree_b') }}</span>
                 </label>
             </div>
 
@@ -274,11 +274,11 @@
                 <button type="button" x-show="currentStep > 0" @click="prevStep()"
                     class="px-6 py-3 min-h-[44px] text-sm font-semibold text-stone-600 bg-stone-100 rounded-xl hover:bg-stone-200 transition flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                    Kembali
+                    {{ __('checkout.back') }}
                 </button>
                 <button type="button" x-show="currentStep < 3" @click="nextStep()"
                     class="ml-auto px-8 py-3 min-h-[44px] text-sm font-bold text-white bg-brand-600 rounded-xl hover:bg-brand-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
-                    Selanjutnya
+                    {{ __('checkout.next') }}
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 <button type="submit" x-show="currentStep === 3"
@@ -286,7 +286,7 @@
                     :disabled="!agreedTerms || placing"
                     :class="(!agreedTerms || placing) ? 'opacity-50 cursor-not-allowed' : ''">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span x-text="placing ? 'Memproses…' : 'Buat Pesanan'"></span>
+                    <span x-text="placing ? '{{ __('checkout.processing') }}' : '{{ __('checkout.place_order') }}'"></span>
                 </button>
             </div>
             </div>
@@ -296,7 +296,7 @@
     <script>
         function checkoutPage() {
             return {
-                steps: ['Alamat', 'Pengiriman', 'Pembayaran', 'Konfirmasi'],
+                steps: ['{{ __('checkout.step_address') }}', '{{ __('checkout.step_shipping') }}', '{{ __('checkout.step_payment') }}', '{{ __('checkout.step_confirm') }}'],
                 currentStep: 0,
                 placing: false,
                 addressType: 'new',
@@ -351,13 +351,13 @@
                 nextStep() {
                     if (this.currentStep === 0) {
                         if (this.addressType === 'new' && (!this.form.name || !this.form.phone || !this.form.address)) {
-                            this.addrError = 'Lengkapi nama, telepon, dan alamat dulu.';
+                            this.addrError = '{{ __('checkout.err_address') }}';
                             return;
                         }
                         this.addrError = '';
                     }
                     if (this.currentStep === 1 && !this.shipSel) {
-                        this.shipError = this.shipError || 'Pilih salah satu layanan pengiriman.';
+                        this.shipError = this.shipError || '{{ __('checkout.err_ship') }}';
                         return;
                     }
                     if (this.currentStep < 3) this.currentStep++;
@@ -377,7 +377,7 @@
                 async fetchShipping() {
                     if (!this.destArea?.id) return;
                     const origin = this.warehouse.area_id || this.warehouse.city_id;
-                    if (!origin) { this.shipError = 'Kota asal toko belum diatur admin.'; return; }
+                    if (!origin) { this.shipError = '{{ __('checkout.err_origin') }}'; return; }
                     this.loadingShip = true; this.shipError = '';
                     try {
                         const params = new URLSearchParams({
@@ -387,10 +387,10 @@
                         });
                         const r = await fetch('/api/shipping/cost?' + params.toString());
                         const d = await r.json();
-                        if (!d.success) throw new Error(d.message || 'Gagal hitung ongkir');
+                        if (!d.success) throw new Error(d.message || '{{ __('checkout.err_calc') }}');
                         this.shipOptions = (d.data || []).flatMap(g => (g.costs || []).map(c => ({ courier: g.courier, ...c }))).slice(0, 8);
                         this.selectedShip = this.shipOptions.length ? 0 : -1;
-                        if (!this.shipOptions.length) this.shipError = 'Tidak ada layanan untuk tujuan ini.';
+                        if (!this.shipOptions.length) this.shipError = '{{ __('checkout.err_no_service') }}';
                     } catch (e) { this.shipError = e.message; }
                     this.loadingShip = false;
                 },
@@ -404,7 +404,7 @@
                             body: JSON.stringify({ code: this.couponCode }),
                         });
                         const d = await r.json();
-                        if (!d.success) throw new Error(d.message || 'Kupon tidak valid');
+                        if (!d.success) throw new Error(d.message || '{{ __('checkout.err_coupon') }}');
                         this.couponDiscount = d.discount; this.couponOk = true;
                     } catch (e) { this.couponError = e.message; this.couponDiscount = 0; }
                     this.couponLoading = false;

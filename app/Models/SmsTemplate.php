@@ -8,6 +8,7 @@ class SmsTemplate extends Model
 {
     protected $fillable = [
         'identifier',
+        'locale',
         'sms_type',
         'body',
         'status',

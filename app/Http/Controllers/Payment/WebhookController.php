@@ -35,6 +35,13 @@ class WebhookController extends Controller
         try {
             $service = app(PaymentGatewayService::class);
 
+            // Header-based signatures (Stripe/PayPal): expose headers + raw body
+            // to verifyCallback via reserved keys. Never logged (see logAttempt).
+            $payload['_headers'] = collect($request->headers->all())
+                ->mapWithKeys(fn ($v, $k) => [strtolower($k) => $v[0] ?? ''])->all();
+            $payload['_raw_body'] = $request->getContent();
+            $payload = $this->normalizeGatewayPayload($gateway, $payload);
+
             if (!$service->verifyCallback($gateway, $payload)) {
                 Log::warning('Payment webhook: signature verification failed', [
                     'gateway_id' => $gatewayId,
@@ -84,6 +91,7 @@ class WebhookController extends Controller
             $mappedStatus = $paymentStatusMap[$transactionStatus] ?? 'unpaid';
 
             $wasPaid = $order->payment_status === 'paid';
+            $wasFailed = in_array($order->payment_status, ['failed'], true);
             $order->update([
                 'payment_status' => $mappedStatus,
                 'payment_details' => json_encode($payload),
@@ -171,6 +179,19 @@ class WebhookController extends Controller
                 'payment_status' => $mappedStatus,
             ]);
 
+            // payment.failed: only on explicit failure signals, once (idempotent via $wasFailed/$wasPaid).
+            $failedSignals = ['deny', 'cancel', 'expire', 'expired', 'failure', 'failed'];
+            if (in_array((string) $transactionStatus, $failedSignals, true) && !$wasPaid && !$wasFailed) {
+                $order->update(['payment_status' => 'failed']);
+                if (class_exists(\App\Events\PaymentFailed::class)) {
+                    try {
+                        event(new \App\Events\PaymentFailed($order->fresh(), (string) $transactionStatus));
+                    } catch (\Exception $e) {
+                        Log::warning('PaymentFailed dispatch failed (non-fatal)', ['order' => $orderCode, 'error' => $e->getMessage()]);
+                    }
+                }
+            }
+
             return response()->json(['status' => 'ok']);
         } catch (\Exception $e) {
             Log::error('Payment webhook error: ' . $e->getMessage(), [
@@ -178,6 +199,43 @@ class WebhookController extends Controller
             ]);
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Normalize Stripe/PayPal webhook shapes into the shared
+     * {order_id, transaction_status|status, transaction_id} envelope the
+     * mapping table below understands. Other formats pass through.
+     */
+    protected function normalizeGatewayPayload(PaymentGatewayConfig $gateway, array $payload): array
+    {
+        $format = (string) $gateway->gateway_format;
+
+        if ($format === 'stripe-pi' && isset($payload['type'])) {
+            $obj = $payload['data']['object'] ?? [];
+            $payload['order_id'] = $obj['metadata']['order_id'] ?? $payload['order_id'] ?? null;
+            $payload['transaction_id'] = $obj['id'] ?? null;
+            $payload['status'] = match ((string) $payload['type']) {
+                'payment_intent.succeeded' => 'success',
+                'payment_intent.payment_failed', 'payment_intent.canceled' => 'failed',
+                default => 'pending',
+            };
+        }
+
+        if ($format === 'paypal-order' && isset($payload['event_type'])) {
+            $resource = $payload['resource'] ?? [];
+            $payload['order_id'] = $resource['purchase_units'][0]['reference_id']
+                ?? $resource['custom_id']
+                ?? $resource['id']
+                ?? $payload['order_id'] ?? null;
+            $payload['transaction_id'] = $resource['id'] ?? null;
+            $payload['status'] = match ((string) $payload['event_type']) {
+                'CHECKOUT.ORDER.COMPLETED', 'PAYMENT.CAPTURE.COMPLETED' => 'success',
+                'PAYMENT.CAPTURE.DENIED', 'PAYMENT.CAPTURE.REFUNDED' => 'failed',
+                default => 'pending',
+            };
+        }
+
+        return $payload;
     }
 
     /**

@@ -7,7 +7,7 @@
         <div class="bg-white rounded-2xl p-6 lg:p-8 border border-stone-100 reveal">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="font-display text-xl lg:text-2xl font-bold text-stone-900">{{ $cat->name }}</h2>
-                <a href="{{ route('categories.show', $cat->slug) }}" class="text-brand-600 text-sm font-semibold hover:underline">Lihat Semua <i class="fas fa-arrow-right ml-1 text-[10px]"></i></a>
+                <a href="{{ route('categories.show', $cat->slug) }}" class="text-brand-600 text-sm font-semibold hover:underline">{{ __('common.view_all') }} <i class="fas fa-arrow-right ml-1 text-[10px]"></i></a>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 @foreach($cat->products as $product)

@@ -469,7 +469,7 @@ class ProductResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with(['category', 'brand']);
+        return parent::getEloquentQuery()->with(['category', 'brand', 'stocks']);
     }
 
     public static function getRelations(): array

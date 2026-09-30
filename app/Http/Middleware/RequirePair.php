@@ -41,6 +41,9 @@ class RequirePair
         // Always allow the wizard itself
         if (str_starts_with($path, '/__pair')) return true;
 
+        // Installer (diamankan sendiri oleh InstallLock + lock file)
+        if (str_starts_with($path, '/install')) return true;
+
         // Health check / debug
         if ($path === '/up') return true;
         if (str_starts_with($path, '/_debugbar')) return true;

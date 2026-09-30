@@ -18,6 +18,10 @@ class ShippingQuoteRequest extends FormRequest
             'destination' => 'required',
             'weight' => 'required|integer|min:1|max:30000',
             'couriers' => 'nullable|string|max:255',
+            'postcode' => 'nullable|string|max:16',
+            'state' => 'nullable|string|max:128',
+            'country' => 'nullable|string|max:8',
+            'subtotal' => 'nullable|integer|min:0',
         ];
     }
 }

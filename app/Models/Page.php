@@ -35,6 +35,23 @@ class Page extends Model
 
     protected static function booted(): void
     {
+        // Sanitasi XSS tersimpan SEBELUM validasi/aturan lain (create + update).
+        static::saving(function (Page $page) {
+            $page->content = \App\Services\Content\SafeHtml::clean($page->content);
+            $blocks = $page->blocks;
+            if (is_string($blocks)) {
+                $blocks = json_decode($blocks, true);
+            }
+            if (is_array($blocks)) {
+                foreach ($blocks as $i => $block) {
+                    if (($block['type'] ?? null) === 'html' && isset($block['data']['html'])) {
+                        $blocks[$i]['data']['html'] = \App\Services\Content\SafeHtml::clean($block['data']['html']);
+                    }
+                }
+                $page->blocks = $blocks;
+            }
+        });
+
         static::updating(function (Page $page) {
             $dirty = array_intersect_key($page->getDirty(), array_flip(['title', 'slug', 'content', 'blocks']));
             if ($dirty !== []) {

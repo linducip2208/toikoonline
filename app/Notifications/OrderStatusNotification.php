@@ -27,6 +27,8 @@ class OrderStatusNotification extends Notification
             'message' => match ($this->event) {
                 'order.shipped' => 'Order ' . $this->order->code . ' has been shipped.',
                 'order.delivered' => 'Order ' . $this->order->code . ' has been delivered.',
+                'order.created' => 'Order ' . $this->order->code . ' has been created.',
+                'payment.failed' => 'Payment failed for order ' . $this->order->code . '.',
                 default => 'Payment received for order ' . $this->order->code . '.',
             },
         ];

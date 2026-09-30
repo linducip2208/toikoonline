@@ -5,10 +5,10 @@
             <i class="fas fa-shopping-bag text-brand-500 text-sm"></i>
         </div>
         <div class="flex-1 min-w-0">
-            <p class="text-xs text-stone-600 leading-snug"><span class="font-bold text-stone-800" x-text="toast.name"></span> baru saja beli <span class="font-semibold" x-text="toast.product"></span></p>
+            <p class="text-xs text-stone-600 leading-snug"><span class="font-bold text-stone-800" x-text="toast.name"></span> {{ __('storefront.just_bought') }} <span class="font-semibold" x-text="toast.product"></span></p>
             <p class="text-[10px] text-stone-400" x-text="toast.time"></p>
         </div>
-        <button @click="toast.show=false" class="text-stone-300 hover:text-stone-500 px-1" aria-label="Tutup notifikasi"><i class="fas fa-times text-xs"></i></button>
+        <button @click="toast.show=false" class="text-stone-300 hover:text-stone-500 px-1" aria-label="{{ __('common.close') }}"><i class="fas fa-times text-xs"></i></button>
     </div>
 </div>
 <script>
@@ -22,7 +22,7 @@ function socialProof(){
             setTimeout(()=>this.cycle(names,prods,i), 12000);
         },
         cycle(names,prods,i){
-            this.toast={show:true,name:names[i%names.length],product:prods[i%prods.length],time:'2 menit lalu · terverifikasi'};
+            this.toast={show:true,name:names[i%names.length],product:prods[i%prods.length],time:'{{ __('storefront.verified_time') }}'};
             setTimeout(()=>{this.toast.show=false; setTimeout(()=>this.cycle(names,prods,i+1), 25000);}, 5000);
         }
     }

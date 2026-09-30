@@ -49,12 +49,12 @@
         @endif
 
         @if($showNewBadge ?? false)
-        <span class="absolute top-2 {{ $hasDisc ? 'left-14' : 'left-2' }} bg-gradient-to-r from-green-500 to-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Baru</span>
+        <span class="absolute top-2 {{ $hasDisc ? 'left-14' : 'left-2' }} bg-gradient-to-r from-green-500 to-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ __('storefront.badge_new') }}</span>
         @endif
 
         @if($showBestBadge ?? false)
         <span class="absolute top-2 {{ $hasDisc ? 'left-14' : 'left-2' }} bg-gradient-to-r from-warm-400 to-warm-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-            <i class="fas fa-fire text-[8px] mr-0.5"></i>Best
+            <i class="fas fa-fire text-[8px] mr-0.5"></i>{{ __('storefront.badge_best') }}
         </span>
         @endif
 
@@ -85,7 +85,7 @@
                 <i class="fas fa-star text-[10px] {{ $i <= round($product->rating ?: 0) ? 'star-gold' : 'text-stone-300' }}"></i>
             @endfor
             @if($product->num_of_sale > 0)
-            <span class="text-[10px] text-stone-400 ml-1">| {{ number_format($product->num_of_sale) }} terjual</span>
+            <span class="text-[10px] text-stone-400 ml-1">| {{ number_format($product->num_of_sale) }} {{ __('common.sold') }}</span>
             @endif
         </div>
         <div class="flex items-center gap-1.5 mb-3">
@@ -98,7 +98,7 @@
         <a href="{{ route('products.show', $product->slug) }}"
            class="block w-full py-2 text-center bg-gradient-to-r from-brand-50 to-accent-50 text-brand-700 text-xs font-semibold rounded-lg
                   border border-brand-200 hover:bg-gradient-to-r hover:from-brand-100 hover:to-accent-100 transition-all">
-            <i class="fas fa-cog mr-1"></i> Pilih Varian
+            <i class="fas fa-cog mr-1"></i> {{ __('storefront.choose_variant') }}
         </a>
         @else
         <form action="{{ route('cart.add') }}" method="POST">
@@ -109,7 +109,7 @@
             <button type="submit"
                     class="w-full py-2 bg-gradient-to-r from-brand-500 to-brand-600 text-white text-xs font-semibold rounded-lg
                            hover:from-brand-600 hover:to-brand-700 transition-all hover:shadow-lg hover:shadow-brand-500/25">
-                <i class="fas fa-cart-plus mr-1"></i> Tambah ke Keranjang
+                <i class="fas fa-cart-plus mr-1"></i> {{ __('storefront.add_to_cart') }}
             </button>
         </form>
         @endif

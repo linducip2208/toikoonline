@@ -1,6 +1,6 @@
 @extends('layouts.storefront')
 
-@section('title', 'Blog — TokoOnline')
+@section('title', __('blog.title') . ' — TokoOnline')
 @section('meta_description', 'Tips belanja, review produk, panduan, dan berita terbaru seputar belanja online. Baca artikel menarik di Blog TokoOnline.')
 
 @push('styles')
@@ -41,11 +41,11 @@
             <h1 class="font-display text-3xl font-bold text-stone-900 mb-2">
                 <i class="fas fa-newspaper text-brand-600 mr-2"></i>Blog TokoOnline
             </h1>
-            <p class="text-stone-500 mb-8">Tips belanja, review produk, dan berita terbaru seputar belanja online.</p>
+            <p class="text-stone-500 mb-8">{{ __('blog.index_subtitle') }}</p>
 
-            @if(isset($posts) && $posts->count() > 0)
+            @if(isset($blogs) && $blogs->count() > 0)
                 <div class="grid sm:grid-cols-2 gap-6">
-                    @foreach($posts as $post)
+                    @foreach($blogs as $post)
                         <article class="blog-card bg-white border border-stone-200 rounded-2xl overflow-hidden card-lift reveal">
                             <a href="{{ route('blog.show', $post->slug) }}" class="blog-card-img block aspect-[16/9] overflow-hidden bg-stone-100">
                                 @if($post->featured_image)
@@ -83,7 +83,7 @@
                                     @endif
                                     <span class="flex items-center gap-1">
                                         <i class="far fa-clock"></i>
-                                        {{ \Illuminate\Support\Str::readingMinutes(strip_tags($post->content)) }} mnt baca
+                                        {{ max(1, (int) ceil(str_word_count(strip_tags($post->content)) / 200)) }} mnt baca
                                     </span>
                                 </div>
                             </div>
@@ -92,15 +92,15 @@
                 </div>
 
                 <div class="mt-10">
-                    {{ $posts->links() }}
+                    {{ $blogs->links() }}
                 </div>
             @else
                 <div class="text-center py-20">
                     <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-stone-100 flex items-center justify-center">
                         <i class="fas fa-newspaper text-3xl text-stone-300"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-stone-700 mb-2">Belum ada artikel</h3>
-                    <p class="text-stone-400 text-sm">Kami sedang menyiapkan konten menarik untuk Anda. Kunjungi lagi nanti!</p>
+                    <h3 class="text-lg font-semibold text-stone-700 mb-2">{{ __('blog.no_articles') }}</h3>
+                    <p class="text-stone-400 text-sm">{{ __('blog.no_articles_hint') }}</p>
                 </div>
             @endif
         </div>
@@ -112,12 +112,12 @@
                 {{-- Search --}}
                 <div class="bg-white border border-stone-200 rounded-2xl p-5">
                     <h4 class="font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                        <i class="fas fa-search text-brand-500"></i>Cari Artikel
+                        <i class="fas fa-search text-brand-500"></i>{{ __('blog.search_articles') }}
                     </h4>
                     <form action="{{ route('blog.index') }}" method="GET" role="search" aria-label="Cari artikel" class="relative">
                         <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm" aria-hidden="true"></i>
-                        <label for="blog-q" class="sr-only">Cari artikel</label>
-                        <input id="blog-q" type="search" name="q" value="{{ request('q') }}" placeholder="Cari artikel..."
+                        <label for="blog-q" class="sr-only">{{ __('blog.search_articles_sr') }}</label>
+                        <input id="blog-q" type="search" name="q" value="{{ request('q') }}" placeholder="{{ __('blog.search_ph') }}"
                                class="w-full pl-10 pr-4 py-2.5 min-h-[44px] rounded-xl border border-stone-200 bg-stone-50 text-sm
                                       focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400">
                     </form>
@@ -127,7 +127,7 @@
                 @if(isset($categories) && $categories->count() > 0)
                 <div class="bg-white border border-stone-200 rounded-2xl p-5">
                     <h4 class="font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                        <i class="fas fa-folder text-brand-500"></i>Kategori
+                        <i class="fas fa-folder text-brand-500"></i>{{ __('blog.categories') }}
                     </h4>
                     <ul class="space-y-1">
                         @foreach($categories as $cat)
@@ -147,7 +147,7 @@
                 @if(isset($recentPosts) && $recentPosts->count() > 0)
                 <div class="bg-white border border-stone-200 rounded-2xl p-5">
                     <h4 class="font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                        <i class="fas fa-clock text-brand-500"></i>Artikel Terbaru
+                        <i class="fas fa-clock text-brand-500"></i>{{ __('blog.recent_posts') }}
                     </h4>
                     <div class="space-y-3">
                         @foreach($recentPosts as $rp)
@@ -180,25 +180,23 @@
                     <h4 class="font-semibold mb-2 flex items-center gap-2">
                         <i class="fas fa-paper-plane"></i>Newsletter
                     </h4>
-                    <p class="text-sm text-brand-100 mb-4">Dapatkan tips belanja & promo terbaru langsung ke email Anda.</p>
+                    <p class="text-sm text-brand-100 mb-4">{{ __('blog.newsletter_desc') }}</p>
                     <form action="{{ route('newsletter.subscribe') }}" method="POST" class="space-y-2" aria-label="Berlangganan newsletter">
                         @csrf
-                        <label for="newsletter-email" class="sr-only">Alamat email</label>
-                        <input id="newsletter-email" type="email" name="email" required placeholder="Email Anda"
+                        <label for="newsletter-email" class="sr-only">{{ __('blog.email_label') }}</label>
+                        <input id="newsletter-email" type="email" name="email" required placeholder="{{ __('blog.email_ph') }}"
                                class="w-full px-4 py-2.5 min-h-[44px] rounded-xl border border-brand-500 bg-brand-700/50 text-white text-sm
                                       placeholder:text-brand-300 focus:outline-none focus:ring-2 focus:ring-white/20">
                         <button type="submit"
-                                class="w-full py-2.5 min-h-[44px] bg-white text-brand-700 rounded-xl text-sm font-semibold hover:bg-brand-50 transition-colors">
-                            Berlangganan
-                        </button>
+                                class="w-full py-2.5 min-h-[44px] bg-white text-brand-700 rounded-xl text-sm font-semibold hover:bg-brand-50 transition-colors">{{ __('blog.subscribe') }}</button>
                     </form>
                 </div>
 
                 {{-- CTA Source Code --}}
                 <div class="bg-stone-900 rounded-2xl p-5 text-white">
                     <div class="text-3xl mb-3">🛒</div>
-                    <h4 class="font-semibold mb-2">Beli Source Code</h4>
-                    <p class="text-sm text-stone-400 mb-4">Dapatkan source code lengkap TokoOnline untuk bisnis Anda.</p>
+                    <h4 class="font-semibold mb-2">{{ __('blog.buy_source') }}</h4>
+                    <p class="text-sm text-stone-400 mb-4">{{ __('blog.buy_source_desc') }}</p>
                     <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20tertarik%20dengan%20source%20code%20TokoOnline"
                        target="_blank" rel="noopener"
                        class="block text-center py-2.5 bg-green-600 hover:bg-green-500 rounded-xl text-sm font-semibold transition-colors">

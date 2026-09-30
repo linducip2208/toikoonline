@@ -1,4 +1,5 @@
 @extends('layouts.storefront')
+@php($post = $blog ?? $post ?? null)
 
 @section('title', ($post->meta_title ?: $post->title) . ' — Blog TokoOnline')
 @section('meta_description', $post->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($post->short_description ?: $post->content), 160))
@@ -133,7 +134,7 @@
                         </span>
                         <span class="flex items-center gap-1.5">
                             <i class="far fa-clock text-brand-500"></i>
-                            {{ \Illuminate\Support\Str::readingMinutes(strip_tags($post->content)) }} mnt baca
+                            {{ max(1, (int) ceil(str_word_count(strip_tags($post->content)) / 200)) }} mnt baca
                         </span>
                         @if($post->views)
                         <span class="flex items-center gap-1.5">
@@ -158,7 +159,7 @@
 
                 {{-- Share buttons --}}
                 <div class="mt-10 pt-6 border-t border-stone-200">
-                    <p class="text-sm font-semibold text-stone-800 mb-3">Bagikan artikel ini:</p>
+                    <p class="text-sm font-semibold text-stone-800 mb-3">{{ __('blog.share_this') }}</p>
                     <div class="flex flex-wrap gap-2" role="group" aria-label="Bagikan artikel">
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
                            target="_blank" rel="noopener" aria-label="Bagikan ke Facebook"
@@ -177,7 +178,7 @@
                         </a>
                         <button onclick="copyLink()" aria-label="Salin tautan artikel"
                                 class="share-btn inline-flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-xl bg-stone-100 text-stone-700 text-sm font-medium hover:bg-stone-200">
-                            <i class="fas fa-link" aria-hidden="true"></i> <span id="copyText" role="status">Salin Link</span>
+                            <i class="fas fa-link" aria-hidden="true"></i> <span id="copyText" role="status">{{ __('blog.copy_link') }}</span>
                         </button>
                     </div>
                 </div>
@@ -190,7 +191,7 @@
                     </div>
                     <div>
                         <p class="font-semibold text-stone-900">{{ $post->user->name }}</p>
-                        <p class="text-sm text-stone-500 mt-0.5">Penulis di Blog TokoOnline. Menyajikan tips dan informasi seputar belanja online.</p>
+                        <p class="text-sm text-stone-500 mt-0.5">{{ __('blog.author_bio') }}</p>
                     </div>
                 </div>
                 @endif
@@ -200,7 +201,7 @@
             @if(isset($relatedPosts) && $relatedPosts->count() > 0)
             <div class="mt-12">
                 <h3 class="font-display text-2xl font-bold text-stone-900 mb-6">
-                    <i class="fas fa-link text-brand-500 mr-2"></i>Artikel Terkait
+                    <i class="fas fa-link text-brand-500 mr-2"></i>{{ __('blog.related_posts') }}
                 </h3>
                 <div class="grid sm:grid-cols-3 gap-6">
                     @foreach($relatedPosts as $rp)
@@ -238,12 +239,12 @@
                 {{-- Search --}}
                 <div class="bg-white border border-stone-200 rounded-2xl p-5">
                     <h4 class="font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                        <i class="fas fa-search text-brand-500"></i>Cari Artikel
+                        <i class="fas fa-search text-brand-500"></i>{{ __('blog.search_articles') }}
                     </h4>
                     <form action="{{ route('blog.index') }}" method="GET" role="search" aria-label="Cari artikel" class="relative">
                         <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm" aria-hidden="true"></i>
-                        <label for="artikel-q" class="sr-only">Cari artikel</label>
-                        <input id="artikel-q" type="search" name="q" placeholder="Cari artikel..."
+                        <label for="artikel-q" class="sr-only">{{ __('blog.search_articles_sr') }}</label>
+                        <input id="artikel-q" type="search" name="q" placeholder="{{ __('blog.search_ph') }}"
                                class="w-full pl-10 pr-4 py-2.5 min-h-[44px] rounded-xl border border-stone-200 bg-stone-50 text-sm
                                       focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400">
                     </form>
@@ -253,7 +254,7 @@
                 @if(isset($categories) && $categories->count() > 0)
                 <div class="bg-white border border-stone-200 rounded-2xl p-5">
                     <h4 class="font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                        <i class="fas fa-folder text-brand-500"></i>Kategori
+                        <i class="fas fa-folder text-brand-500"></i>{{ __('blog.categories') }}
                     </h4>
                     <ul class="space-y-1">
                         @foreach($categories as $cat)
@@ -273,7 +274,7 @@
                 @if(isset($recentPosts) && $recentPosts->count() > 0)
                 <div class="bg-white border border-stone-200 rounded-2xl p-5">
                     <h4 class="font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                        <i class="fas fa-clock text-brand-500"></i>Artikel Terbaru
+                        <i class="fas fa-clock text-brand-500"></i>{{ __('blog.recent_posts') }}
                     </h4>
                     <div class="space-y-3">
                         @foreach($recentPosts as $rp)
@@ -304,8 +305,8 @@
                 {{-- CTA Source Code --}}
                 <div class="bg-stone-900 rounded-2xl p-5 text-white">
                     <div class="text-3xl mb-3">🛒</div>
-                    <h4 class="font-semibold mb-2">Beli Source Code</h4>
-                    <p class="text-sm text-stone-400 mb-4">Dapatkan source code lengkap TokoOnline untuk bisnis Anda.</p>
+                    <h4 class="font-semibold mb-2">{{ __('blog.buy_source') }}</h4>
+                    <p class="text-sm text-stone-400 mb-4">{{ __('blog.buy_source_desc') }}</p>
                     <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20tertarik%20dengan%20source%20code%20TokoOnline"
                        target="_blank" rel="noopener"
                        class="block text-center py-2.5 bg-green-600 hover:bg-green-500 rounded-xl text-sm font-semibold transition-colors">

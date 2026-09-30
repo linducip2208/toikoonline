@@ -49,7 +49,7 @@
             <form action="{{ url('/products') }}" class="flex-1 max-w-md mx-4 hidden sm:block">
                 <div class="relative">
                     <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-                    <input type="search" name="q" placeholder="Cari produk..."
+                    <input type="search" name="q" placeholder="{{ __('storefront.search_mobile_placeholder') }}"
                            class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm
                                   focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400
                                   transition-all placeholder:text-stone-400">
@@ -71,8 +71,8 @@
                 </div>
                 <span class="font-display font-bold text-white">TokoOnline</span>
             </div>
-            <p>&copy; {{ date('Y') }} TokoOnline. Seluruh hak cipta dilindungi.</p>
-            <p class="text-stone-600 text-xs mt-1">Powered by Laravel</p>
+            <p>&copy; {{ date('Y') }} TokoOnline. {{ __('storefront.copyright') }}</p>
+            <p class="text-stone-600 text-xs mt-1">{{ __('pseo.powered_by') }}</p>
         </div>
     </footer>
 

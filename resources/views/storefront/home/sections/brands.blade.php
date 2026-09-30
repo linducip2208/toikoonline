@@ -2,7 +2,7 @@
 @if($settings['top_brands'] === '1' && $brands->count())
 <section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="font-display text-2xl lg:text-3xl font-bold text-stone-900 mb-8 reveal text-center">Brand Terpercaya</h2>
+        <h2 class="font-display text-2xl lg:text-3xl font-bold text-stone-900 mb-8 reveal text-center">{{ __('storefront.trusted_brands') }}</h2>
         <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
             @foreach($brands as $brand)
             <a href="{{ route('brands.show', $brand->slug) }}"

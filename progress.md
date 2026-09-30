@@ -210,3 +210,25 @@ See `docs/03-code-comparison.md` for full detailed analysis.
 - Platform: API v1 Sanctum (/api/v1), payment intents idempoten + reconcile + refund Midtrans, ShippingManager multi-provider + local-flat, OrderPaid/Shipped/Delivered events + mail-template {{var}}, outbound webhooks HMAC + retry, sitemap hreflang, flash-deal scheduler, cart-abandon.
 - Admin/UX: dashboard + AnalyticsDashboard (filter tanggal), ReportService, TrackPageView, 6 policies + 21 permissions, tests Unit/Feature/Security/Locale, a11y + empty states, invoice/resi/refund pelanggan (bayar-ulang Snap, konfirmasi terima, ajukan refund).
 - Integrasi: middleware locale/redirect/tracker, API routing, EventBridge provider, invoice route, webhook CSRF-except + throttle, policies, Translatable 6 model, lang commerce.*, bugfix HomeController/BlogCategory/webhook-commit/PSR-4.
+
+## 2026-09-30 — FINAL DEWA AUDIT & 10/10 TRANSFORMATION
+Forensik + 4 agent + integration pass. Test 50/50, build OK, 292 route.
+- B2B (companies, price lists, quotes→coupon), OrderStateService guarded, CartMerge login/register, cancel + release stok, money integer-IDR.
+- Stripe/PayPal drivers, shipping zones + table-rate, PromotionService composable (ter-wire ke checkout: promo_discount + promo_names), SearchService typo-tolerant, Automation rules, 7 event baru.
+- Settings engine, GlobalBlocks, menu mega/visibility/i18n, blog tags + related, template renderer multilingual, SafeUpload, 380+ lang keys, __() massal storefront.
+- Addresses/contact/FAQ/offline/installer/PWA/health-check/backup, import/export kategori, login throttle, /en/ route group, JourneyTest 11 skenario.
+- Integrasi: 3 bug constraint order-level (delivery_histories, refund_requests nullable), bugfix silang, wiring middleware/provider/route/policy, promo engine live.
+
+## Lanjutan semua sisa audit
+- SafeHtml (allowlist DOM) + hook saving Page/Blog + SafeHtmlTest 4/4.
+- Midtrans: item_details seimbang vs gross (pajak/ongkir/fee/diskon), guard mismatch, fee kanal dari config/payment.php + kolom orders.payment_fee.
+- HealthCheck: warning gateway/shipping/gudang/kunci; TaxService opt-in via tax_engine=zone.
+- PWA icons 192/512/maskable + manifest + sw v2; og-default.jpg 1200x630.
+- Schema: delivery_histories + refund_requests order_detail_id nullable; addresses.set_billing boolean+nullable.
+- __() sweep 25 file (+296 keys, 710/file); test 54/54.
+
+## Lanjutan semua (post-dewa)
+- Event wiring: ProductObserver created/updated, stock.low saat ambang, order.created web.
+- Audit resource baru: 32 file lint OK, auto-discovery OK, Quote approve valid.
+- i18n Alpine: greeting, number_sign, placed_on, waiting, confirm, item_suffix, variant_prefix (+en).
+- Test 54/54, view:cache bersih.

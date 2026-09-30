@@ -23,6 +23,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+            app(\App\Services\Cart\CartMergeService::class)->mergeSessionFor(Auth::user());
             return redirect()->intended('/account');
         }
 

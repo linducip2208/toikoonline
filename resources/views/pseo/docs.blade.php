@@ -128,17 +128,17 @@ $whatsapp = '6281234567890';
     <div class="max-w-6xl mx-auto px-4 text-center">
         <span class="inline-block text-brand-200 bg-white/10 backdrop-blur rounded-full px-4 py-1.5 text-xs font-semibold tracking-wider uppercase mb-4">Dokumentasi</span>
         <h1 class="font-display text-4xl lg:text-5xl font-extrabold leading-tight">
-            Dokumentasi Lengkap TokoOnline
+            {{ __('pseo.docs_title') }}
         </h1>
         <p class="text-brand-200 text-lg mt-4 max-w-2xl mx-auto leading-relaxed">
-            Panduan lengkap penggunaan aplikasi toko online — dari setup awal hingga operasional harian.
+            {{ __('pseo.docs_sub') }}
         </p>
     </div>
 </div>
 
 <div class="sticky top-16 z-40 bg-white/90 backdrop-blur-lg border-b border-stone-200 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 py-2 overflow-x-auto flex gap-2 text-xs font-semibold whitespace-nowrap">
-        @foreach(['Akun Demo', 'Struktur Menu', 'Tutorial'] as $i => $anchor)
+        @foreach([__('pseo.docs_nav_demo'), __('pseo.docs_nav_menu'), __('pseo.docs_nav_tutorial')] as $i => $anchor)
         @php
         $slugs = ['akun-demo', 'struktur-menu', 'tutorial-langkah-demi-langkah'];
         @endphp
@@ -153,16 +153,16 @@ $whatsapp = '6281234567890';
 <div class="max-w-6xl mx-auto px-4 py-12 space-y-16">
 
     <section id="akun-demo">
-        <h2 class="font-display text-3xl font-bold text-stone-900 mb-6">Akun Demo</h2>
-        <p class="text-stone-500 mb-6">Gunakan akun berikut untuk mencoba semua fitur TokoOnline:</p>
+        <h2 class="font-display text-3xl font-bold text-stone-900 mb-6">{{ __('pseo.docs_demo') }}</h2>
+        <p class="text-stone-500 mb-6">{{ __('pseo.docs_demo_sub') }}</p>
         <div class="overflow-x-auto">
             <table class="w-full text-sm border border-stone-200 rounded-xl overflow-hidden">
                 <thead>
                     <tr class="bg-stone-100">
-                        <th class="text-left px-5 py-3 font-semibold text-stone-700">Role</th>
-                        <th class="text-left px-5 py-3 font-semibold text-stone-700">Email</th>
-                        <th class="text-left px-5 py-3 font-semibold text-stone-700">Password</th>
-                        <th class="text-left px-5 py-3 font-semibold text-stone-700">Cakupan Akses</th>
+                        <th class="text-left px-5 py-3 font-semibold text-stone-700">{{ __('pseo.docs_col_role') }}</th>
+                        <th class="text-left px-5 py-3 font-semibold text-stone-700">{{ __('pseo.docs_col_email') }}</th>
+                        <th class="text-left px-5 py-3 font-semibold text-stone-700">{{ __('pseo.docs_col_pass') }}</th>
+                        <th class="text-left px-5 py-3 font-semibold text-stone-700">{{ __('pseo.docs_col_scope') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-stone-100">
@@ -181,13 +181,13 @@ $whatsapp = '6281234567890';
         </div>
         <div class="mt-4 text-center">
             <a href="/admin/login" class="inline-block px-6 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-500/25 transition-all hover:-translate-y-0.5">
-                <i class="fas fa-sign-in-alt mr-2"></i>Masuk ke Admin Panel
+                <i class="fas fa-sign-in-alt mr-2"></i>{{ __('pseo.docs_admin_login') }}
             </a>
         </div>
     </section>
 
     <section id="struktur-menu">
-        <h2 class="font-display text-3xl font-bold text-stone-900 mb-6">Struktur Menu Admin</h2>
+        <h2 class="font-display text-3xl font-bold text-stone-900 mb-6">{{ __('pseo.docs_menu') }}</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($menuStructure as $group)
             <div class="bg-white rounded-2xl border border-stone-200 p-5 card-lift">
@@ -214,8 +214,8 @@ $whatsapp = '6281234567890';
     </section>
 
     <section id="tutorial-langkah-demi-langkah">
-        <h2 class="font-display text-3xl font-bold text-stone-900 mb-2">Tutorial Langkah Demi Langkah</h2>
-        <p class="text-stone-500 mb-8">Ikuti panduan lengkap dari setup awal hingga operasional harian.</p>
+        <h2 class="font-display text-3xl font-bold text-stone-900 mb-2">{{ __('pseo.docs_tutorial') }}</h2>
+        <p class="text-stone-500 mb-8">{{ __('pseo.docs_tutorial_sub') }}</p>
         <div class="space-y-10">
             @foreach($tutorial as $phase)
             <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden">
@@ -283,13 +283,13 @@ $whatsapp = '6281234567890';
 
 <section class="bg-gradient-to-r from-brand-700 to-accent-700 text-white py-12 mt-12">
     <div class="max-w-6xl mx-auto px-4 text-center">
-        <p class="text-brand-200 text-sm font-semibold tracking-wider uppercase mb-2">Mulai Sekarang</p>
-        <h2 class="font-display text-3xl font-extrabold mb-3">Siap Jualan Online?</h2>
+        <p class="text-brand-200 text-sm font-semibold tracking-wider uppercase mb-2">{{ __('pseo.docs_cta_badge') }}</p>
+        <h2 class="font-display text-3xl font-extrabold mb-3">{{ __('pseo.docs_cta_title') }}</h2>
         <p class="text-brand-100 text-lg mb-6 max-w-2xl mx-auto">
-            Akses admin panel sekarang dan mulai kelola toko online Anda dalam hitungan menit.
+            {{ __('pseo.docs_cta_sub') }}
         </p>
         <a href="/admin/login" class="inline-block px-8 py-3.5 bg-white text-brand-700 font-bold rounded-xl hover:shadow-xl transition-all hover:-translate-y-0.5">
-            <i class="fas fa-sign-in-alt mr-2"></i>Masuk ke Admin Panel
+            <i class="fas fa-sign-in-alt mr-2"></i>{{ __('pseo.docs_admin_login') }}
         </a>
     </div>
 </section>

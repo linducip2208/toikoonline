@@ -8,7 +8,7 @@
          x-transition:leave-end="-translate-x-full">
         <div class="p-4">
             <div class="flex items-center justify-between mb-5">
-                <span class="font-display font-bold text-lg text-stone-800">Kategori</span>
+                <span class="font-display font-bold text-lg text-stone-800">{{ __('common.categories') }}</span>
                 <button @click="catSidebar = false" class="text-stone-400 hover:text-stone-600 p-1">
                     <i class="fas fa-times text-lg"></i>
                 </button>
@@ -43,11 +43,11 @@
     <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
         <div class="flex items-center gap-2 overflow-x-auto whitespace-nowrap scrollbar-none">
             <i class="fas fa-ticket-alt text-brand-300 animate-ping-slow"></i>
-            <span class="font-semibold">Kupon Tersedia:</span>
+            <span class="font-semibold">{{ __('storefront.coupons_available') }}:</span>
             @foreach($coupons->take(3) as $coupon)
             <span class="bg-white/15 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold">{{ $coupon->code }}</span>
             @endforeach
-            <span class="text-brand-200 cursor-pointer hover:underline whitespace-nowrap" onclick="document.getElementById('coupon-section')?.scrollIntoView({behavior:'smooth'})">Klaim Sekarang &raquo;</span>
+            <span class="text-brand-200 cursor-pointer hover:underline whitespace-nowrap" onclick="document.getElementById('coupon-section')?.scrollIntoView({behavior:'smooth'})">{{ __('storefront.claim_now') }} &raquo;</span>
         </div>
         <button @click="showTopBanner = false" class="text-white/60 hover:text-white ml-2 shrink-0">
             <i class="fas fa-times"></i>
@@ -77,7 +77,7 @@
                     @endif
                     <a href="{{ $slider->link ?: route('products.index') }}"
                        class="btn-gradient inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-white font-semibold text-sm shadow-lg shadow-brand-600/30">
-                        <i class="fas fa-shopping-bag"></i> Belanja Sekarang
+                        <i class="fas fa-shopping-bag"></i> {{ __('storefront.shop_now') }}
                     </a>
                 </div>
             </div>
@@ -101,18 +101,18 @@
     <div class="relative max-w-7xl mx-auto px-4">
         <div class="max-w-2xl reveal">
             <h1 class="font-display text-4xl lg:text-6xl font-extrabold text-white leading-tight mb-6 hero-headline">
-                Belanja Mudah,<br>Harga Terbaik
+                {{ __('storefront.hero_title_a') }},<br>{{ __('storefront.hero_title_b') }}
             </h1>
             <p class="text-lg text-brand-100/90 leading-relaxed mb-9">
-                Temukan ribuan produk berkualitas dengan harga bersaing dan pengiriman cepat ke seluruh Indonesia.
+                {{ __('storefront.hero_subtitle') }}
             </p>
             <div class="flex flex-wrap gap-4">
                 <a href="{{ route('products.index') }}" class="btn-gradient inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-white font-semibold text-sm shadow-lg shadow-brand-600/30">
-                    <i class="fas fa-shopping-bag"></i> Belanja Sekarang
+                    <i class="fas fa-shopping-bag"></i> {{ __('storefront.shop_now') }}
                 </a>
                 <a href="#featured-categories"
                    class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl border-2 border-white/30 text-white font-semibold text-sm hover:bg-white/10 transition-colors backdrop-blur-sm">
-                    <i class="fas fa-th-large"></i> Lihat Kategori
+                    <i class="fas fa-th-large"></i> {{ __('storefront.view_categories') }}
                 </a>
             </div>
         </div>
@@ -126,7 +126,7 @@
     <div class="max-w-7xl mx-auto px-4 py-3">
         <button @click="catSidebar = true" class="inline-flex items-center gap-2 text-sm font-medium text-stone-700 hover:text-brand-600 transition-colors px-4 py-2 rounded-lg hover:bg-brand-50">
             <i class="fas fa-bars"></i>
-            <span>Semua Kategori</span>
+            <span>{{ __('storefront.all_categories') }}</span>
             <i class="fas fa-chevron-down text-[10px]"></i>
         </button>
     </div>
@@ -137,10 +137,10 @@
 <section class="py-6 bg-white border-b border-stone-100">
     <div class="max-w-7xl mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div class="flex items-center gap-2.5 p-2 reveal"><div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0"><i class="fas fa-shipping-fast text-green-600"></i></div><div><p class="text-xs font-semibold text-stone-800">Pengiriman Cepat</p><p class="text-[10px] text-stone-500">JNE Â· J&T Â· SiCepat Â· GoSend</p></div></div>
-            <div class="flex items-center gap-2.5 p-2 reveal"><div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center shrink-0"><i class="fas fa-qrcode text-blue-600"></i></div><div><p class="text-xs font-semibold text-stone-800">QRIS Â· VA Â· E-wallet</p><p class="text-[10px] text-stone-500">Midtrans Â· Xendit Â· Tripay</p></div></div>
-            <div class="flex items-center gap-2.5 p-2 reveal"><div class="w-10 h-10 rounded-xl bg-warm-100 flex items-center justify-center shrink-0"><i class="fas fa-medal text-warm-600"></i></div><div><p class="text-xs font-semibold text-stone-800">Garansi Produk</p><p class="text-[10px] text-stone-500">Retur 7 hari Â· 100% Ori</p></div></div>
-            <div class="flex items-center gap-2.5 p-2 reveal"><div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center shrink-0"><i class="fas fa-headset text-purple-600"></i></div><div><p class="text-xs font-semibold text-stone-800">Support 24/7 + COD</p><p class="text-[10px] text-stone-500">WA CS siap membantu</p></div></div>
+            <div class="flex items-center gap-2.5 p-2 reveal"><div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0"><i class="fas fa-shipping-fast text-green-600"></i></div><div><p class="text-xs font-semibold text-stone-800">{{ __('storefront.fast_shipping') }}</p><p class="text-[10px] text-stone-500">JNE · J&T · SiCepat · GoSend</p></div></div>
+            <div class="flex items-center gap-2.5 p-2 reveal"><div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center shrink-0"><i class="fas fa-qrcode text-blue-600"></i></div><div><p class="text-xs font-semibold text-stone-800">{{ __('storefront.qris_va_wallet') }}</p><p class="text-[10px] text-stone-500">Midtrans · Xendit · Tripay</p></div></div>
+            <div class="flex items-center gap-2.5 p-2 reveal"><div class="w-10 h-10 rounded-xl bg-warm-100 flex items-center justify-center shrink-0"><i class="fas fa-medal text-warm-600"></i></div><div><p class="text-xs font-semibold text-stone-800">{{ __('storefront.product_warranty') }}</p><p class="text-[10px] text-stone-500">{{ __('storefront.return_7_ori') }}</p></div></div>
+            <div class="flex items-center gap-2.5 p-2 reveal"><div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center shrink-0"><i class="fas fa-headset text-purple-600"></i></div><div><p class="text-xs font-semibold text-stone-800">{{ __('storefront.support_cod') }}</p><p class="text-[10px] text-stone-500">{{ __('storefront.cs_ready') }}</p></div></div>
         </div>
     </div>
 </section>

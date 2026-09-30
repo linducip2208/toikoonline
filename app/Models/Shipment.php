@@ -31,6 +31,12 @@ class Shipment extends Model
         static::updated(fn (self $shipment) => $shipment->syncToOrder());
     }
 
+    /**
+     * Mirror courier/tracking ke order + tulis timeline.
+     * Baris shipment_* di delivery_histories bersifat informasional dan
+     * sengaja DI LUAR guarded map OrderStateService (bukan status delivery).
+     * Perubahan delivery_status order WAJIB lewat OrderStateService.
+     */
     public function syncToOrder(): void
     {
         $order = $this->order()->first();

@@ -23,6 +23,7 @@ class SmsTemplateResource extends Resource
     {
         return $form->schema([
             Forms\Components\TextInput::make('identifier')->required()->maxLength(100),
+            Forms\Components\Select::make('locale')->label('Locale')->options(['id' => 'Indonesia (id)', 'en' => 'English (en)'])->default('id')->required(),
             Forms\Components\Select::make('sms_type')->options(['customer' => 'Customer', 'admin' => 'Admin', 'seller' => 'Seller'])->required(),
             Forms\Components\Textarea::make('body')->required()->rows(4)->columnSpanFull(),
             Forms\Components\Toggle::make('status')->default(true),
@@ -34,6 +35,7 @@ class SmsTemplateResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('identifier')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('locale')->badge()->sortable(),
                 Tables\Columns\TextColumn::make('sms_type')->badge()->sortable(),
                 Tables\Columns\TextColumn::make('body')->limit(60),
                 Tables\Columns\IconColumn::make('status')->boolean(),

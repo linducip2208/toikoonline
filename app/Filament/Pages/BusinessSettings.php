@@ -54,6 +54,27 @@ class BusinessSettings extends Page implements HasForms
             'invoice_prefix' => $settings['invoice_prefix'] ?? 'INV',
             'invoice_footer' => $settings['invoice_footer'] ?? '',
             'order_code_prefix' => $settings['order_code_prefix'] ?? 'ORD',
+            'default_language' => $settings['default_language'] ?? 'id',
+            'translation_default' => $settings['translation_default'] ?? 'id',
+            'translation_fallback' => $settings['translation_fallback'] ?? 'en',
+            'currency_code' => $settings['currency_code'] ?? 'IDR',
+            'currency_symbol' => $settings['currency_symbol'] ?? 'Rp',
+            'currency_position' => $settings['currency_position'] ?? 'before',
+            'tax_enabled' => ($settings['tax_enabled'] ?? '0') === '1',
+            'tax_rate_default' => $settings['tax_rate_default'] ?? '0',
+            'tax_included' => ($settings['tax_included'] ?? '0') === '1',
+            'checkout_guest_enabled' => ($settings['checkout_guest_enabled'] ?? '1') === '1',
+            'checkout_min_order' => $settings['checkout_min_order'] ?? '0',
+            'checkout_notes_enabled' => ($settings['checkout_notes_enabled'] ?? '1') === '1',
+            'warehouse_city_id' => $settings['warehouse_city_id'] ?? '',
+            'warehouse_area_id' => $settings['warehouse_area_id'] ?? '',
+            'theme_active' => $settings['theme_active'] ?? 'default',
+            'ai_api_url' => $settings['ai_api_url'] ?? '',
+            'ai_api_key' => $settings['ai_api_key'] ?? '',
+            'ai_model' => $settings['ai_model'] ?? 'gpt-4o-mini',
+            'maintenance_mode' => ($settings['maintenance_mode'] ?? '0') === '1',
+            'seo_meta_title' => $settings['seo_meta_title'] ?? '',
+            'seo_meta_description' => $settings['seo_meta_description'] ?? '',
         ]);
     }
 
@@ -100,6 +121,39 @@ class BusinessSettings extends Page implements HasForms
                     Forms\Components\Textarea::make('invoice_footer')->label('Footer Invoice')->rows(3)->placeholder('Catatan yang muncul di footer invoice'),
                     Forms\Components\TextInput::make('order_code_prefix')->label('Prefix Kode Order')->required(),
                 ]),
+
+                Forms\Components\Tabs\Tab::make('Locale & Currency')->schema([
+                    Forms\Components\Select::make('default_language')->label('Bahasa Default')->options(['id' => 'Indonesia', 'en' => 'English'])->required(),
+                    Forms\Components\Select::make('translation_default')->label('Locale Default (terjemahan)')->options(['id' => 'Indonesia', 'en' => 'English']),
+                    Forms\Components\Select::make('translation_fallback')->label('Locale Fallback')->options(['id' => 'Indonesia', 'en' => 'English']),
+                    Forms\Components\TextInput::make('currency_code')->label('Kode Mata Uang')->required()->maxLength(3),
+                    Forms\Components\TextInput::make('currency_symbol')->label('Simbol Mata Uang')->required()->maxLength(10),
+                    Forms\Components\Select::make('currency_position')->label('Posisi Simbol')->options(['before' => 'Depan (Rp100)', 'after' => 'Belakang (100Rp)'])->required(),
+                ]),
+
+                Forms\Components\Tabs\Tab::make('Pajak & Checkout')->schema([
+                    Forms\Components\Toggle::make('tax_enabled')->label('Pajak Aktif'),
+                    Forms\Components\TextInput::make('tax_rate_default')->label('Tarif Pajak Default (%)')->numeric()->minValue(0)->maxValue(100),
+                    Forms\Components\Toggle::make('tax_included')->label('Harga Termasuk Pajak'),
+                    Forms\Components\Toggle::make('checkout_guest_enabled')->label('Checkout Tamu Diizinkan'),
+                    Forms\Components\TextInput::make('checkout_min_order')->label('Minimal Belanja (IDR)')->numeric()->minValue(0),
+                    Forms\Components\Toggle::make('checkout_notes_enabled')->label('Catatan Pembeli Aktif'),
+                    Forms\Components\TextInput::make('warehouse_city_id')->label('Kota Gudang (ID)'),
+                    Forms\Components\TextInput::make('warehouse_area_id')->label('Area Gudang (ID)'),
+                ]),
+
+                Forms\Components\Tabs\Tab::make('Tema & AI')->schema([
+                    Forms\Components\TextInput::make('theme_active')->label('Tema Aktif')->required()->maxLength(60),
+                    Forms\Components\TextInput::make('ai_api_url')->label('AI API URL')->url(),
+                    Forms\Components\TextInput::make('ai_api_key')->label('AI API Key')->password()->revealable(),
+                    Forms\Components\TextInput::make('ai_model')->label('AI Model')->placeholder('gpt-4o-mini'),
+                ]),
+
+                Forms\Components\Tabs\Tab::make('Lainnya')->schema([
+                    Forms\Components\Toggle::make('maintenance_mode')->label('Mode Maintenance'),
+                    Forms\Components\TextInput::make('seo_meta_title')->label('Meta Title Default')->maxLength(255)->columnSpanFull(),
+                    Forms\Components\Textarea::make('seo_meta_description')->label('Meta Description Default')->rows(2)->columnSpanFull(),
+                ]),
             ])->activeTab($this->activeTab),
         ])->statePath('data');
     }
@@ -121,6 +175,9 @@ class BusinessSettings extends Page implements HasForms
             $type = 'general';
             if (in_array($key, $socialKeys)) $type = 'social';
             if (in_array($key, $smtpKeys)) $type = 'smtp';
+
+            // Normalize toggles to '1'/'0' so typed Settings::get('bool') reads back correctly.
+            if (is_bool($value)) $value = $value ? '1' : '0';
 
             BusinessSetting::updateOrCreate(
                 ['type' => $type, 'key' => $key],

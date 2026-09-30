@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Models\DeliveryHistory;
 use App\Models\Order;
 use App\Models\RefundRequest;
 use Illuminate\Http\Request;
@@ -110,12 +109,7 @@ class OrderController extends Controller
         if (! in_array($order->delivery_status, ['picked_up', 'on_delivery'], true)) {
             return back()->with('error', 'Pesanan belum dalam pengiriman.');
         }
-        $order->update(['delivery_status' => 'delivered']);
-        DeliveryHistory::create([
-            'order_id' => $order->id,
-            'delivery_status' => 'delivered',
-            'status' => 'Paket diterima pelanggan',
-        ]);
+        app(\App\Services\Order\OrderStateService::class)->transitionDelivery($order, 'delivered', Auth::id(), 'Diterima pelanggan via akun');
 
         return back()->with('success', 'Terima kasih! Pesanan ditandai selesai.');
     }
@@ -145,5 +139,43 @@ class OrderController extends Controller
         ]);
 
         return back()->with('success', 'Pengajuan refund terkirim, admin akan memprosesnya.');
+    }
+
+    /**
+     * Pelanggan membatalkan pesanan yang masih pending & belum dibayar.
+     * Stok yang ter-reserve dikembalikan, status via OrderStateService.
+     * BUTUH ROUTE (integrator): POST /account/orders/{order}/cancel → customer.orders.cancel
+     */
+    public function cancel(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+        if ($order->payment_status !== 'unpaid' || ! in_array($order->delivery_status, ['pending', 'confirmed'], true)) {
+            return back()->with('error', 'Pesanan ini sudah tidak bisa dibatalkan.');
+        }
+
+        $order->loadMissing('orderDetails');
+        $inventory = app(\App\Services\Inventory\InventoryService::class);
+        foreach ($order->orderDetails as $detail) {
+            $stockId = \App\Models\ProductStock::where('product_id', $detail->product_id)
+                ->when($detail->variation !== null && $detail->variation !== '', fn ($q) => $q->where('variant', $detail->variation))
+                ->orderByDesc('qty')
+                ->value('id');
+            if ($stockId) {
+                try {
+                    $inventory->release($detail->product_id, $stockId, (int) $detail->quantity, 'order', $order->id);
+                } catch (\Throwable) {
+                }
+            }
+        }
+
+        try {
+            app(\App\Services\Order\OrderStateService::class)->transitionDelivery($order, 'cancelled', Auth::id(), 'Dibatalkan pelanggan');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->with('error', implode(' ', $e->validator->errors()->all()));
+        }
+
+        return back()->with('success', 'Pesanan dibatalkan, stok dikembalikan.');
     }
 }

@@ -1,19 +1,19 @@
 @extends('customer.layout')
-@section('title', 'Detail Pesanan')
-@section('page-title', 'Detail Pesanan')
+@section('title', __('customer.order_detail'))
+@section('page-title', __('customer.order_detail'))
 
 @section('content')
 <div x-data="orderDetailPage()">
     <div class="mb-6">
         <a href="{{ route('customer.orders') }}" class="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-brand-600 transition mb-4">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            Kembali ke Daftar Pesanan
+            {{ __('customer.back_to_orders') }}
         </a>
 
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-                <h1 class="text-2xl font-extrabold text-stone-900" x-text="'Pesanan #' + order.code"></h1>
-                <p class="text-sm text-stone-500 mt-1" x-text="'Dibuat pada ' + order.date"></p>
+                <h1 class="text-2xl font-extrabold text-stone-900" x-text="'{{ __('customer.orders.number_sign') }}' + order.code"></h1>
+                <p class="text-sm text-stone-500 mt-1" x-text="'{{ __('customer.orders.placed_on') }} ' + order.date"></p>
             </div>
             <span class="px-4 py-2 text-sm font-bold rounded-full self-start" :class="statusBadge(order.status)" x-text="order.status"></span>
         </div>
@@ -22,7 +22,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div class="lg:col-span-2 space-y-6">
             <div class="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm">
-                <h2 class="font-bold text-stone-900 mb-6">Status Pesanan</h2>
+                <h2 class="font-bold text-stone-900 mb-6">{{ __('customer.order_status') }}</h2>
                 <div class="relative">
                     <template x-for="(step, idx) in timeline" :key="idx">
                         <div class="flex gap-4 pb-8 last:pb-0">
@@ -37,7 +37,7 @@
                             </div>
                             <div class="flex-1" :class="!step.done && idx > currentTimelineIdx ? 'opacity-50' : ''">
                                 <p class="font-bold text-stone-800" x-text="step.label"></p>
-                                <p class="text-sm text-stone-500" x-text="step.date || 'Menunggu'"></p>
+                                <p class="text-sm text-stone-500" x-text="step.date || '{{ __('customer.orders.waiting') }}'"></p>
                             </div>
                         </div>
                     </template>
@@ -46,16 +46,16 @@
 
             <div class="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-stone-200">
-                    <h2 class="font-bold text-stone-900">Detail Produk</h2>
+                    <h2 class="font-bold text-stone-900">{{ __('customer.product_detail') }}</h2>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <caption class="sr-only">Rincian produk dalam pesanan</caption>
                         <thead class="bg-stone-50 border-b border-stone-200">
                             <tr>
-                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">Produk</th>
+                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">{{ __('customer.col_product') }}</th>
                                 <th scope="col" class="text-center px-4 py-3 font-semibold text-stone-600">Qty</th>
-                                <th scope="col" class="text-right px-4 py-3 font-semibold text-stone-600">Harga</th>
+                                <th scope="col" class="text-right px-4 py-3 font-semibold text-stone-600">{{ __('customer.col_price') }}</th>
                                 <th scope="col" class="text-right px-4 py-3 font-semibold text-stone-600">Subtotal</th>
                             </tr>
                         </thead>
@@ -84,22 +84,22 @@
 
         <div class="space-y-6">
             <div class="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm">
-                <h3 class="font-bold text-stone-900 mb-4">Ringkasan Pembayaran</h3>
+                <h3 class="font-bold text-stone-900 mb-4">{{ __('customer.payment_summary') }}</h3>
                 <div class="space-y-2.5 text-sm">
                     <div class="flex justify-between">
                         <span class="text-stone-500">Subtotal</span>
                         <span class="font-semibold" x-text="'Rp ' + formatRupiah(order.subtotal)"></span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-stone-500">Ongkos Kirim</span>
+                        <span class="text-stone-500">{{ __('customer.shipping_cost') }}</span>
                         <span class="font-semibold" x-text="'Rp ' + formatRupiah(order.shippingCost)"></span>
                     </div>
                     <div class="flex justify-between" x-show="order.discount > 0">
-                        <span class="text-stone-500">Diskon</span>
+                        <span class="text-stone-500">{{ __('customer.discount') }}</span>
                         <span class="font-semibold text-green-600" x-text="'-Rp ' + formatRupiah(order.discount)"></span>
                     </div>
                     <div class="flex justify-between border-t border-stone-200 pt-2.5 mt-2.5 text-base">
-                        <span class="font-bold text-stone-800">Total</span>
+                        <span class="font-bold text-stone-800">{{ __('customer.col_total') }}</span>
                         <span class="font-extrabold text-brand-600" x-text="'Rp ' + formatRupiah(order.total)"></span>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
             <div class="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm" x-show="order.shippingAddress">
                 <h3 class="font-bold text-stone-900 mb-3 flex items-center gap-2">
                     <svg class="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    Alamat Pengiriman
+                    {{ __('customer.shipping_address') }}
                 </h3>
                 <div class="text-sm">
                     <p class="font-semibold text-stone-800" x-text="order.shippingAddress.name"></p>
@@ -120,11 +120,11 @@
             <div class="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm" x-show="order.paymentInfo">
                 <h3 class="font-bold text-stone-900 mb-3 flex items-center gap-2">
                     <svg class="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                    Info Pembayaran
+                    {{ __('customer.payment_info') }}
                 </h3>
                 <div class="text-sm space-y-1.5">
                     <div class="flex justify-between">
-                        <span class="text-stone-500">Metode</span>
+                        <span class="text-stone-500">{{ __('customer.method') }}</span>
                         <span class="font-semibold text-stone-800" x-text="order.paymentInfo.method"></span>
                     </div>
                     <div class="flex justify-between" x-show="order.paymentInfo.bankName">
@@ -132,7 +132,7 @@
                         <span class="font-semibold text-stone-800" x-text="order.paymentInfo.bankName"></span>
                     </div>
                     <div class="flex justify-between" x-show="order.paymentInfo.accountNumber">
-                        <span class="text-stone-500">Nomor Rekening</span>
+                        <span class="text-stone-500">{{ __('customer.account_no') }}</span>
                         <span class="font-semibold font-mono text-stone-800" x-text="order.paymentInfo.accountNumber"></span>
                     </div>
                 </div>
@@ -141,9 +141,9 @@
             {{-- Lacak pengiriman live (delivery_histories DB + API Biteship/RajaOngkir) --}}
             <div class="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm">
                 <h3 class="font-bold text-stone-900 mb-1 flex items-center gap-2">
-                    <i class="fas fa-truck text-brand-500"></i> Lacak Pengiriman
+                    <i class="fas fa-truck text-brand-500"></i>{{ __('customer.track_shipping') }}
                 </h3>
-                <p class="text-xs text-stone-500 mb-4">Riwayat dari admin & kurir (diperbarui otomatis via webhook).</p>
+                <p class="text-xs text-stone-500 mb-4">{{ __('customer.track_history_note') }}</p>
                 @if(isset($trackingTimeline) && $trackingTimeline->count())
                 <ol class="relative border-l border-stone-200 ml-2 space-y-4" aria-label="Riwayat pengiriman">
                     @foreach($trackingTimeline as $t)
@@ -158,12 +158,12 @@
                 @else
                 <div x-data="{ waybill: '', courier: 'jne', result: null, loading: false, err: '' }" class="text-sm">
                     <div class="flex gap-2">
-                        <input x-model="waybill" placeholder="No. resi…" class="flex-1 px-3 py-2.5 min-h-[44px] border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400" aria-label="Nomor resi">
-                        <button @click="loading=true; err=''; fetch(`/api/shipping/track/${waybill}?courier=${courier}`).then(r=>r.json()).then(d=>{result=d.data; if(!d.success) err=d.message||'Tidak ditemukan'}).catch(e=>err=e.message).finally(()=>loading=false)" class="px-4 min-h-[44px] bg-stone-900 text-white text-sm font-semibold rounded-xl" :disabled="!waybill">Lacak</button>
+                        <input x-model="waybill" placeholder="{{ __('customer.waybill_ph') }}" class="flex-1 px-3 py-2.5 min-h-[44px] border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400" aria-label="Nomor resi">
+                        <button @click="loading=true; err=''; fetch(`/api/shipping/track/${waybill}?courier=${courier}`).then(r=>r.json()).then(d=>{result=d.data; if(!d.success) err=d.message||'Tidak ditemukan'}).catch(e=>err=e.message).finally(()=>loading=false)" class="px-4 min-h-[44px] bg-stone-900 text-white text-sm font-semibold rounded-xl" :disabled="!waybill">{{ __('customer.track_btn') }}</button>
                     </div>
                     <p x-show="err" x-text="err" class="text-xs text-red-600 mt-2"></p>
                     <pre x-show="result" x-text="JSON.stringify(result,null,2)" class="text-[11px] bg-stone-50 border rounded-xl p-3 mt-2 overflow-auto max-h-48"></pre>
-                    <p class="text-[11px] text-stone-400 mt-2">Belum ada riwayat? Resi muncul setelah admin input no. resi.</p>
+                    <p class="text-[11px] text-stone-400 mt-2">{{ __('customer.no_history_hint') }}</p>
                 </div>
                 @endif
             </div>
@@ -182,12 +182,12 @@
             <div class="flex flex-wrap gap-3">
                 @if(!empty($snapToken))
                 <button @click="payNow()" class="px-6 py-3 min-h-[44px] text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-brand-500 rounded-xl hover:shadow-lg transition-all flex items-center gap-2">
-                    <i class="fas fa-qrcode"></i> Bayar Sekarang
+                    <i class="fas fa-qrcode"></i>{{ __('customer.pay_now') }}
                 </button>
                 @elseif($order->manual_payment)
                 <a href="https://wa.me/6281234567890?text={{ urlencode('Halo, konfirmasi pembayaran manual order '.$order->code) }}" target="_blank" rel="noopener"
                     class="px-6 py-3 min-h-[44px] text-sm font-bold text-white bg-green-600 rounded-xl hover:bg-green-700 transition-all flex items-center gap-2">
-                    <i class="fab fa-whatsapp"></i> Konfirmasi via WhatsApp
+                    <i class="fab fa-whatsapp"></i>{{ __('customer.confirm_wa') }}
                 </a>
                 @endif
             </div>
@@ -199,7 +199,7 @@
                 <button type="submit" aria-label="Konfirmasi pesanan sudah diterima"
                     class="min-h-[44px] px-6 py-3 text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-brand-500 rounded-xl hover:shadow-lg transition-all flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    Konfirmasi Terima
+                    {{ __('customer.confirm_received') }}
                 </button>
             </form>
         </template>
@@ -208,7 +208,7 @@
             <button @click="refundOpen = !refundOpen"
                 class="px-6 py-3 min-h-[44px] text-sm font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-xl hover:bg-amber-100 transition flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
-                Ajukan Refund
+                {{ __('customer.request_refund') }}
             </button>
             <form x-show="refundOpen" x-cloak action="{{ route('customer.orders.refund', $order) }}" method="POST" class="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-3 max-w-md">
                 @csrf
@@ -217,17 +217,17 @@
                     <input id="refund_amount" type="number" name="refund_amount" min="1000" max="{{ (int) $order->grand_total }}" required class="w-full px-3 py-2.5 min-h-[44px] border border-amber-300 rounded-xl text-sm bg-white">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-amber-800 mb-1" for="refund_reason">Alasan</label>
-                    <textarea id="refund_reason" name="refund_reason" rows="3" required placeholder="Ceritakan kendalanya…" class="w-full px-3 py-2.5 border border-amber-300 rounded-xl text-sm bg-white"></textarea>
+                    <label class="block text-xs font-semibold text-amber-800 mb-1" for="refund_reason">{{ __('customer.refund_reason') }}</label>
+                    <textarea id="refund_reason" name="refund_reason" rows="3" required placeholder="{{ __('customer.refund_reason_ph') }}" class="w-full px-3 py-2.5 border border-amber-300 rounded-xl text-sm bg-white"></textarea>
                 </div>
-                <button class="px-5 py-2.5 min-h-[44px] bg-amber-600 text-white text-sm font-bold rounded-xl">Kirim Pengajuan</button>
+                <button class="px-5 py-2.5 min-h-[44px] bg-amber-600 text-white text-sm font-bold rounded-xl">{{ __('customer.refund_submit') }}</button>
             </form>
         </div>
 
         <a href="{{ route('customer.orders.invoice', $order) }}"
             class="px-6 py-3 min-h-[44px] text-sm font-bold text-stone-600 bg-stone-100 border border-stone-200 rounded-xl hover:bg-stone-200 transition flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            Download Invoice
+            {{ __('customer.download_invoice') }}
         </a>
     </div>
 </div>

@@ -24,6 +24,8 @@ class PaymentGatewayService
             'midtrans-core' => new CoreApiAdapter($gateway),
             'xendit-invoice' => new XenditInvoiceAdapter($gateway),
             'tripay-closed' => new TripayClosedAdapter($gateway),
+            'stripe-pi' => new StripePaymentIntentAdapter($gateway),
+            'paypal-order' => new PayPalOrderAdapter($gateway),
             'duitku-redirect' => new GenericRedirectAdapter($gateway),
             'oyindonesia-api',
             'ipaymu-api',

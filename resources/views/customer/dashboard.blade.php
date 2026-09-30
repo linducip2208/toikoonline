@@ -5,8 +5,8 @@
 @section('content')
 <div x-data="customerDashboard()">
     <div class="mb-8">
-        <h1 class="text-2xl font-extrabold text-stone-900" x-text="'Halo, ' + userName + '! 👋'"></h1>
-        <p class="text-stone-500 mt-1">Selamat datang kembali. Ada yang bisa kami bantu hari ini?</p>
+        <h1 class="text-2xl font-extrabold text-stone-900" x-text="'{{ __('customer.dashboard.greeting') }} ' + userName + '!'"></h1>
+        <p class="text-stone-500 mt-1">{{ __('customer.welcome_back') }}</p>
     </div>
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -15,7 +15,7 @@
                 <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
                     <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 </div>
-                <span class="text-xs font-semibold text-stone-500 uppercase tracking-wide">Total Pesanan</span>
+                <span class="text-xs font-semibold text-stone-500 uppercase tracking-wide">{{ __('customer.total_orders') }}</span>
             </div>
             <span class="text-3xl font-extrabold text-stone-900" x-text="stats.totalOrders"></span>
         </div>
@@ -25,7 +25,7 @@
                 <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
                     <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
-                <span class="text-xs font-semibold text-stone-500 uppercase tracking-wide">Pesanan Aktif</span>
+                <span class="text-xs font-semibold text-stone-500 uppercase tracking-wide">{{ __('customer.active_orders') }}</span>
             </div>
             <span class="text-3xl font-extrabold text-stone-900" x-text="stats.activeOrders"></span>
         </div>
@@ -45,7 +45,7 @@
                 <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
                     <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
                 </div>
-                <span class="text-xs font-semibold text-stone-500 uppercase tracking-wide">Poin Loyalty</span>
+                <span class="text-xs font-semibold text-stone-500 uppercase tracking-wide">{{ __('customer.loyalty_points') }}</span>
             </div>
             <span class="text-3xl font-extrabold text-stone-900" x-text="stats.loyaltyPoints"></span>
         </div>
@@ -57,8 +57,8 @@
                 <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
             </div>
             <div>
-                <p class="font-bold text-stone-800">Belanja Sekarang</p>
-                <p class="text-sm text-stone-500">Lihat produk terbaru</p>
+                <p class="font-bold text-stone-800">{{ __('customer.shop_now') }}</p>
+                <p class="text-sm text-stone-500">{{ __('customer.shop_now_hint') }}</p>
             </div>
         </a>
 
@@ -67,8 +67,8 @@
                 <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
             </div>
             <div>
-                <p class="font-bold text-stone-800">Lacak Pesanan</p>
-                <p class="text-sm text-stone-500">Pantau status pesanan</p>
+                <p class="font-bold text-stone-800">{{ __('customer.track_orders') }}</p>
+                <p class="text-sm text-stone-500">{{ __('customer.track_orders_hint') }}</p>
             </div>
         </a>
 
@@ -77,8 +77,8 @@
                 <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
             </div>
             <div>
-                <p class="font-bold text-stone-800">Tulis Ulasan</p>
-                <p class="text-sm text-stone-500">Bagikan pengalamanmu</p>
+                <p class="font-bold text-stone-800">{{ __('customer.write_review') }}</p>
+                <p class="text-sm text-stone-500">{{ __('customer.write_review_hint') }}</p>
             </div>
         </a>
     </div>
@@ -87,18 +87,18 @@
         <div class="lg:col-span-2">
             <div class="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-stone-200 flex items-center justify-between">
-                    <h2 class="font-bold text-stone-900">Pesanan Terbaru</h2>
-                    <a href="{{ route('customer.orders') }}" class="text-sm text-brand-600 hover:text-brand-700 font-semibold">Lihat Semua →</a>
+                    <h2 class="font-bold text-stone-900">{{ __('customer.recent_orders') }}</h2>
+                    <a href="{{ route('customer.orders') }}" class="text-sm text-brand-600 hover:text-brand-700 font-semibold">{{ __('customer.view_all') }}</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <caption class="sr-only">Lima pesanan terbaru Anda</caption>
                         <thead class="bg-stone-50 border-b border-stone-200">
                             <tr>
-                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">Kode</th>
-                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">Tanggal</th>
-                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">Status</th>
-                                <th scope="col" class="text-right px-4 py-3 font-semibold text-stone-600">Total</th>
+                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">{{ __('customer.col_code') }}</th>
+                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">{{ __('customer.col_date') }}</th>
+                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">{{ __('customer.col_status') }}</th>
+                                <th scope="col" class="text-right px-4 py-3 font-semibold text-stone-600">{{ __('customer.col_total') }}</th>
                                 <th scope="col" class="text-right px-4 py-3 font-semibold text-stone-600"><span class="sr-only">Aksi</span></th>
                             </tr>
                         </thead>
@@ -120,7 +120,7 @@
                     </table>
                 </div>
                 <div x-show="recentOrders.length === 0" class="p-8 text-center text-stone-400">
-                    Belum ada pesanan. <a href="/" class="text-brand-600 font-semibold">Mulai belanja →</a>
+                    {{ __('customer.no_orders_yet') }} <a href="/" class="text-brand-600 font-semibold">{{ __('customer.start_shopping_link') }}</a>
                 </div>
             </div>
         </div>
@@ -128,8 +128,8 @@
         <div>
             <div class="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-stone-200 flex items-center justify-between">
-                    <h2 class="font-bold text-stone-900">Wishlist</h2>
-                    <a href="{{ route('customer.wishlist') }}" class="text-sm text-brand-600 hover:text-brand-700 font-semibold">Lihat Semua →</a>
+                    <h2 class="font-bold text-stone-900">{{ __('customer.wishlist_heading') }}</h2>
+                    <a href="{{ route('customer.wishlist') }}" class="text-sm text-brand-600 hover:text-brand-700 font-semibold">{{ __('customer.view_all') }}</a>
                 </div>
                 <div class="p-4 space-y-3">
                     <template x-for="item in wishlistItems" :key="item.name">
@@ -144,7 +144,7 @@
                 </div>
                 <div x-show="wishlistItems.length === 0" class="p-8 text-center text-stone-400">
                     <p class="text-3xl mb-2">🤍</p>
-                    <p>Wishlist kosong</p>
+                    <p>{{ __('customer.wishlist_empty') }}</p>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 @extends('layouts.storefront')
 
-@section('title', 'Daftar')
+@section('title', __('auth.register'))
 
 @section('content')
 <div class="min-h-[calc(100vh-200px)] grid lg:grid-cols-2 gap-0 -mx-4">
@@ -32,22 +32,22 @@
 
         {{-- Tagline + Benefit Cards --}}
         <div class="relative text-white">
-            <h2 class="font-display text-5xl font-bold leading-tight mb-4">Gabung Jadi Member</h2>
+            <h2 class="font-display text-5xl font-bold leading-tight mb-4">{{ __('auth.join_title') }}</h2>
             <p class="text-brand-100 text-lg leading-relaxed mb-8 max-w-md">
-                Dapatkan pengalaman belanja terbaik dengan berbagai keuntungan eksklusif untuk member TokoOnline.
+                {{ __('auth.join_subtitle') }}
             </p>
             <div class="grid grid-cols-3 gap-4 max-w-md">
                 <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10">
                     <i class="fas fa-shopping-bag text-2xl mb-2 block text-brand-200"></i>
-                    <span class="text-xs font-semibold text-white">Mulai Belanja</span>
+                    <span class="text-xs font-semibold text-white">{{ __('auth.benefit_shop') }}</span>
                 </div>
                 <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10">
                     <i class="fas fa-box text-2xl mb-2 block text-brand-200"></i>
-                    <span class="text-xs font-semibold text-white">Lacak Pesanan</span>
+                    <span class="text-xs font-semibold text-white">{{ __('auth.benefit_track') }}</span>
                 </div>
                 <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10">
                     <i class="fas fa-gift text-2xl mb-2 block text-brand-200"></i>
-                    <span class="text-xs font-semibold text-white">Dapatkan Promo</span>
+                    <span class="text-xs font-semibold text-white">{{ __('auth.benefit_promo') }}</span>
                 </div>
             </div>
         </div>
@@ -61,10 +61,10 @@
     {{-- Right: Register Form --}}
     <div class="flex items-center justify-center p-8 lg:p-16">
         <div class="w-full max-w-md">
-            <h1 class="font-display text-4xl font-bold text-stone-900 mb-2">Daftar</h1>
+            <h1 class="font-display text-4xl font-bold text-stone-900 mb-2">{{ __('auth.register') }}</h1>
             <p class="text-stone-500 mb-8">
-                Sudah punya akun?
-                <a href="{{ route('login') }}" class="text-brand-600 font-semibold hover:underline">Masuk di sini</a>
+                {{ __('auth.have_account') }}
+                <a href="{{ route('login') }}" class="text-brand-600 font-semibold hover:underline">{{ __('auth.login_here') }}</a>
             </p>
 
             {{-- Validation Errors --}}
@@ -72,7 +72,7 @@
                 <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-700">
                     <div class="flex items-center gap-2 mb-1">
                         <i class="fas fa-exclamation-circle text-red-500"></i>
-                        <span class="font-semibold">Oops! Ada yang salah</span>
+                        <span class="font-semibold">{{ __('auth.error_title') }}</span>
                     </div>
                     <ul class="list-disc list-inside mt-1 space-y-0.5 text-red-600">
                         @foreach ($errors->all() as $error)
@@ -87,11 +87,11 @@
 
                 {{-- Name --}}
                 <div>
-                    <label for="name" class="block text-sm font-semibold text-stone-700 mb-1.5">Nama Lengkap</label>
+                    <label for="name" class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('auth.full_name') }}</label>
                     <div class="relative">
                         <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
                         <input type="text" name="name" id="name" value="{{ old('name') }}"
-                               placeholder="Nama Anda" required autofocus
+                               placeholder="{{ __('auth.name_ph') }}" required autofocus
                                class="w-full pl-11 pr-4 py-3 rounded-xl border border-stone-300 bg-white text-sm
                                       focus:outline-none focus:ring-3 focus:ring-brand-500/20 focus:border-brand-400
                                       transition-all placeholder:text-stone-400">
@@ -113,7 +113,7 @@
 
                 {{-- Phone --}}
                 <div>
-                    <label for="phone" class="block text-sm font-semibold text-stone-700 mb-1.5">Nomor Telepon <span class="text-stone-400 font-normal">(opsional)</span></label>
+                    <label for="phone" class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('auth.phone') }} <span class="text-stone-400 font-normal">{{ __('auth.optional') }}</span></label>
                     <div class="relative">
                         <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
                         <input type="text" name="phone" id="phone" value="{{ old('phone') }}"
@@ -126,11 +126,11 @@
 
                 {{-- Password --}}
                 <div>
-                    <label for="password" class="block text-sm font-semibold text-stone-700 mb-1.5">Kata Sandi</label>
+                    <label for="password" class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('auth.password') }}</label>
                     <div class="relative" x-data="{ show: false }">
                         <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
                         <input :type="show ? 'text' : 'password'" name="password" id="password"
-                               placeholder="Minimal 8 karakter" required
+                               placeholder="{{ __('auth.password_ph') }}" required
                                class="w-full pl-11 pr-12 py-3 rounded-xl border border-stone-300 bg-white text-sm
                                       focus:outline-none focus:ring-3 focus:ring-brand-500/20 focus:border-brand-400
                                       transition-all placeholder:text-stone-400">
@@ -143,11 +143,11 @@
 
                 {{-- Confirm Password --}}
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-semibold text-stone-700 mb-1.5">Konfirmasi Kata Sandi</label>
+                    <label for="password_confirmation" class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('auth.confirm_password') }}</label>
                     <div class="relative">
                         <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
                         <input type="password" name="password_confirmation" id="password_confirmation"
-                               placeholder="Ulangi kata sandi" required
+                               placeholder="{{ __('auth.confirm_password_ph') }}" required
                                class="w-full pl-11 pr-4 py-3 rounded-xl border border-stone-300 bg-white text-sm
                                       focus:outline-none focus:ring-3 focus:ring-brand-500/20 focus:border-brand-400
                                       transition-all placeholder:text-stone-400">
@@ -160,14 +160,14 @@
                                text-white rounded-xl font-semibold text-sm shadow-lg shadow-brand-500/25
                                hover:shadow-brand-500/40 transition-all hover:-translate-y-0.5
                                active:translate-y-0 active:shadow-md">
-                    <i class="fas fa-user-plus mr-2"></i>Daftar
+                    <i class="fas fa-user-plus mr-2"></i>{{ __('auth.register') }}
                 </button>
             </form>
 
             {{-- Divider --}}
             <div class="flex items-center gap-3 my-6">
                 <div class="flex-1 h-px bg-stone-200"></div>
-                <span class="text-xs text-stone-400 font-medium">keuntungan member</span>
+                <span class="text-xs text-stone-400 font-medium">{{ __('auth.member_benefits') }}</span>
                 <div class="flex-1 h-px bg-stone-200"></div>
             </div>
 
@@ -176,29 +176,29 @@
                 <div class="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-3">
                     <i class="fas fa-percent text-amber-600 text-lg"></i>
                     <div>
-                        <span class="text-xs font-semibold text-amber-800 block">Voucher Khusus</span>
-                        <span class="text-[10px] text-amber-600">Diskon member eksklusif</span>
+                        <span class="text-xs font-semibold text-amber-800 block">{{ __('auth.voucher_title') }}</span>
+                        <span class="text-[10px] text-amber-600">{{ __('auth.voucher_desc') }}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-3 bg-green-50 border border-green-200 rounded-xl p-3">
                     <i class="fas fa-star text-green-600 text-lg"></i>
                     <div>
-                        <span class="text-xs font-semibold text-green-800 block">Poin Belanja</span>
-                        <span class="text-[10px] text-green-600">Kumpulkan & tukar hadiah</span>
+                        <span class="text-xs font-semibold text-green-800 block">{{ __('auth.points_title') }}</span>
+                        <span class="text-[10px] text-green-600">{{ __('auth.points_desc') }}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl p-3">
                     <i class="fas fa-truck-fast text-blue-600 text-lg"></i>
                     <div>
-                        <span class="text-xs font-semibold text-blue-800 block">Gratis Ongkir</span>
-                        <span class="text-[10px] text-blue-600">Min. belanja tertentu</span>
+                        <span class="text-xs font-semibold text-blue-800 block">{{ __('auth.shipping_title') }}</span>
+                        <span class="text-[10px] text-blue-600">{{ __('auth.shipping_desc') }}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-3 bg-purple-50 border border-purple-200 rounded-xl p-3">
                     <i class="fas fa-headset text-purple-600 text-lg"></i>
                     <div>
-                        <span class="text-xs font-semibold text-purple-800 block">Prioritas Support</span>
-                        <span class="text-[10px] text-purple-600">CS khusus member</span>
+                        <span class="text-xs font-semibold text-purple-800 block">{{ __('auth.support_title') }}</span>
+                        <span class="text-[10px] text-purple-600">{{ __('auth.support_desc') }}</span>
                     </div>
                 </div>
             </div>

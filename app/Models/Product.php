@@ -184,6 +184,11 @@ class Product extends Model
         return $this->hasMany(WholesalePrice::class);
     }
 
+    public function priceListItems()
+    {
+        return $this->hasMany(PriceListItem::class);
+    }
+
     public function auction()
     {
         return $this->hasOne(Auction::class);

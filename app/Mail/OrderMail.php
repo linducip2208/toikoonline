@@ -51,6 +51,7 @@ class OrderMail extends Mailable
         $identifier = match ($this->kind) {
             'order.shipped' => 'order_shipped',
             'order.delivered' => 'order_delivered',
+            'order.created', 'payment.failed' => 'order_paid',
             default => 'order_paid',
         };
 

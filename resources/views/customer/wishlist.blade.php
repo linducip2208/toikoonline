@@ -1,10 +1,10 @@
 @extends('customer.layout')
-@section('title', 'Wishlist Saya')
-@section('page-title', 'Wishlist Saya')
+@section('title', __('customer.wishlist_title'))
+@section('page-title', __('customer.wishlist_title'))
 
 @section('content')
 <div>
-    <h1 class="text-2xl font-extrabold text-stone-900 mb-6">Wishlist Saya</h1>
+    <h1 class="text-2xl font-extrabold text-stone-900 mb-6">{{ __('customer.wishlist_title') }}</h1>
 
     @if($wishlists->count() > 0)
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" role="list" aria-label="Daftar wishlist">
@@ -36,10 +36,10 @@
     @else
         <div class="text-center py-16" role="status">
             <div class="text-6xl mb-4" aria-hidden="true">🤍</div>
-            <h2 class="text-xl font-bold text-stone-800 mb-2">Wishlist kosong</h2>
-            <p class="text-stone-500 mb-6">Simpan produk favoritmu di sini untuk dibeli nanti.</p>
+            <h2 class="text-xl font-bold text-stone-800 mb-2">{{ __('customer.wishlist_empty') }}</h2>
+            <p class="text-stone-500 mb-6">{{ __('customer.wishlist_empty_hint') }}</p>
             <a href="{{ route('products.index') }}" class="inline-flex items-center justify-center min-h-[44px] gap-2 px-6 py-3 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 hover:shadow-lg transition">
-                Jelajahi Produk
+                {{ __('customer.browse_products') }}
             </a>
         </div>
     @endif

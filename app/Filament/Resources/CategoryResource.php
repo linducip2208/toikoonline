@@ -19,6 +19,10 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Actions\ImportAction;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Imports\CategoryImporter;
+use App\Filament\Exports\CategoryExporter;
 
 class CategoryResource extends Resource
 {
@@ -92,6 +96,10 @@ class CategoryResource extends Resource
             ])
             ->filters([
                 //
+            ])
+            ->headerActions([
+                ImportAction::make()->importer(CategoryImporter::class),
+                ExportAction::make()->exporter(CategoryExporter::class),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

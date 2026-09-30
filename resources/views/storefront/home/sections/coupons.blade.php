@@ -7,9 +7,9 @@
     <div class="relative max-w-7xl mx-auto px-4">
         <div class="text-center mb-10 reveal">
             <h2 class="font-display text-3xl lg:text-4xl font-bold text-white mb-3">
-                <i class="fas fa-ticket-alt mr-2"></i>Kupon Diskon
+                <i class="fas fa-ticket-alt mr-2"></i>{{ __('storefront.discount_coupons') }}
             </h2>
-            <p class="text-brand-100/80 text-lg max-w-xl mx-auto">Dapatkan potongan harga spesial dengan kupon eksklusif kami.</p>
+            <p class="text-brand-100/80 text-lg max-w-xl mx-auto">{{ __('storefront.coupons_subtitle') }}</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             @foreach($coupons as $coupon)
@@ -25,14 +25,14 @@
                     <span class="text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-1 rounded-full">OFF</span>
                 </div>
                 <div class="mb-3">
-                    <h4 class="font-semibold text-sm mb-1">Kode: <span class="font-mono font-bold bg-white/20 px-2 py-0.5 rounded text-xs">{{ $coupon->code }}</span></h4>
+                    <h4 class="font-semibold text-sm mb-1">{{ __('storefront.code') }}: <span class="font-mono font-bold bg-white/20 px-2 py-0.5 rounded text-xs">{{ $coupon->code }}</span></h4>
                     @if($coupon->min_buy > 0)
-                    <p class="text-[11px] text-brand-100/70">Min. belanja Rp{{ number_format($coupon->min_buy, 0, ',', '.') }}</p>
+                    <p class="text-[11px] text-brand-100/70">{{ __('storefront.min_spend') }} Rp{{ number_format($coupon->min_buy, 0, ',', '.') }}</p>
                     @endif
                 </div>
-                <button onclick="navigator.clipboard.writeText('{{ $coupon->code }}');this.innerHTML='<i class=\'fas fa-check mr-1\'></i>Tersalin!'"
+                <button onclick="navigator.clipboard.writeText('{{ $coupon->code }}');this.innerHTML='<i class=\'fas fa-check mr-1\'></i>{{ __('common.copied') }}!'"
                         class="w-full py-2 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-xl transition-colors border border-white/30">
-                    <i class="fas fa-copy mr-1"></i> Salin Kode
+                    <i class="fas fa-copy mr-1"></i> {{ __('common.copy_code') }}
                 </button>
             </div>
             @endforeach

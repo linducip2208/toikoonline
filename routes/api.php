@@ -20,6 +20,7 @@ Route::prefix('v1')->middleware('throttle:60,1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::get('/products', [\App\Http\Controllers\Api\V1\ProductController::class, 'index'])->name('api.v1.products.index');
+    Route::get('/products/suggest', [\App\Http\Controllers\Api\V1\ProductController::class, 'suggest'])->name('api.v1.products.suggest');
     Route::get('/products/{slug}', [\App\Http\Controllers\Api\V1\ProductController::class, 'show'])->name('api.v1.products.show');
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/categories/{slug}', [CategoryController::class, 'show']);

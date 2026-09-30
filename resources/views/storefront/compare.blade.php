@@ -1,17 +1,17 @@
 @extends('layouts.storefront')
 
-@section('title', 'Bandingkan Produk — TokoOnline')
+@section('title', __('compare.title') . ' — TokoOnline')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 py-8">
     <nav class="flex items-center gap-2 text-xs text-stone-400 mb-6">
         <a href="{{ route('home') }}" class="hover:text-brand-600">Home</a>
         <i class="fas fa-chevron-right text-[8px]"></i>
-        <span class="text-stone-600 font-medium">Bandingkan Produk</span>
+        <span class="text-stone-600 font-medium">{{ __('compare.title') }}</span>
     </nav>
 
-    <h1 class="font-display text-3xl font-bold text-stone-900 mb-2"><i class="fas fa-balance-scale text-brand-500 mr-2"></i>Bandingkan Produk</h1>
-    <p class="text-stone-500 mb-8">Bandingkan spesifikasi dan harga produk pilihan Anda (maks. 4 produk).</p>
+    <h1 class="font-display text-3xl font-bold text-stone-900 mb-2"><i class="fas fa-balance-scale text-brand-500 mr-2"></i>{{ __('compare.title') }}</h1>
+    <p class="text-stone-500 mb-8">{{ __('compare.subtitle') }}</p>
 
     @auth
         @if($compares->count())
@@ -19,7 +19,7 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b border-stone-100">
-                        <th class="p-4 text-left text-stone-400 font-medium text-xs uppercase tracking-wider w-40">Spesifikasi</th>
+                        <th class="p-4 text-left text-stone-400 font-medium text-xs uppercase tracking-wider w-40">{{ __('compare.specs') }}</th>
                         @foreach($compares as $compare)
                         <th class="p-4 text-center min-w-[200px]">
                             <button onclick="event.preventDefault(); document.getElementById('remove-{{ $compare->id }}').submit()" class="text-stone-400 hover:text-red-500 float-right">
@@ -35,7 +35,7 @@
                 </thead>
                 <tbody>
                     <tr class="border-b border-stone-50">
-                        <td class="p-4 text-stone-400 text-xs">Gambar</td>
+                        <td class="p-4 text-stone-400 text-xs">{{ __('compare.image') }}</td>
                         @foreach($compares as $compare)
                         <td class="p-4 text-center">
                             <a href="{{ route('products.show', $compare->product->slug) }}">
@@ -51,7 +51,7 @@
                         @endforeach
                     </tr>
                     <tr class="border-b border-stone-50">
-                        <td class="p-4 text-stone-400 text-xs">Nama</td>
+                        <td class="p-4 text-stone-400 text-xs">{{ __('compare.name') }}</td>
                         @foreach($compares as $compare)
                         <td class="p-4 text-center font-semibold text-stone-800">
                             <a href="{{ route('products.show', $compare->product->slug) }}" class="hover:text-brand-600">{{ $compare->product->name }}</a>
@@ -59,7 +59,7 @@
                         @endforeach
                     </tr>
                     <tr class="border-b border-stone-50">
-                        <td class="p-4 text-stone-400 text-xs">Harga</td>
+                        <td class="p-4 text-stone-400 text-xs">{{ __('compare.price') }}</td>
                         @foreach($compares as $compare)
                         <td class="p-4 text-center font-bold text-brand-600">Rp {{ number_format($compare->product->unit_price, 0, ',', '.') }}</td>
                         @endforeach
@@ -71,7 +71,7 @@
                         @endforeach
                     </tr>
                     <tr class="border-b border-stone-50">
-                        <td class="p-4 text-stone-400 text-xs">Kategori</td>
+                        <td class="p-4 text-stone-400 text-xs">{{ __('compare.category') }}</td>
                         @foreach($compares as $compare)
                         <td class="p-4 text-center text-stone-600">{{ $compare->product->category?->name ?? '-' }}</td>
                         @endforeach
@@ -88,7 +88,7 @@
                         @endforeach
                     </tr>
                     <tr>
-                        <td class="p-4 text-stone-400 text-xs">Tambah ke Keranjang</td>
+                        <td class="p-4 text-stone-400 text-xs">{{ __('compare.add_to_cart') }}</td>
                         @foreach($compares as $compare)
                         <td class="p-4 text-center">
                             <form action="{{ route('cart.add') }}" method="POST">
@@ -97,7 +97,7 @@
                                 <input type="hidden" name="price" value="{{ $compare->product->unit_price }}">
                                 <input type="hidden" name="quantity" value="1">
                                 <button class="px-4 py-2 bg-gradient-to-r from-brand-500 to-brand-600 text-white text-xs font-semibold rounded-lg hover:shadow-md transition-all">
-                                    <i class="fas fa-cart-plus mr-1"></i> Keranjang
+                                    <i class="fas fa-cart-plus mr-1"></i> {{ __('compare.cart_short') }}
                                 </button>
                             </form>
                         </td>
@@ -109,17 +109,17 @@
         @else
         <div class="text-center py-20 bg-white rounded-2xl border border-stone-100">
             <i class="fas fa-balance-scale text-6xl text-stone-200 mb-4"></i>
-            <h3 class="text-lg font-semibold text-stone-500">Belum ada produk dibandingkan</h3>
-            <p class="text-sm text-stone-400 mt-1 mb-6">Tambahkan produk untuk membandingkan spesifikasinya.</p>
-            <a href="{{ route('products.index') }}" class="inline-block px-6 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors">Lihat Produk</a>
+            <h3 class="text-lg font-semibold text-stone-500">{{ __('compare.empty_title') }}</h3>
+            <p class="text-sm text-stone-400 mt-1 mb-6">{{ __('compare.empty_hint') }}</p>
+            <a href="{{ route('products.index') }}" class="inline-block px-6 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors">{{ __('compare.view_products') }}</a>
         </div>
         @endif
     @else
     <div class="text-center py-20 bg-white rounded-2xl border border-stone-100">
         <i class="fas fa-lock text-6xl text-stone-200 mb-4"></i>
-        <h3 class="text-lg font-semibold text-stone-500">Silakan masuk untuk membandingkan produk</h3>
-        <p class="text-sm text-stone-400 mt-1 mb-6">Fitur perbandingan produk memerlukan akun.</p>
-        <a href="{{ route('login') }}" class="inline-block px-6 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors">Masuk</a>
+        <h3 class="text-lg font-semibold text-stone-500">{{ __('compare.login_title') }}</h3>
+        <p class="text-sm text-stone-400 mt-1 mb-6">{{ __('compare.login_hint') }}</p>
+        <a href="{{ route('login') }}" class="inline-block px-6 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors">{{ __('compare.login_btn') }}</a>
     </div>
     @endauth
 </div>

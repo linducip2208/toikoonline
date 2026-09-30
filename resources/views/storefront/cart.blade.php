@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Keranjang — {{ config('app.name', 'TokoOnline') }}</title>
+    <title>{{ __('cart.title') }} — {{ config('app.name', 'TokoOnline') }}</title>
     {{-- CSS lokal (Vite). Catatan: brand disatukan ke indigo (dulu emerald khusus halaman ini) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -16,7 +16,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <a href="/" class="text-2xl font-extrabold text-brand-600 tracking-tight">{{ config('app.name', 'TokoOnline') }}</a>
             <div class="flex items-center gap-6">
-                <a href="/" class="text-sm text-stone-600 hover:text-brand-600 transition">Lanjut Belanja</a>
+                <a href="/" class="text-sm text-stone-600 hover:text-brand-600 transition">{{ __('cart.continue_shopping') }}</a>
                 <a href="/cari" aria-label="Cari produk" class="inline-flex items-center justify-center min-w-[44px] min-h-[44px] text-stone-500 hover:text-stone-700 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></a>
             </div>
         </div>
@@ -26,10 +26,10 @@
         <nav class="flex items-center gap-2 text-sm text-stone-500 mb-6" aria-label="Breadcrumb">
             <a href="/" class="hover:text-brand-600 transition">Home</a>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-stone-800 font-semibold" aria-current="page">Keranjang</span>
+            <span class="text-stone-800 font-semibold" aria-current="page">{{ __('cart.title') }}</span>
         </nav>
 
-        <h1 class="text-3xl font-extrabold text-stone-900 mb-8">Keranjang Belanja <span class="text-stone-400 text-lg font-medium" x-text="'(' + items.length + ' item)'"></span></h1>
+        <h1 class="text-3xl font-extrabold text-stone-900 mb-8">{{ __('cart.heading') }} <span class="text-stone-400 text-lg font-medium" x-text="'(' + items.length + ' {{ __('cart.item_suffix') }})'"></span></h1>
 
         @if(session('success'))
         <div class="mb-6 bg-green-50 border border-green-200 text-green-700 text-sm rounded-xl px-4 py-3" role="status">{{ session('success') }}</div>
@@ -40,11 +40,11 @@
 
         <div x-show="items.length === 0" class="text-center py-20" x-cloak>
             <div class="text-8xl mb-6">🛒</div>
-            <h2 class="text-2xl font-bold text-stone-800 mb-2">Keranjangmu kosong</h2>
-            <p class="text-stone-500 mb-6">Yuk, isi keranjang dengan produk-produk terbaik kami.</p>
+            <h2 class="text-2xl font-bold text-stone-800 mb-2">{{ __('cart.empty_title') }}</h2>
+            <p class="text-stone-500 mb-6">{{ __('cart.empty_hint') }}</p>
             <a href="/" class="inline-flex items-center gap-2 px-8 py-3.5 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
-                Mulai Belanja
+                {{ __('cart.start_shopping') }}
             </a>
         </div>
 
@@ -53,13 +53,13 @@
                 <template x-for="(item, idx) in items" :key="idx">
                     <div class="bg-white rounded-2xl border border-stone-200 p-4 sm:p-5 flex flex-col sm:flex-row gap-4 hover:shadow-md transition-shadow duration-200">
                         <div class="flex-shrink-0">
-                            <img :src="item.image || '{{ asset('marketing/products/placeholder.jpg') }}'" :alt="item.name" class="w-full sm:w-28 h-28 object-cover rounded-xl bg-stone-100">
+                            <img :src="item.image || '{{ asset('marketing/products/placeholder.jpg') }}'" :alt="item.name" loading="lazy" class="w-full sm:w-28 h-28 object-cover rounded-xl bg-stone-100">
                         </div>
                         <div class="flex-1 flex flex-col sm:flex-row gap-4">
                             <div class="flex-1">
                                 <h3 class="font-semibold text-stone-900" x-text="item.name"></h3>
                                 <template x-if="item.variant">
-                                    <p class="text-sm text-stone-500 mt-0.5" x-text="'Varian: ' + item.variant"></p>
+                                    <p class="text-sm text-stone-500 mt-0.5" x-text="'{{ __('cart.variant_prefix') }}' + item.variant"></p>
                                 </template>
                                 <p class="text-brand-600 font-bold mt-2" x-text="'Rp ' + formatRupiah(item.price)"></p>
                             </div>
@@ -85,15 +85,15 @@
                 <div class="flex justify-between items-center pt-2">
                     <a href="/" class="inline-flex items-center gap-1.5 text-sm text-brand-600 hover:text-brand-700 font-medium transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                        Lanjut Belanja
+                        {{ __('cart.continue_shopping') }}
                     </a>
-                    <a href="/cari" class="text-sm text-stone-500 hover:text-stone-700">Cari produk lain</a>
+                    <a href="/cari" class="text-sm text-stone-500 hover:text-stone-700">{{ __('cart.search_other') }}</a>
                 </div>
             </div>
 
             <div class="w-full lg:w-96 flex-shrink-0">
                 <div class="bg-white rounded-2xl border border-stone-200 p-6 sticky top-24 space-y-5 shadow-sm">
-                    <h3 class="font-bold text-lg text-stone-900">Ringkasan Pesanan</h3>
+                    <h3 class="font-bold text-lg text-stone-900">{{ __('cart.summary') }}</h3>
 
                     <div class="space-y-3 text-sm">
                         <div class="flex justify-between">
@@ -102,26 +102,26 @@
                         </div>
 
                         <div class="flex justify-between items-center">
-                            <span class="text-stone-500">Kupon <span class="text-xs text-brand-600" x-show="discount > 0" x-text="'(diterapkan)'" x-cloak></span></span>
+                            <span class="text-stone-500">{{ __('cart.coupon') }} <span class="text-xs text-brand-600" x-show="discount > 0" x-text="'{{ __('cart.applied') }}'" x-cloak></span></span>
                             <span x-show="discount > 0" class="font-semibold text-green-600" x-text="'-Rp ' + formatRupiah(discount)" x-cloak></span>
-                            <span x-show="discount === 0" class="text-stone-400 text-xs">belum ada</span>
+                            <span x-show="discount === 0" class="text-stone-400 text-xs">{{ __('cart.no_coupon') }}</span>
                         </div>
 
                         <div class="flex gap-2">
-                            <label for="kupon" class="sr-only">Kode kupon</label>
-                            <input id="kupon" type="text" x-model="couponCode" @keyup.enter="applyCoupon()" placeholder="Kode kupon" class="flex-1 px-3 py-2 min-h-[44px] text-sm border border-stone-300 rounded-lg outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
-                            <button @click="applyCoupon()" class="px-4 py-2 min-h-[44px] text-sm font-semibold text-brand-700 bg-brand-50 border border-brand-200 rounded-lg hover:bg-brand-100 transition">Pakai</button>
+                            <label for="kupon" class="sr-only">{{ __('cart.coupon_code_label') }}</label>
+                            <input id="kupon" type="text" x-model="couponCode" @keyup.enter="applyCoupon()" placeholder="{{ __('cart.coupon_ph') }}" class="flex-1 px-3 py-2 min-h-[44px] text-sm border border-stone-300 rounded-lg outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition">
+                            <button @click="applyCoupon()" class="px-4 py-2 min-h-[44px] text-sm font-semibold text-brand-700 bg-brand-50 border border-brand-200 rounded-lg hover:bg-brand-100 transition">{{ __('cart.apply') }}</button>
                         </div>
                         <p x-show="couponMsg" x-text="couponMsg" :class="couponMsgType === 'error' ? 'text-red-500' : 'text-green-600'" class="text-xs" role="status" x-cloak></p>
 
                         <div class="border-t border-stone-200 pt-3 flex justify-between text-base">
-                            <span class="font-semibold text-stone-800">Total</span>
+                            <span class="font-semibold text-stone-800">{{ __('cart.total') }}</span>
                             <span class="font-extrabold text-brand-600 text-lg" x-text="'Rp ' + formatRupiah(total)"></span>
                         </div>
                     </div>
 
                     <a href="/checkout" class="block w-full py-3.5 min-h-[44px] bg-gradient-to-r from-brand-600 to-brand-500 text-white font-bold rounded-xl hover:from-brand-700 hover:to-brand-600 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
-                        Lanjut ke Checkout
+                        {{ __('cart.checkout_btn') }}
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                     </a>
                 </div>

@@ -17,7 +17,11 @@ class WebhookDispatcher
 {
     public static function supportedEvents(): array
     {
-        return ['order.paid', 'order.shipped', 'order.delivered'];
+        return [
+            'order.created', 'order.paid', 'order.shipped', 'order.delivered',
+            'payment.failed', 'refund.created', 'stock.low', 'cart.abandoned',
+            'review.created', 'product.created', 'product.updated',
+        ];
     }
 
     public static function sign(string $secret, string $payloadJson): string

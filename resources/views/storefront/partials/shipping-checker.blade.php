@@ -2,15 +2,15 @@
 <div x-data="shippingChecker({{ $product->weight ?? 500 }})" class="bg-white border border-stone-200 rounded-2xl p-4 mt-4">
     <div class="flex items-center gap-2 mb-3">
         <i class="fas fa-truck text-brand-500"></i>
-        <h3 class="font-bold text-sm text-stone-800">Cek Ongkir</h3>
+        <h3 class="font-bold text-sm text-stone-800">{{ __('storefront.check_shipping') }}</h3>
         @if($freeOngkirMin ?? false)
-        <span class="ml-auto text-[10px] font-bold text-green-700 bg-green-50 px-2 py-1 rounded-full">Gratis ongkir min. Rp150rb</span>
+        <span class="ml-auto text-[10px] font-bold text-green-700 bg-green-50 px-2 py-1 rounded-full">{{ __('storefront.free_ship_min') }}</span>
         @endif
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
-        <input x-model="dest" @input.debounce.500ms="lookupArea" placeholder="Ketik kecamatan/kota… (cth: Bandung)" class="col-span-2 px-3 py-2.5 min-h-[44px] border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400" aria-label="Tujuan pengiriman">
-        <select x-model="courier" class="px-3 py-2.5 min-h-[44px] border border-stone-200 rounded-xl text-sm bg-white" aria-label="Kurir">
-            <option value="">Semua kurir</option>
+        <input x-model="dest" @input.debounce.500ms="lookupArea" placeholder="{{ __('storefront.shipping_dest_ph') }}" class="col-span-2 px-3 py-2.5 min-h-[44px] border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400" aria-label="{{ __('storefront.shipping_dest') }}">
+        <select x-model="courier" class="px-3 py-2.5 min-h-[44px] border border-stone-200 rounded-xl text-sm bg-white" aria-label="{{ __('storefront.courier') }}">
+            <option value="">{{ __('storefront.all_couriers') }}</option>
             <option value="jne">JNE</option>
             <option value="jnt">J&T</option>
             <option value="sicepat">SiCepat</option>
@@ -26,7 +26,7 @@
         </template>
     </div>
     <button @click="checkCost()" :disabled="loading || !selectedArea" class="w-full py-2.5 min-h-[44px] bg-stone-900 hover:bg-stone-800 disabled:opacity-40 text-white text-sm font-semibold rounded-xl transition">
-        <span x-show="!loading">Lihat Ongkir</span><span x-show="loading">Menghitung…</span>
+        <span x-show="!loading">{{ __('storefront.view_shipping') }}</span><span x-show="loading">{{ __('storefront.calculating') }}</span>
     </button>
     <div x-show="results.length" class="mt-3 space-y-2">
         <template x-for="c in results" :key="c.courier + c.service">
@@ -35,7 +35,7 @@
                 <p class="font-bold text-brand-600" x-text="'Rp ' + Number(c.cost).toLocaleString('id-ID')"></p>
             </div>
         </template>
-        <p x-show="freeCover>0" class="text-[11px] text-green-700 font-medium">Termasuk subsidi gratis ongkir Rp <span x-text="Number(freeCover).toLocaleString('id-ID')"></span></p>
+        <p x-show="freeCover>0" class="text-[11px] text-green-700 font-medium">{{ __('storefront.incl_free_ship') }} Rp <span x-text="Number(freeCover).toLocaleString('id-ID')"></span></p>
     </div>
     <p x-show="error" x-text="error" class="text-xs text-red-600 mt-2"></p>
 </div>

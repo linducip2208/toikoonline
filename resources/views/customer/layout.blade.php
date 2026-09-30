@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Akun Saya') — {{ config('app.name', 'TokoOnline') }}</title>
+    <title>@yield('title', __('customer.account')) — {{ config('app.name', 'TokoOnline') }}</title>
     {{-- CSS lokal (Vite) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -26,7 +26,7 @@
     </style>
 </head>
 <body class="bg-stone-50 font-sans text-stone-800 antialiased" x-data="customerLayout()">
-    <a href="#akun-konten" class="skip-link">Lewati ke konten utama</a>
+    <a href="#akun-konten" class="skip-link">{{ __('customer.skip_link') }}</a>
     <div class="sidebar-backdrop" :class="{ open: sidebarOpen }" @click="sidebarOpen = false" aria-hidden="true"></div>
 
     <div class="min-h-screen flex flex-col lg:flex-row">
@@ -44,7 +44,7 @@
                         <p class="text-xs text-stone-500 truncate">{{ auth()->user()->email ?? '' }}</p>
                     </div>
                 </div>
-                <a href="{{ route('customer.profile') }}" class="inline-block mt-3 text-xs text-brand-600 hover:text-brand-700 font-semibold">Edit Profil →</a>
+                <a href="{{ route('customer.profile') }}" class="inline-block mt-3 text-xs text-brand-600 hover:text-brand-700 font-semibold">{{ __('customer.edit_profile') }}</a>
             </div>
 
             <nav class="flex-1 p-4 space-y-1 overflow-y-auto" aria-label="Navigasi akun">
@@ -54,7 +54,7 @@
                 </a>
                 <a href="{{ route('customer.orders') }}" @if(request()->routeIs('customer.orders*')) aria-current="page" @endif class="nav-link flex items-center gap-3 px-4 py-3 min-h-[44px] rounded-xl text-sm {{ request()->routeIs('customer.orders*') ? 'active' : 'text-stone-600 hover:bg-stone-50' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
-                    Pesanan Saya
+                    {{ __('customer.orders') }}
                 </a>
                 <a href="{{ route('customer.wishlist') }}" @if(request()->routeIs('customer.wishlist*')) aria-current="page" @endif class="nav-link flex items-center gap-3 px-4 py-3 min-h-[44px] rounded-xl text-sm {{ request()->routeIs('customer.wishlist*') ? 'active' : 'text-stone-600 hover:bg-stone-50' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
@@ -62,7 +62,11 @@
                 </a>
                 <a href="{{ route('customer.profile') }}" @if(request()->routeIs('customer.profile*')) aria-current="page" @endif class="nav-link flex items-center gap-3 px-4 py-3 min-h-[44px] rounded-xl text-sm {{ request()->routeIs('customer.profile*') ? 'active' : 'text-stone-600 hover:bg-stone-50' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    Profil
+                    {{ __('customer.profile') }}
+                </a>
+                <a href="{{ route('customer.addresses') }}" @if(request()->routeIs('customer.addresses*')) aria-current="page" @endif class="nav-link flex items-center gap-3 px-4 py-3 min-h-[44px] rounded-xl text-sm {{ request()->routeIs('customer.addresses*') ? 'active' : 'text-stone-600 hover:bg-stone-50' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    {{ __('customer.addresses') }}
                 </a>
             </nav>
 
@@ -71,7 +75,7 @@
                     @csrf
                     <button class="w-full px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-xl transition flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                        Keluar
+                        {{ __('customer.logout') }}
                     </button>
                 </form>
             </div>
@@ -88,7 +92,7 @@
                         <a href="{{ route('cart.index') }}" aria-label="Lihat keranjang belanja" class="relative p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-stone-500 hover:text-stone-700 rounded-lg hover:bg-stone-100 transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
                         </a>
-                        <a href="{{ route('home') }}" class="text-sm text-brand-600 hover:text-brand-700 font-semibold">← Toko</a>
+                        <a href="{{ route('home') }}" class="text-sm text-brand-600 hover:text-brand-700 font-semibold">{{ __('customer.back_to_shop') }}</a>
                     </div>
                 </div>
             </header>
@@ -98,7 +102,7 @@
             </div>
 
             <footer class="py-4 text-center text-xs text-stone-400 border-t border-stone-200 bg-white">
-                &copy; {{ date('Y') }} {{ config('app.name', 'TokoOnline') }}. Semua hak cipta dilindungi.
+                &copy; {{ date('Y') }} {{ config('app.name', 'TokoOnline') }}. {{ __('customer.copyright') }}
             </footer>
         </main>
     </div>

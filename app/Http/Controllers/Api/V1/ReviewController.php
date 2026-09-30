@@ -32,6 +32,13 @@ class ReviewController extends Controller
             'status' => true,
         ]);
 
+        if (class_exists(\App\Events\ReviewCreated::class)) {
+            try {
+                event(new \App\Events\ReviewCreated($review));
+            } catch (\Exception) {
+            }
+        }
+
         return response()->json(['success' => true, 'data' => (new ReviewResource($review))->resolve()], 201);
     }
 }

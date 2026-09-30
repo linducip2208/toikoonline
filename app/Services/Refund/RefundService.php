@@ -6,12 +6,13 @@ use App\Models\DeliveryHistory;
 use App\Models\OrderNote;
 use App\Models\RefundRequest;
 use App\Services\Inventory\InventoryService;
+use App\Services\Order\OrderStateService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class RefundService
 {
-    public function __construct(protected InventoryService $inventory) {}
+    public function __construct(protected InventoryService $inventory, protected OrderStateService $states) {}
 
     public function approve(RefundRequest $refund, ?int $staffId = null, ?string $note = null): RefundRequest
     {
@@ -56,11 +57,15 @@ class RefundService
                     ->sum('refund_amount');
                 $orderTotal = (int) $order->grand_total;
 
-                $order->update([
-                    'payment_status' => $totalRefunded >= $orderTotal && $orderTotal > 0
-                        ? 'refunded'
-                        : 'partially_refunded',
-                ]);
+                $target = $totalRefunded >= $orderTotal && $orderTotal > 0
+                    ? 'refunded'
+                    : 'partially_refunded';
+
+                // Guarded payment transition (audit OrderNote written by state service).
+                if ($order->payment_status !== $target) {
+                    $this->states->transitionPayment($order->fresh(), $target, $staffId ?? auth()->id(), 'Refund #'.$refund->id.' disetujui');
+                    $order = $order->fresh();
+                }
 
                 DeliveryHistory::create([
                     'order_id' => $order->id,

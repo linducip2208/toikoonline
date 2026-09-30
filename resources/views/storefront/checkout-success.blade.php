@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesanan Berhasil — {{ config('app.name', 'TokoOnline') }}</title>
+    <title>{{ __('checkout.success_title') }} — {{ config('app.name', 'TokoOnline') }}</title>
     {{-- CSS lokal (Vite). Catatan: brand disatukan ke indigo (dulu emerald khusus halaman ini) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -45,46 +45,46 @@
                 </div>
             </div>
 
-            <h1 class="text-3xl font-extrabold text-stone-900 mb-2 animate-fade-up delay-100">Pesanan Berhasil!</h1>
-            <p class="text-stone-500 mb-8 animate-fade-up delay-200">Terima kasih sudah berbelanja di {{ config('app.name', 'TokoOnline') }}.</p>
+            <h1 class="text-3xl font-extrabold text-stone-900 mb-2 animate-fade-up delay-100">{{ __('checkout.success_title') }}!</h1>
+            <p class="text-stone-500 mb-8 animate-fade-up delay-200">{{ __('checkout.thank_you', ['app' => config('app.name', 'TokoOnline')]) }}</p>
 
             <div class="bg-white border border-stone-200 rounded-2xl p-6 mb-6 text-left space-y-4 animate-fade-up delay-300 shadow-sm">
                 <div class="flex items-center justify-between">
-                    <span class="text-sm text-stone-500">Kode Pesanan</span>
+                    <span class="text-sm text-stone-500">{{ __('checkout.order_code') }}</span>
                     <div class="flex items-center gap-2">
                         <span class="font-extrabold text-brand-600 text-lg" x-text="'#' + orderCode"></span>
-                        <button @click="copyOrderCode()" class="p-1.5 text-stone-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition" title="Salin kode">
+                        <button @click="copyOrderCode()" class="p-1.5 text-stone-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition" title="{{ __('checkout.copy_code') }}">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         </button>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span class="text-sm text-stone-500">Total Pembayaran</span>
+                    <span class="text-sm text-stone-500">{{ __('checkout.grand_total') }}</span>
                     <span class="font-extrabold text-stone-800 text-lg" x-text="'Rp ' + formatRupiah(totalPaid)"></span>
                 </div>
-                <div x-show="copied" x-transition class="text-xs text-green-600 font-medium text-right" x-cloak>Kode berhasil disalin!</div>
+                <div x-show="copied" x-transition class="text-xs text-green-600 font-medium text-right" x-cloak>{{ __('checkout.code_copied') }}</div>
             </div>
 
             <div class="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-8 text-left animate-fade-up delay-400">
                 <h3 class="font-bold text-amber-800 flex items-center gap-2 mb-4">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Instruksi Pembayaran
+                    {{ __('checkout.payment_instruction') }}
                 </h3>
                 <div class="space-y-2 text-sm">
                     <div class="flex justify-between">
-                        <span class="text-amber-700">Bank</span>
+                        <span class="text-amber-700">{{ __('checkout.bank') }}</span>
                         <span class="font-semibold text-amber-900" x-text="bankName"></span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-amber-700">Nomor Rekening</span>
+                        <span class="text-amber-700">{{ __('checkout.account_no') }}</span>
                         <span class="font-semibold font-mono text-amber-900" x-text="bankAccount"></span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-amber-700">Atas Nama</span>
+                        <span class="text-amber-700">{{ __('checkout.account_name') }}</span>
                         <span class="font-semibold text-amber-900" x-text="bankHolder"></span>
                     </div>
                     <div class="flex justify-between border-t border-amber-200 pt-2 mt-2">
-                        <span class="font-bold text-amber-800">Jumlah Transfer</span>
+                        <span class="font-bold text-amber-800">{{ __('checkout.transfer_amount') }}</span>
                         <span class="font-extrabold text-amber-900" x-text="'Rp ' + formatRupiah(totalPaid)"></span>
                     </div>
                 </div>
@@ -93,24 +93,24 @@
             <div class="flex flex-col sm:flex-row gap-3 justify-center animate-fade-up delay-500">
                 @if(!empty($snapToken))
                 <button @click="payNow()" class="px-6 py-3.5 bg-gradient-to-r from-brand-600 to-violet-600 text-white font-bold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
-                    <i class="fas fa-qrcode mr-1"></i> Bayar Sekarang (QRIS/VA/E-wallet)
+                    <i class="fas fa-qrcode mr-1"></i> {{ __('checkout.pay_now') }}
                 </button>
                 @endif
                 <a href="{{ route('customer.orders') }}" class="px-6 py-3.5 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
-                    Lihat Pesanan Saya
+                    {{ __('common.my_orders') }}
                 </a>
                 <a href="/customer/pesanan/bayar?order=" x-bind:href="'/customer/pesanan/bayar?order=' + orderCode" class="px-6 py-3.5 bg-white border-2 border-brand-200 text-brand-700 font-bold rounded-xl hover:bg-brand-50 hover:border-brand-400 transition-all duration-200">
-                    Upload Bukti Bayar
+                    {{ __('checkout.upload_proof') }}
                 </a>
                 <a href="/" class="px-6 py-3.5 bg-stone-100 text-stone-700 font-semibold rounded-xl hover:bg-stone-200 transition-all duration-200">
-                    Lanjut Belanja
+                    {{ __('checkout.continue_shopping') }}
                 </a>
             </div>
         </div>
     </main>
 
     <footer class="py-6 text-center text-xs text-stone-400 border-t border-stone-200 bg-white">
-        &copy; {{ date('Y') }} {{ config('app.name', 'TokoOnline') }}. Semua hak cipta dilindungi.
+        &copy; {{ date('Y') }} {{ config('app.name', 'TokoOnline') }}. {{ __('storefront.copyright') }}
     </footer>
 
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key', env('MIDTRANS_CLIENT_KEY')) }}"></script>
@@ -119,9 +119,9 @@
             return {
                 orderCode: @json($order->code),
                 totalPaid: {{ (int) $order->grand_total }},
-                bankName: 'QRIS / VA / E-wallet',
+                bankName: '{{ __('checkout.bank_default') }}',
                 bankAccount: @json($order->code),
-                bankHolder: 'PT TokoOnline Indonesia',
+                bankHolder: '{{ __('checkout.bank_holder') }}',
                 copied: false,
                 snapToken: @json($snapToken ?? null),
 

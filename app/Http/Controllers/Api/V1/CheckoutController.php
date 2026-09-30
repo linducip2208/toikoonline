@@ -13,6 +13,7 @@ use App\Models\PaymentGatewayConfig;
 use App\Services\CouponService;
 use App\Services\Payment\PaymentGatewayService;
 use App\Services\Shipping\ShippingManager;
+use App\Services\Shipping\ShippingMethodService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\DB;
  */
 class CheckoutController extends Controller
 {
-    public function quote(ShippingQuoteRequest $request, ShippingManager $manager): JsonResponse
+    public function quote(ShippingQuoteRequest $request, ShippingManager $manager, ShippingMethodService $tables): JsonResponse
     {
         $origin = $request->input('origin') ?: $manager->defaultOrigin();
 
@@ -33,6 +34,14 @@ class CheckoutController extends Controller
         }
 
         $rates = $manager->cachedQuote($origin, (string) $request->destination, (int) $request->weight, (string) $request->input('couriers', ''));
+
+        // Table-rate zones merged with live provider quotes (sorted by cost).
+        $rates = $tables->mergeWithLive($rates, [
+            'city' => (string) $request->destination,
+            'postcode' => (string) $request->input('postcode', ''),
+            'state' => (string) $request->input('state', ''),
+            'country' => (string) $request->input('country', 'ID'),
+        ], (int) $request->weight, (int) $request->input('subtotal', 0));
 
         return response()->json([
             'success' => true,
@@ -105,6 +114,14 @@ class CheckoutController extends Controller
         });
 
         $intent = $payments->createIntent($gateway, $order->id, $grandTotal);
+
+        if (class_exists(\App\Events\OrderCreated::class)) {
+            try {
+                event(new \App\Events\OrderCreated($order));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning('OrderCreated dispatch failed (non-fatal)', ['order' => $order->code, 'error' => $e->getMessage()]);
+            }
+        }
 
         return response()->json([
             'success' => true,

@@ -130,7 +130,7 @@
 
     {{-- Breadcrumb --}}
     <nav class="flex items-center gap-2 text-xs text-stone-400 mb-6 flex-wrap">
-        <a href="{{ route('home') }}" class="hover:text-brand-600 transition-colors">Home</a>
+        <a href="{{ route('home') }}" class="hover:text-brand-600 transition-colors">{{ __('common.home') }}</a>
         <i class="fas fa-chevron-right text-[8px]"></i>
         @if($product->category)
             <a href="{{ route('categories.show', $product->category->slug) }}" class="hover:text-brand-600 transition-colors">{{ $product->category->name }}</a>
@@ -167,7 +167,7 @@
                 @foreach($allImages as $i => $img)
                 <div class="thumbnail-btn {{ $i === 0 ? 'active' : '' }} bg-gradient-to-br from-brand-50 to-accent-50 flex items-center justify-center"
                      @click="currentImage = '{{ asset($img) }}'; document.querySelectorAll('.thumbnail-btn').forEach(el => el.classList.remove('active')); $el.classList.add('active')">
-                    <img src="{{ asset($img) }}" alt="Thumbnail {{ $i+1 }}" loading="lazy">
+                    <img src="{{ asset($img) }}" alt="{{ __('storefront.thumbnail_alt', ['n' => $i+1]) }}" loading="lazy">
                 </div>
                 @endforeach
             </div>
@@ -191,11 +191,11 @@
                 </div>
                 @if($reviewCount > 0)
                 <span class="text-stone-300">|</span>
-                <a href="#reviews" class="text-brand-600 text-sm hover:underline">{{ number_format($reviewCount) }} Ulasan</a>
+                <a href="#reviews" class="text-brand-600 text-sm hover:underline">{{ number_format($reviewCount) }} {{ __('storefront.reviews') }}</a>
                 @endif
                 @if($product->num_of_sale > 0)
                 <span class="text-stone-300">|</span>
-                <span class="text-sm text-stone-500">{{ number_format($product->num_of_sale) }}+ Terjual</span>
+                <span class="text-sm text-stone-500">{{ number_format($product->num_of_sale) }}+ {{ __('common.sold_cap') }}</span>
                 @endif
             </div>
 
@@ -211,7 +211,7 @@
                     @endif
                 </div>
                 @if($hasDiscount)
-                <p class="text-xs text-stone-500">Hemat <span class="font-semibold text-red-500">Rp {{ number_format($product->unit_price - $effectivePrice, 0, ',', '.') }}</span></p>
+                <p class="text-xs text-stone-500">{{ __('storefront.save') }} <span class="font-semibold text-red-500">Rp {{ number_format($product->unit_price - $effectivePrice, 0, ',', '.') }}</span></p>
                 @endif
             </div>
 
@@ -226,7 +226,7 @@
             @if($product->variant_product && $variantStocks->count() > 0)
             <div class="mb-5">
                 <h4 class="text-xs font-semibold text-stone-700 mb-2.5">
-                    Pilih Varian: <span class="text-stone-500 font-normal" x-text="selectedVariant ? selectedVariant.variant : 'Pilih varian'"></span>
+                    >{{ __('storefront.choose_variant_label') }}: <span class="text-stone-500 font-normal" x-text="selectedVariant ? selectedVariant.variant : '{{ __('storefront.choose_variant_ph') }}'"></span>
                 </h4>
                 <div class="flex gap-2 flex-wrap">
                     @foreach($variantStocks as $stock)
@@ -256,12 +256,12 @@
                     <button @click="qty = Math.min(99, qty + 1)" class="quantity-btn rounded-none border-0">+</button>
                 </div>
                 <span class="text-xs text-stone-400">
-                    Stok:
+                    {{ __('storefront.stock') }}:
                     @if($product->variant_product)
-                        <span class="font-semibold" :class="availableStock > 0 ? 'text-green-600' : 'text-red-500'" x-text="availableStock > 0 ? 'Tersedia (' + availableStock + ' unit)' : 'Habis'"></span>
+                        <span class="font-semibold" :class="availableStock > 0 ? 'text-green-600' : 'text-red-500'" x-text="availableStock > 0 ? '{{ __('storefront.in_stock') }} (' + availableStock + ')' : '{{ __('storefront.out_of_stock') }}'"></span>
                     @else
                         <span class="font-semibold {{ $totalStock > 0 ? 'text-green-600' : 'text-red-500' }}">
-                            {{ $totalStock > 0 ? 'Tersedia (' . $totalStock . ' unit)' : 'Habis' }}
+                            {{ $totalStock > 0 ? __('storefront.in_stock') . ' (' . $totalStock . ')' : __('storefront.out_of_stock') }}
                         </span>
                     @endif
                 </span>
@@ -277,15 +277,15 @@
                     <button type="submit"
                             class="w-full py-3.5 min-h-[44px] bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold rounded-xl
                                    hover:from-brand-600 hover:to-brand-700 transition-all hover:shadow-xl hover:shadow-brand-500/30 text-sm focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none"
-                            aria-label="Tambah {{ $product->name }} ke keranjang">
-                        <i class="fas fa-shopping-cart mr-2"></i> Tambah ke Keranjang
+                            aria-label="{{ __('storefront.add_to_cart_aria', ['name' => $product->name]) }}">
+                        <i class="fas fa-shopping-cart mr-2"></i> {{ __('storefront.add_to_cart') }}
                     </button>
                 </form>
                 <button @click="toggleWishlist()"
                         class="px-5 py-3.5 min-h-[44px] border-2 border-stone-200 text-stone-600 hover:text-red-500 hover:border-red-200 rounded-xl
                                font-semibold text-sm transition-colors focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:outline-none"
-                        aria-label="Simpan ke wishlist">
-                    <i class="far fa-heart mr-1.5"></i> Wishlist
+                        aria-label="{{ __('storefront.save_to_wishlist') }}">
+                    <i class="far fa-heart mr-1.5"></i> {{ __('common.wishlist') }}
                 </button>
             </div>
 
@@ -302,13 +302,13 @@
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <input type="hidden" name="price" value="{{ $effectivePrice }}">
                     <input type="hidden" name="quantity" value="1">
-                    <button class="px-6 py-3 min-h-[44px] bg-brand-600 text-white text-sm font-bold rounded-xl">+ Keranjang</button>
+                    <button class="px-6 py-3 min-h-[44px] bg-brand-600 text-white text-sm font-bold rounded-xl">+ {{ __('common.cart') }}</button>
                 </form>
             </div>
 
             {{-- Share --}}
             <div class="flex items-center gap-3 mt-5 pt-4 border-t border-stone-100">
-                <span class="text-xs text-stone-500">Bagikan:</span>
+                <span class="text-xs text-stone-500">{{ __('storefront.share') }}:</span>
                 <div class="flex gap-2">
                     <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank" rel="noopener"
                        class="w-8 h-8 rounded-lg bg-blue-50 hover:bg-blue-100 flex items-center justify-center text-blue-600 transition-colors text-sm">
@@ -338,9 +338,9 @@
                     </div>
                     <div>
                         <p class="text-xs font-semibold text-stone-800">{{ $product->brand->name }}</p>
-                        <p class="text-[10px] text-stone-400">Brand Resmi</p>
+                        <p class="text-[10px] text-stone-400">{{ __('storefront.official_brand') }}</p>
                     </div>
-                    <a href="{{ route('brands.show', $product->brand->slug) }}" class="ml-auto text-[10px] text-brand-600 font-semibold hover:underline shrink-0">Lihat</a>
+                    <a href="{{ route('brands.show', $product->brand->slug) }}" class="ml-auto text-[10px] text-brand-600 font-semibold hover:underline shrink-0">{{ __('storefront.view') }}</a>
                 </div>
                 @endif
                 <div class="bg-green-50 rounded-xl p-4 flex items-center gap-3 border border-green-100">
@@ -348,8 +348,8 @@
                         <i class="fas fa-shield-alt text-green-600 text-sm"></i>
                     </div>
                     <div>
-                        <p class="text-xs font-semibold text-green-800">Produk Original</p>
-                        <p class="text-[10px] text-green-600">Garansi & Pengembalian</p>
+                        <p class="text-xs font-semibold text-green-800">{{ __('storefront.original_product') }}</p>
+                        <p class="text-[10px] text-green-600">{{ __('storefront.warranty_return') }}</p>
                     </div>
                     <i class="fas fa-check-circle text-green-500 text-lg ml-auto"></i>
                 </div>
@@ -363,12 +363,12 @@
             <button @click="tab = 'description'"
                     :class="tab === 'description' ? 'tab-btn active' : 'text-stone-500 hover:text-stone-700 border-b-2 border-transparent'"
                     class="px-5 py-3.5 text-sm font-semibold transition-colors whitespace-nowrap flex items-center gap-2">
-                <i class="fas fa-align-left text-xs"></i> Deskripsi
+                <i class="fas fa-align-left text-xs"></i> {{ __('storefront.description') }}
             </button>
             <button @click="tab = 'reviews'"
                     :class="tab === 'reviews' ? 'tab-btn active' : 'text-stone-500 hover:text-stone-700 border-b-2 border-transparent'"
                     class="px-5 py-3.5 text-sm font-semibold transition-colors whitespace-nowrap flex items-center gap-2">
-                <i class="fas fa-star text-xs"></i> Ulasan
+                <i class="fas fa-star text-xs"></i> {{ __('storefront.reviews') }}
                 @if($reviewCount > 0)
                 <span class="text-[10px] text-stone-400">({{ number_format($reviewCount) }})</span>
                 @endif
@@ -381,12 +381,12 @@
                 @if($product->description)
                     {!! $product->description !!}
                 @else
-                    <p class="text-stone-400 italic">Belum ada deskripsi untuk produk ini.</p>
+                    <p class="text-stone-400 italic">{{ __('storefront.no_description') }}</p>
                 @endif
 
                 @if($product->tags)
                 <div class="mt-6 pt-4 border-t border-stone-100">
-                    <h4 class="text-xs font-semibold text-stone-500 mb-2">Tags:</h4>
+                    <h4 class="text-xs font-semibold text-stone-500 mb-2">{{ __('storefront.tags') }}:</h4>
                     <div class="flex gap-1.5 flex-wrap">
                         @foreach(explode(',', $product->tags) as $tag)
                         <span class="px-2.5 py-1 bg-stone-100 text-stone-600 text-[11px] rounded-md">{{ trim($tag) }}</span>
@@ -400,12 +400,12 @@
             <div x-show="tab === 'reviews'" id="reviews">
                 @auth
                 <div class="bg-stone-50 rounded-xl p-5 mb-6">
-                    <h4 class="font-semibold text-sm text-stone-700 mb-3">Tulis Ulasan</h4>
+                    <h4 class="font-semibold text-sm text-stone-700 mb-3">{{ __('storefront.write_review') }}</h4>
                     <form action="{{ route('review.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <div class="flex items-center gap-1 mb-3" x-data="{ rating: 5 }">
-                            <span class="text-xs text-stone-500 mr-2">Rating:</span>
+                            <span class="text-xs text-stone-500 mr-2">{{ __('storefront.rating') }}:</span>
                             <template x-for="i in 5">
                                 <button type="button" @click="rating = i" class="text-xl transition-colors">
                                     <i :class="i <= rating ? 'fas fa-star review-star' : 'far fa-star text-stone-300'"></i>
@@ -413,16 +413,16 @@
                             </template>
                             <input type="hidden" name="rating" :value="rating">
                         </div>
-                        <textarea name="comment" rows="3" placeholder="Bagikan pengalaman Anda dengan produk ini..." required minlength="5"
+                        <textarea name="comment" rows="3" placeholder="{{ __('storefront.review_ph') }}" required minlength="5"
                                   class="w-full px-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400 mb-3 resize-none"></textarea>
                         <button type="submit" class="px-5 py-2 bg-gradient-to-r from-brand-500 to-brand-600 text-white text-xs font-semibold rounded-lg hover:shadow-md transition-all">
-                            <i class="fas fa-paper-plane mr-1"></i> Kirim Ulasan
+                            <i class="fas fa-paper-plane mr-1"></i> {{ __('storefront.submit_review') }}
                         </button>
                     </form>
                 </div>
                 @else
                 <div class="bg-stone-50 rounded-xl p-5 mb-6 text-center">
-                    <p class="text-sm text-stone-500"><a href="{{ route('login') }}" class="text-brand-600 font-semibold hover:underline">Masuk</a> untuk menulis ulasan.</p>
+                    <p class="text-sm text-stone-500"><a href="{{ route('login') }}" class="text-brand-600 font-semibold hover:underline">{{ __('common.login') }}</a> {{ __('storefront.to_write_review') }}</p>
                 </div>
                 @endauth
 
@@ -442,7 +442,7 @@
                                 <i class="fas fa-star review-star text-lg {{ $i <= round($avgRating) ? '' : 'text-stone-300' }}"></i>
                             @endfor
                         </div>
-                        <p class="text-xs text-stone-400">{{ number_format($reviewCount) }} ulasan</p>
+                        <p class="text-xs text-stone-400">{{ number_format($reviewCount) }} {{ __('storefront.reviews_lower') }}</p>
                     </div>
                     <div class="col-span-2 space-y-2">
                         @foreach($ratingDistribution as $star => $pct)
@@ -466,7 +466,7 @@
                                 {{ strtoupper(substr($review->user?->name ?? 'A', 0, 1)) }}
                             </div>
                             <div>
-                                <p class="text-sm font-semibold text-stone-800">{{ $review->user?->name ?? 'Anonim' }}</p>
+                                <p class="text-sm font-semibold text-stone-800">{{ $review->user?->name ?? __('storefront.anonymous') }}</p>
                                 <p class="text-[10px] text-stone-400">{{ $review->created_at->diffForHumans() }}</p>
                             </div>
                             <div class="ml-auto flex gap-0.5">
@@ -475,15 +475,15 @@
                                 @endfor
                             </div>
                         </div>
-                        <p class="text-sm text-stone-600 leading-relaxed">{{ $review->comment ?? 'Tidak ada komentar.' }}</p>
+                        <p class="text-sm text-stone-600 leading-relaxed">{{ $review->comment ?? __('storefront.no_comment') }}</p>
                     </div>
                     @endforeach
                 </div>
                 @else
                 <div class="text-center py-12">
                     <i class="far fa-comment-dots text-5xl text-stone-200 mb-3"></i>
-                    <p class="text-stone-500 text-sm">Belum ada ulasan untuk produk ini.</p>
-                    <p class="text-stone-400 text-xs mt-1">Jadilah yang pertama memberikan ulasan!</p>
+                    <p class="text-stone-500 text-sm">{{ __('storefront.no_reviews') }}</p>
+                    <p class="text-stone-400 text-xs mt-1">{{ __('storefront.first_review_hint') }}</p>
                 </div>
                 @endif
             </div>
@@ -494,7 +494,7 @@
     @if($relatedProducts->count() > 0)
     <section class="mb-16">
         <div class="flex items-center justify-between mb-6">
-            <h2 class="font-display text-xl lg:text-2xl font-bold text-stone-900 reveal">Produk Terkait</h2>
+            <h2 class="font-display text-xl lg:text-2xl font-bold text-stone-900 reveal">{{ __('storefront.related_products') }}</h2>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             @foreach($relatedProducts as $related)
@@ -545,7 +545,7 @@
                 this.availableStock = stock.qty;
             },
             toggleWishlist() {
-                alert('Fitur wishlist akan segera hadir!');
+                alert('{{ __('storefront.wishlist_soon') }}');
             },
             get selectedPriceFormatted() {
                 return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(this.selectedPrice);

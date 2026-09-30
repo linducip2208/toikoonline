@@ -125,4 +125,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserCoupon::class);
     }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'company_user')->withPivot('role', 'can_approve')->withTimestamps();
+    }
+
+    public function customerGroups()
+    {
+        return $this->belongsToMany(CustomerGroup::class, 'customer_group_user');
+    }
+
+    public function quotes()
+    {
+        return $this->hasMany(Quote::class);
+    }
 }

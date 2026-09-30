@@ -4,7 +4,7 @@
 
 **Mulai cepat:** `composer install` → `cp .env.example .env` → `php artisan key:generate` → `php artisan migrate --seed` → `php artisan db:seed --class=Database\Seeders\PermissionsSeeder` → `npm install && npm run build` → `php artisan serve`. Admin: `/admin`. API: `/api/v1`.
 
-**Dokumen:** `docs/08-api-v1.md` (API) · `docs/09-admin-guide.md` (Admin) · `docs/10-security.md` (Keamanan) · `docs/11-testing.md` (Testing) · `DEPLOYMENT.md` (Deploy) · `progress.md` (Jurnal). Lokalisasi: `lang/id.json`, `lang/en.json`, `php artisan translations:scan`.
+**Dokumen:** `docs/08-api-v1.md` (API) · `docs/09-admin-guide.md` (Admin) · `docs/10-security.md` (Keamanan) · `docs/11-testing.md` (Testing) · `docs/INSTALLATION.md` (Instalasi) · `docs/CONFIGURATION.md` (Konfigurasi) · `docs/CMS_GUIDE.md` + `docs/PAGE_BUILDER.md` + `docs/THEMING.md` + `docs/TRANSLATION.md` (CMS) · `docs/ECOMMERCE.md` + `docs/PRODUCTS.md` + `docs/INVENTORY.md` + `docs/ORDERS.md` (Commerce) · `docs/PAYMENTS.md` + `docs/SHIPPING.md` + `docs/MARKETING.md` + `docs/SEO.md` + `docs/WEBHOOKS.md` (Platform) · `docs/ADMIN_GUIDE.md` + `docs/DEVELOPER_GUIDE.md` + `docs/SECURITY.md` + `docs/DEPLOYMENT.md` + `docs/UPGRADE.md` (Operasional) · `DEPLOYMENT.md` (Deploy) · `progress.md` (Jurnal). Lokalisasi: `lang/id.json`, `lang/en.json`, `php artisan translations:scan`.
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 

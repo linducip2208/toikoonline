@@ -23,6 +23,7 @@ class EmailTemplateResource extends Resource
     {
         return $form->schema([
             Forms\Components\TextInput::make('identifier')->required()->maxLength(255)->disabled(fn($record) => $record?->is_status_changeable === false),
+            Forms\Components\Select::make('locale')->label('Locale')->options(['id' => 'Indonesia (id)', 'en' => 'English (en)'])->default('id')->required(),
             Forms\Components\Select::make('email_type')->options(['customer' => 'Customer', 'admin' => 'Admin', 'seller' => 'Seller'])->required(),
             Forms\Components\TextInput::make('subject')->required()->maxLength(255),
             Forms\Components\Textarea::make('default_text')->required()->rows(6)->columnSpanFull(),
@@ -35,6 +36,7 @@ class EmailTemplateResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('identifier')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('locale')->badge()->sortable(),
                 Tables\Columns\TextColumn::make('email_type')->badge()->sortable(),
                 Tables\Columns\TextColumn::make('subject')->searchable()->limit(50),
                 Tables\Columns\IconColumn::make('status')->boolean(),

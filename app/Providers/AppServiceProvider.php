@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Coupon;
 use App\Models\Blog;
 use App\Observers\OrderObserver;
+use App\Observers\ProductObserver;
 use App\Policies\CategoryPolicy;
 use App\Policies\CouponPolicy;
 use App\Policies\OrderPolicy;
@@ -24,6 +25,9 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Order::observe(OrderObserver::class);
+        Product::observe(ProductObserver::class);
 
         Gate::policy(Product::class, ProductPolicy::class);
         Gate::policy(Order::class, OrderPolicy::class);
@@ -48,6 +53,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Coupon::class, CouponPolicy::class);
         Gate::policy(Page::class, PagePolicy::class);
+
+        RateLimiter::for('login', fn(Request $r) => Limit::perMinute(5)
+            ->by(strtolower($r->input('email', '').'|'.$r->ip()))
+            ->response(fn() => back()->withErrors(['email' => 'Terlalu banyak percobaan. Coba lagi 1 menit.'])));
 
         // CMS versi kita: share popup + menu + footer pages ke semua storefront view.
         // Dibungkus try/catch + cache agar aman saat migrate/fresh install.

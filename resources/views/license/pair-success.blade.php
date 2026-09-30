@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="refresh" content="4; url=/">
-<title>Aktivasi Berhasil</title>
+<title>{{ __('license.success_title') }}</title>
 {{-- CSS lokal (Vite) --}}
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 <style>
@@ -26,19 +26,19 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
         </svg>
       </div>
-      <h1 class="text-2xl font-bold">Aktivasi Berhasil</h1>
-      <p class="text-emerald-100 mt-1 text-sm">Aplikasi siap digunakan.</p>
+      <h1 class="text-2xl font-bold">{{ __('license.success_title') }}</h1>
+      <p class="text-emerald-100 mt-1 text-sm">{{ __('license.success_subtitle') }}</p>
     </div>
 
     <div class="p-7 space-y-5 fade-up">
 
       <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
-        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Produk</div>
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">{{ __('license.product') }}</div>
         <div class="flex items-baseline gap-3">
           <span class="text-2xl">📦</span>
           <div>
             <div class="text-lg font-bold text-slate-900">{{ $data['product']['name'] ?? 'Aplikasi' }}</div>
-            <div class="text-sm text-slate-500">Versi v{{ $data['product']['version'] ?? '1.0.0' }}</div>
+            <div class="text-sm text-slate-500">{{ __('license.version') }} v{{ $data['product']['version'] ?? '1.0.0' }}</div>
           </div>
         </div>
       </div>
@@ -47,7 +47,7 @@
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
           <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Domain Terkunci
+            {{ __('license.locked_domain') }}
           </div>
           <div class="font-mono text-sm text-slate-800 break-all">{{ $data['domain'] ?? '-' }}</div>
         </div>
@@ -56,7 +56,7 @@
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
           <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            Support Aktif Sampai
+            {{ __('license.support_until') }}
           </div>
           <div class="font-medium text-sm text-slate-800">{{ \Illuminate\Support\Carbon::parse($data['license']['support_until'])->format('d M Y') }}</div>
         </div>
@@ -66,16 +66,16 @@
       <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex items-start gap-3">
         <svg class="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
         <div class="text-sm text-emerald-800 leading-relaxed">
-          <strong>Konfirmasi:</strong> nama produk di atas harus cocok dengan yang kamu beli. Kalau salah, klik "Revoke" di marketplace dan re-pair dengan key yang benar.
+          <strong>{{ __('license.confirm') }}</strong> {{ __('license.confirm_text') }}
         </div>
       </div>
 
       <a href="/" class="block w-full text-center py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg transition">
-        Masuk ke Aplikasi →
+        {{ __('license.enter_app') }}
       </a>
 
       <p class="text-center text-xs text-slate-500">
-        Auto-redirect dalam 4 detik...
+        {{ __('license.auto_redirect') }}
       </p>
     </div>
   </div>

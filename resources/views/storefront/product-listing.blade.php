@@ -1,7 +1,7 @@
 @extends('layouts.storefront')
 
-@section('title', ($title ?? 'Daftar Produk') . ' — ' . config('app.name'))
-@section('meta_description', 'Jelajahi katalog produk lengkap ' . config('app.name') . '. Filter berdasarkan kategori, harga, brand, dan rating. Temukan produk terbaik untuk kebutuhan Anda.')
+@section('title', ($title ?? __('storefront.product_list')) . ' — ' . config('app.name'))
+@section('meta_description', __('storefront.listing_meta', ['app' => config('app.name')]))
 
 @push('styles')
 <style>
@@ -25,19 +25,19 @@
 
     {{-- Breadcrumb --}}
     <nav class="flex items-center gap-2 text-xs text-stone-400 mb-6">
-        <a href="{{ route('home') }}" class="hover:text-brand-600 transition-colors">Home</a>
+        <a href="{{ route('home') }}" class="hover:text-brand-600 transition-colors">{{ __('common.home') }}</a>
         <i class="fas fa-chevron-right text-[8px]"></i>
         @if(isset($category))
             <span class="text-stone-600 font-medium">{{ $category->name }}</span>
         @elseif(isset($brand))
             <i class="fas fa-chevron-right text-[8px]"></i>
-            <span class="text-stone-400">Brand</span>
+            <span class="text-stone-400">{{ __('common.brands') }}</span>
             <i class="fas fa-chevron-right text-[8px]"></i>
             <span class="text-stone-600 font-medium">{{ $brand->name }}</span>
         @elseif(isset($query))
-            <span class="text-stone-600 font-medium">Pencarian: "{{ $query }}"</span>
+            <span class="text-stone-600 font-medium">{{ __('storefront.search_for', ['q' => $query]) }}</span>
         @else
-            <span class="text-stone-600 font-medium">Produk</span>
+            <span class="text-stone-600 font-medium">{{ __('storefront.products') }}</span>
         @endif
     </nav>
 
@@ -54,7 +54,7 @@
                       h-[calc(100vh-5rem)] lg:h-fit overflow-y-auto shadow-xl lg:shadow-sm p-5
                       lg:translate-x-0 lg:relative lg:sticky lg:top-20">
             <div class="flex items-center justify-between mb-5 lg:hidden">
-                <h4 class="font-semibold text-stone-800">Filter</h4>
+                <h4 class="font-semibold text-stone-800">{{ __('storefront.filter') }}</h4>
                 <button @click="sidebarOpen = false" class="text-stone-400 hover:text-stone-600">
                     <i class="fas fa-times text-lg"></i>
                 </button>
@@ -63,7 +63,7 @@
             {{-- Category Filter --}}
             @if($categories->count() > 0)
             <div class="mb-6">
-                <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">Kategori</h4>
+                <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">{{ __('common.categories') }}</h4>
                 <div class="space-y-1">
                     @foreach($categories as $cat)
                     <a href="{{ route('categories.show', $cat->slug) }}"
@@ -79,17 +79,17 @@
 
             {{-- Price Range --}}
             <div class="mb-6">
-                <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">Harga</h4>
+                <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">{{ __('storefront.price') }}</h4>
                 <form method="GET" action="{{ url()->current() }}" id="priceFilter">
                     <div class="flex gap-2 mb-3">
-                        <input type="number" name="min_price" placeholder="Min" value="{{ request('min_price') }}"
+                        <input type="number" name="min_price" placeholder="{{ __('storefront.min') }}" value="{{ request('min_price') }}"
                                class="w-full px-3 py-2 border border-stone-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400">
                         <span class="text-stone-300 self-center">—</span>
-                        <input type="number" name="max_price" placeholder="Max" value="{{ request('max_price') }}"
+                        <input type="number" name="max_price" placeholder="{{ __('storefront.max') }}" value="{{ request('max_price') }}"
                                class="w-full px-3 py-2 border border-stone-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400">
                     </div>
                     <button type="submit" class="w-full py-2 bg-brand-600 text-white text-xs font-semibold rounded-xl hover:bg-brand-700 transition-colors">
-                        Terapkan
+                        {{ __('storefront.apply') }}
                     </button>
                 </form>
             </div>
@@ -97,7 +97,7 @@
             {{-- Brand Filter --}}
             @if($brands->count() > 0)
             <div class="mb-6">
-                <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">Brand</h4>
+                <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">{{ __('common.brands') }}</h4>
                 <div class="space-y-1 max-h-44 overflow-y-auto">
                     @foreach($brands as $br)
                     <a href="{{ route('brands.show', $br->slug) }}"
@@ -112,7 +112,7 @@
 
             <a href="{{ route('products.index') }}"
                class="block w-full py-2 text-center text-stone-500 text-xs hover:text-stone-700 transition-colors">
-                Reset Filter
+                {{ __('storefront.reset_filter') }}
             </a>
         </aside>
 
@@ -126,8 +126,8 @@
                         <i class="fas fa-filter text-lg"></i>
                     </button>
                     <span class="text-xs text-stone-500">
-                        Menampilkan <span class="font-semibold text-stone-800">{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</span> dari
-                        <span class="font-semibold text-stone-800">{{ number_format($products->total()) }}</span> produk
+                        {{ __('storefront.showing') }} <span class="font-semibold text-stone-800">{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</span> {{ __('storefront.from') }}
+                        <span class="font-semibold text-stone-800">{{ number_format($products->total()) }}</span> {{ __('storefront.products_lower') }}
                     </span>
                 </div>
                 <div class="flex items-center gap-3">
@@ -135,11 +135,11 @@
                             class="text-xs border border-stone-200 rounded-lg px-3 py-2 bg-white text-stone-700
                                    focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400">
                         @php $sortOptions = [
-                            'latest' => 'Terbaru',
-                            'price-asc' => 'Harga Rendah - Tinggi',
-                            'price-desc' => 'Harga Tinggi - Rendah',
-                            'popular' => 'Terlaris',
-                            'rating' => 'Rating Tertinggi',
+                            'latest' => __('storefront.sort_latest'),
+                            'price-asc' => __('storefront.sort_price_asc'),
+                            'price-desc' => __('storefront.sort_price_desc'),
+                            'popular' => __('storefront.sort_popular'),
+                            'rating' => __('storefront.sort_rating'),
                         ]; @endphp
                         @foreach($sortOptions as $key => $label)
                         <option value="{{ $key }}" {{ ($sort ?? 'latest') === $key ? 'selected' : '' }}>{{ $label }}</option>
@@ -192,7 +192,7 @@
                                 <i class="fas fa-star text-[9px] {{ $i <= round($product->rating) ? 'star-gold' : 'text-stone-300' }}"></i>
                             @endfor
                             @if($product->num_of_sale > 0)
-                            <span class="text-[10px] text-stone-400 ml-1">| {{ number_format($product->num_of_sale) }} terjual</span>
+                            <span class="text-[10px] text-stone-400 ml-1">| {{ number_format($product->num_of_sale) }} {{ __('common.sold') }}</span>
                             @endif
                         </div>
                         @if($product->category)
@@ -212,7 +212,7 @@
                             <button type="submit"
                                     class="w-full py-2 bg-gradient-to-r from-brand-500 to-brand-600 text-white text-[11px] font-semibold rounded-lg
                                            hover:from-brand-600 hover:to-brand-700 transition-all hover:shadow-lg hover:shadow-brand-500/25">
-                                <i class="fas fa-cart-plus mr-1"></i> Tambah ke Keranjang
+                                <i class="fas fa-cart-plus mr-1"></i> {{ __('storefront.add_to_cart') }}
                             </button>
                         </form>
                     </div>
@@ -255,10 +255,10 @@
             @else
             <div class="text-center py-20 bg-white rounded-2xl border border-stone-100">
                 <i class="fas fa-box-open text-6xl text-stone-200 mb-4"></i>
-                <h3 class="text-lg font-semibold text-stone-500 mb-2">Tidak ada produk ditemukan</h3>
-                <p class="text-sm text-stone-400 mb-6">Coba ubah filter atau kata kunci pencarian Anda.</p>
+                <h3 class="text-lg font-semibold text-stone-500 mb-2">{{ __('storefront.no_products') }}</h3>
+                <p class="text-sm text-stone-400 mb-6">{{ __('storefront.no_products_hint') }}</p>
                 <a href="{{ route('products.index') }}" class="inline-block px-6 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors">
-                    Lihat Semua Produk
+                    {{ __('storefront.all_products') }}
                 </a>
             </div>
             @endif

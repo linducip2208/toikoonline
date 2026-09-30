@@ -53,6 +53,7 @@ class BlogResource extends Resource
                     ->maxLength(1000),
                 Forms\Components\TextInput::make('keywords')
                     ->maxLength(500),
+                Forms\Components\TagsInput::make('tags')->label('Tag')->placeholder('tambah tag'),
                 Forms\Components\FileUpload::make('meta_image')
                     ->image(),
                 Forms\Components\TextInput::make('views')

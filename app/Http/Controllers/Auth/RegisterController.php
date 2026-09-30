@@ -35,6 +35,7 @@ class RegisterController extends Controller
         $user->assignRole('customer');
 
         Auth::login($user);
+        app(\App\Services\Cart\CartMergeService::class)->mergeSessionFor($user);
         return redirect('/account');
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.storefront')
 
-@section('title', 'Masuk')
+@section('title', __('auth.login'))
 
 @push('styles')
 <style>
@@ -135,23 +135,23 @@
         {{-- Tagline + Benefit Cards --}}
         <div class="relative text-white">
             <h2 class="font-display text-5xl font-bold leading-tight mb-4 animate-fade-up stagger-1">
-                Platform E-Commerce Terlengkap
+                {{ __('auth.hero_title') }}
             </h2>
             <p class="text-brand-100 text-lg leading-relaxed mb-8 max-w-md animate-fade-up stagger-2">
-                Belanja jutaan produk dari ribuan penjual terpercaya. Harga terbaik, pengiriman cepat ke seluruh Indonesia.
+                {{ __('auth.hero_subtitle') }}
             </p>
             <div class="grid grid-cols-3 gap-4 max-w-md">
                 <div class="hero-badge bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10 animate-card-lift stagger-3">
                     <i class="fas fa-tags text-2xl mb-2 block text-brand-200"></i>
-                    <span class="text-xs font-semibold text-white">Harga Terbaik</span>
+                    <span class="text-xs font-semibold text-white">{{ __('auth.badge_best_price') }}</span>
                 </div>
                 <div class="hero-badge bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10 animate-card-lift stagger-4">
                     <i class="fas fa-shipping-fast text-2xl mb-2 block text-brand-200"></i>
-                    <span class="text-xs font-semibold text-white">Kirim Cepat</span>
+                    <span class="text-xs font-semibold text-white">{{ __('auth.badge_fast_shipping') }}</span>
                 </div>
                 <div class="hero-badge bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10 animate-card-lift stagger-5">
                     <i class="fas fa-shield-alt text-2xl mb-2 block text-brand-200"></i>
-                    <span class="text-xs font-semibold text-white">Aman Terpercaya</span>
+                    <span class="text-xs font-semibold text-white">{{ __('auth.badge_trusted') }}</span>
                 </div>
             </div>
         </div>
@@ -165,10 +165,10 @@
     {{-- Right: Login Form --}}
     <div class="flex items-center justify-center p-8 lg:p-16">
         <div class="w-full max-w-md">
-            <h1 class="font-display text-4xl font-bold text-stone-900 mb-2 animate-fade-up">Masuk</h1>
+            <h1 class="font-display text-4xl font-bold text-stone-900 mb-2 animate-fade-up">{{ __('auth.login') }}</h1>
             <p class="text-stone-500 mb-8 animate-fade-up stagger-1">
-                Belum punya akun?
-                <a href="{{ route('register') }}" class="text-brand-600 font-semibold hover:underline">Daftar gratis</a>
+                {{ __('auth.no_account') }}
+                <a href="{{ route('register') }}" class="text-brand-600 font-semibold hover:underline">{{ __('auth.register_free') }}</a>
             </p>
 
             {{-- Validation Errors --}}
@@ -176,7 +176,7 @@
                 <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-700 animate-scale-in">
                     <div class="flex items-center gap-2 mb-1">
                         <i class="fas fa-exclamation-circle text-red-500"></i>
-                        <span class="font-semibold">Oops! Ada yang salah</span>
+                        <span class="font-semibold">{{ __('auth.error_title') }}</span>
                     </div>
                     <ul class="list-disc list-inside mt-1 space-y-0.5 text-red-600">
                         @foreach ($errors->all() as $error)
@@ -204,11 +204,11 @@
 
                 {{-- Password --}}
                 <div class="animate-fade-up stagger-3" x-data="{ show: false }">
-                    <label for="password" class="block text-sm font-semibold text-stone-700 mb-1.5">Kata Sandi</label>
+                    <label for="password" class="block text-sm font-semibold text-stone-700 mb-1.5">{{ __('auth.password') }}</label>
                     <div class="relative">
                         <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
                         <input :type="show ? 'text' : 'password'" name="password" id="password"
-                               placeholder="Minimal 8 karakter" required
+                               placeholder="{{ __('auth.password_ph') }}" required
                                class="input-glow w-full pl-11 pr-12 py-3 rounded-xl border border-stone-300 bg-white text-sm
                                       focus:outline-none focus:ring-3 focus:ring-brand-500/20 focus:border-brand-400
                                       transition-all duration-300 placeholder:text-stone-400">
@@ -224,10 +224,10 @@
                     <label class="flex items-center gap-2 text-sm text-stone-600 cursor-pointer">
                         <input type="checkbox" name="remember"
                                class="w-4 h-4 rounded border-stone-300 text-brand-600 focus:ring-brand-500 transition-all">
-                        Ingat saya
+                        {{ __('auth.remember_me') }}
                     </label>
                     <a href="{{ route('password.request') }}" class="text-sm text-brand-600 hover:underline font-medium transition-colors">
-                        Lupa kata sandi?
+                        {{ __('auth.forgot_password') }}
                     </a>
                 </div>
 
@@ -237,14 +237,14 @@
                                text-white rounded-xl font-semibold text-sm shadow-lg shadow-brand-500/25
                                hover:shadow-brand-500/40 transition-all duration-300 hover:-translate-y-0.5
                                active:translate-y-0 active:shadow-md">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Masuk
+                    <i class="fas fa-sign-in-alt mr-2"></i>{{ __('auth.login') }}
                 </button>
             </form>
 
             {{-- Divider --}}
             <div class="flex items-center gap-3 my-8 animate-fade-up stagger-6">
                 <div class="flex-1 h-px bg-stone-200"></div>
-                <span class="text-xs text-stone-400 font-medium">atau</span>
+                <span class="text-xs text-stone-400 font-medium">{{ __('auth.or_divider') }}</span>
                 <div class="flex-1 h-px bg-stone-200"></div>
             </div>
 

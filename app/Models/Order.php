@@ -8,6 +8,7 @@ class Order extends Model
 {
     protected $fillable = [
         'user_id',
+        'company_id',
         'guest_id',
         'seller_id',
         'shipping_address',
@@ -21,12 +22,15 @@ class Order extends Model
         'code',
         'date',
         'coupon_discount',
+        'promo_discount',
+        'promo_names',
         'discount',
         'discount_type',
         'grand_total',
         'coupon_code',
         'tax_amount',
         'shipping_cost',
+        'payment_fee',
         'courier',
         'tracking_number',
         'commission_calculated',
@@ -44,9 +48,11 @@ class Order extends Model
     protected $casts = [
         'coupon_discount' => 'decimal:2',
         'discount' => 'decimal:2',
+        'promo_discount' => 'decimal:2',
         'grand_total' => 'decimal:2',
         'tax_amount' => 'decimal:2',
         'shipping_cost' => 'decimal:2',
+        'payment_fee' => 'decimal:2',
         'commission_calculated' => 'boolean',
         'manual_payment' => 'boolean',
         'view' => 'boolean',
@@ -102,5 +108,15 @@ class Order extends Model
     public function commissionHistory()
     {
         return $this->hasOne(CommissionHistory::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(OrderNote::class);
     }
 }

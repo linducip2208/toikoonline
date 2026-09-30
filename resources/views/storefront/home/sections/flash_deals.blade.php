@@ -24,7 +24,7 @@
                     <i class="fas fa-bolt text-red-500 mr-2"></i>{{ $deal->title }}
                 </h2>
                 <div class="flash-timer-box flex items-center gap-3 px-4 py-2 rounded-lg" x-data="flashTimer({{ $dealEnd }})">
-                    <span class="text-[11px] font-semibold text-red-600">Berakhir dalam:</span>
+                    <span class="text-[11px] font-semibold text-red-600">{{ __('storefront.ends_in') }}:</span>
                     <div class="flex gap-1.5 text-red-700 font-mono font-bold text-sm">
                         <span class="bg-red-100 px-1.5 py-0.5 rounded" x-text="pad(hours)">00</span><span class="text-red-400">:</span>
                         <span class="bg-red-100 px-1.5 py-0.5 rounded" x-text="pad(minutes)">00</span><span class="text-red-400">:</span>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
             </div>
-            <a href="{{ route('flash-deals.show', $deal->slug) }}" class="text-brand-600 text-sm font-semibold hover:underline reveal">Lihat Semua <i class="fas fa-arrow-right ml-1 text-[10px]"></i></a>
+            <a href="{{ route('flash-deals.show', $deal->slug) }}" class="text-brand-600 text-sm font-semibold hover:underline reveal">{{ __('common.view_all') }} <i class="fas fa-arrow-right ml-1 text-[10px]"></i></a>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             @foreach($dealProducts as $dProduct)
@@ -56,7 +56,7 @@
                     <div class="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
                         <div class="bg-gradient-to-r from-red-400 to-red-500 h-full rounded-full" style="width:{{ min(100, $dProduct->num_of_sale / 20) }}%"></div>
                     </div>
-                    <p class="text-[10px] text-stone-400 mt-1">{{ number_format($dProduct->num_of_sale) }}+ terjual</p>
+                    <p class="text-[10px] text-stone-400 mt-1">{{ number_format($dProduct->num_of_sale) }}+ {{ __('common.sold') }}</p>
                 </div>
             </div>
             @endforeach

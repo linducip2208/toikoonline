@@ -11,6 +11,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Exports\UserExporter;
 
 class UserResource extends Resource
 {
@@ -131,6 +133,9 @@ class UserResource extends Resource
             ])
             ->filters([
                 //
+            ])
+            ->headerActions([
+                ExportAction::make()->exporter(UserExporter::class),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

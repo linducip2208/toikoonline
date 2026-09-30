@@ -13,6 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web(prepend: [
+            \App\Http\Middleware\InstallLock::class,
+        ]);
         $middleware->web(append: [
             \App\Http\Middleware\RequirePair::class,
             \App\Http\Middleware\SetLocale::class,

@@ -8,6 +8,7 @@ class EmailTemplate extends Model
 {
     protected $fillable = [
         'identifier',
+        'locale',
         'email_type',
         'subject',
         'default_text',

@@ -59,6 +59,29 @@ class TranslationResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('publishMissing')
+                        ->label('Publish: isi locale lain yang hilang')
+                        ->icon('heroicon-o-megaphone')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            $langs = \App\Models\Language::where('status', true)->pluck('code')->all() ?: ['id', 'en'];
+                            $n = 0;
+                            foreach ($records as $r) {
+                                foreach ($langs as $lang) {
+                                    if ($lang === $r->lang) {
+                                        continue;
+                                    }
+                                    $created = \App\Models\Translation::firstOrCreate(
+                                        ['lang' => $lang, 'lang_key' => $r->lang_key],
+                                        ['lang_value' => $r->lang_value]
+                                    );
+                                    if ($created->wasRecentlyCreated) {
+                                        $n++;
+                                    }
+                                }
+                            }
+                            \Filament\Notifications\Notification::make()->title("Ditambahkan {$n} terjemahan (tanpa duplikat)")->success()->send();
+                        }),
                     Tables\Actions\BulkAction::make('exportCsv')
                         ->label('Export CSV')->icon('heroicon-o-arrow-down-tray')
                         ->action(function ($records) {
@@ -74,6 +97,36 @@ class TranslationResource extends Resource
                 ]),
             ])
             ->headerActions([
+                Tables\Actions\Action::make('coverage')
+                    ->label('Laporan Cakupan')->icon('heroicon-o-chart-bar')
+                    ->modalHeading('Cakupan Terjemahan per Locale')
+                    ->modalContent(function () {
+                        $idJson = json_decode(@file_get_contents(lang_path('id.json')), true) ?: [];
+                        $enJson = json_decode(@file_get_contents(lang_path('en.json')), true) ?: [];
+                        $allKeys = array_unique(array_merge(array_keys($idJson), array_keys($enJson)));
+                        $dbByLang = \App\Models\Translation::select('lang', 'lang_key')->get()->groupBy('lang');
+                        $langs = \App\Models\Language::where('status', true)->pluck('code')->all() ?: ['id', 'en'];
+                        $rows = '';
+                        foreach ($langs as $lang) {
+                            $json = $lang === 'en' ? $enJson : ($lang === 'id' ? $idJson : []);
+                            $dbKeys = isset($dbByLang[$lang]) ? $dbByLang[$lang]->pluck('lang_key')->all() : [];
+                            $inJson = count(array_intersect($allKeys, array_keys($json)));
+                            $inDb = count(array_intersect($allKeys, $dbKeys));
+                            $total = count($allKeys) ?: 1;
+                            $rows .= '<tr class="border-t"><td class="px-3 py-2 font-bold">'.$lang.'</td>'
+                                .'<td class="px-3 py-2">'.$inJson.' / '.count($allKeys).' ('.round($inJson / $total * 100).'%)</td>'
+                                .'<td class="px-3 py-2">'.$inDb.' / '.count($allKeys).' ('.round($inDb / $total * 100).'%)</td></tr>';
+                        }
+
+                        return new \Illuminate\Support\HtmlString(
+                            '<table class="w-full text-sm"><thead><tr><th class="px-3 py-2 text-left">Locale</th>'
+                            .'<th class="px-3 py-2 text-left">lang/*.json</th><th class="px-3 py-2 text-left">tabel translations</th></tr></thead>'
+                            .'<tbody>'.$rows.'</tbody></table>'
+                            .'<p class="text-xs text-gray-500 mt-3">Total kunci unik: '.count($allKeys).'. Gunakan "Pindai Terjemahan" / bulk publish untuk melengkapi yang hilang.</p>'
+                        );
+                    })
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Tutup'),
                 Tables\Actions\Action::make('importCsv')
                     ->label('Import CSV')->icon('heroicon-o-arrow-up-tray')
                     ->form([Forms\Components\FileUpload::make('file')->acceptedFileTypes(['text/csv'])->directory('imports')->required()])

@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'TokoOnline') &mdash; {{ config('app.name', 'TokoOnline') }}</title>
-    <meta name="description" content="@yield('meta_description', 'Belanja mudah, harga terbaik. Temukan ribuan produk berkualitas dengan harga bersaing dan pengiriman cepat ke seluruh Indonesia.')">
-    <meta property="og:title" content="@yield('title', 'TokoOnline')">
-    <meta property="og:description" content="@yield('meta_description', 'Belanja mudah, harga terbaik. Temukan ribuan produk berkualitas.')">
+    <title>@yield('title', __('storefront.site_tagline')) &mdash; {{ config('app.name', 'TokoOnline') }}</title>
+    <meta name="description" content="@yield('meta_description', __('storefront.meta_description'))">
+    <meta property="og:title" content="@yield('title', __('storefront.site_tagline'))">
+    <meta property="og:description" content="@yield('meta_description', __('storefront.meta_description_short'))">
     <meta property="og:image" content="@yield('og_image', asset('marketing/og-default.jpg'))">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
@@ -20,6 +20,15 @@
 
     {{-- CSS lokal (Vite): gantikan cdn.tailwindcss.com — token di tailwind.config.js --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- PWA: installable + offline fallback (checkout selalu network) --}}
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#4f46e5">
+    <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+    }
+    </script>
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 
@@ -53,7 +62,7 @@
                         <input type="search" x-model="query" @input.debounce.300ms="search" @focus="open = results.length > 0"
                                @keydown.escape="open = false" @keydown.arrow-down.prevent="focusNext" @keydown.arrow-up.prevent="focusPrev"
                                @keydown.enter.prevent="selectFocused"
-                               placeholder="Cari produk... (contoh: sepatu, tas, baju)"
+                               placeholder="{{ __('storefront.search_placeholder') }}"
                                class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm
                                       focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400
                                       transition-all placeholder:text-stone-400">
@@ -83,7 +92,7 @@
                          class="absolute top-full mt-2 left-0 right-0 bg-white rounded-xl shadow-xl border border-stone-200 overflow-hidden z-50">
                         <div class="px-4 py-6 text-center text-stone-400 text-sm">
                             <i class="fas fa-search text-2xl mb-2 block"></i>
-                            Tidak ditemukan untuk "<span x-text="query" class="font-semibold text-stone-600"></span>"
+                            {{ __('storefront.search_no_result') }} "<span x-text="query" class="font-semibold text-stone-600"></span>"
                         </div>
                     </div>
                 </div>
@@ -122,20 +131,20 @@
                         <div x-show="open" @click.outside="open = false" x-cloak
                              class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-stone-200 py-2 z-50">
                             @auth
-                            <a href="{{ route('customer.dashboard') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Dashboard</a>
-                            <a href="{{ route('customer.orders') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Pesanan Saya</a>
-                            <a href="{{ route('customer.wishlist') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Wishlist</a>
+                            <a href="{{ route('customer.dashboard') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">{{ __('common.dashboard') }}</a>
+                            <a href="{{ route('customer.orders') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">{{ __('common.my_orders') }}</a>
+                            <a href="{{ route('customer.wishlist') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">{{ __('common.wishlist') }}</a>
                             <hr class="my-1 border-stone-100">
                             <form method="POST" action="{{ route('logout') }}" class="block">
                                 @csrf
-                                <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">Keluar</button>
+                                <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">{{ __('common.logout') }}</button>
                             </form>
                             @else
-                            <a href="{{ route('login') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Masuk</a>
-                            <a href="{{ route('register') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Daftar</a>
+                            <a href="{{ route('login') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">{{ __('common.login') }}</a>
+                            <a href="{{ route('register') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">{{ __('common.register') }}</a>
                             <hr class="my-1 border-stone-100">
-                            <a href="{{ route('compare.index') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Bandingkan</a>
-                            <a href="{{ route('coupons.index') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">Kupon</a>
+                            <a href="{{ route('compare.index') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">{{ __('common.compare') }}</a>
+                            <a href="{{ route('coupons.index') }}" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 hover:text-brand-600">{{ __('common.coupons') }}</a>
                             @endauth
                         </div>
                     </div>
@@ -143,7 +152,7 @@
             </div>
 
             {{-- Category navbar desktop (CMS: menus lokasi header, fallback kategori) --}}
-            <nav class="hidden lg:flex items-center gap-1 pb-2 overflow-x-auto scrollbar-none" aria-label="Navigasi utama">
+            <nav class="hidden lg:flex items-center gap-1 pb-2 overflow-x-auto scrollbar-none" aria-label="{{ __('storefront.main_nav') }}">
                 @if(isset($headerMenus) && $headerMenus->count())
                     @foreach($headerMenus as $m)
                     <a href="{{ $m->url }}" @if($m->open_new_tab) target="_blank" rel="noopener" @endif class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 min-h-[32px] inline-flex items-center rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">@if($m->icon)<i class="fas fa-{{ $m->icon }} mr-1 text-[10px]"></i>@endif{{ $m->label }}</a>
@@ -155,7 +164,7 @@
                     @foreach($navCategories as $cat)
                     <a href="{{ route('categories.show', $cat->slug) }}" class="text-xs font-medium text-stone-600 hover:text-brand-600 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap">{{ $cat->name }}</a>
                     @endforeach
-                    <a href="{{ route('categories.index') }}" class="text-xs font-medium text-brand-600 hover:text-brand-700 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap font-semibold">Semua <i class="fas fa-chevron-right text-[9px] ml-0.5"></i></a>
+                    <a href="{{ route('categories.index') }}" class="text-xs font-medium text-brand-600 hover:text-brand-700 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition-colors whitespace-nowrap font-semibold">{{ __('common.view_all') }} <i class="fas fa-chevron-right text-[9px] ml-0.5"></i></a>
                 @endif
             </nav>
 
@@ -163,7 +172,7 @@
             <div x-show="searchOpen" x-cloak class="md:hidden pb-3">
                 <form action="{{ route('search') }}" class="relative">
                     <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-                    <input type="search" name="q" placeholder="Cari produk..." autofocus
+                    <input type="search" name="q" placeholder="{{ __('storefront.search_mobile_placeholder') }}" autofocus
                            class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm
                                   focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400">
                 </form>
@@ -175,7 +184,7 @@
                  @click="mobileMenu = false">
                 <div @click.stop class="absolute left-0 top-0 h-full w-80 bg-white shadow-2xl overflow-y-auto">
                     <div class="flex items-center justify-between p-4 border-b border-stone-100">
-                        <span class="font-display font-bold text-lg">Kategori</span>
+                        <span class="font-display font-bold text-lg">{{ __('common.categories') }}</span>
                         <button @click="mobileMenu = false" class="text-stone-400 hover:text-stone-600">
                             <i class="fas fa-times text-xl"></i>
                         </button>
@@ -214,7 +223,7 @@
             <div class="flex flex-col h-full">
                 <div class="flex items-center justify-between p-4 border-b border-stone-100">
                     <h3 class="font-semibold text-lg">
-                        <i class="fas fa-shopping-cart text-brand-600 mr-2"></i>Keranjang Belanja
+                        <i class="fas fa-shopping-cart text-brand-600 mr-2"></i>{{ __('storefront.cart_title') }}
                     </h3>
                     <button @click="$store.cart.open = false" class="text-stone-400 hover:text-stone-600 p-1">
                         <i class="fas fa-times text-lg"></i>
@@ -223,16 +232,16 @@
                 <div class="flex-1 overflow-y-auto p-4">
                     <div class="text-center py-16 text-stone-400">
                         <i class="fas fa-shopping-cart text-5xl mb-4 block"></i>
-                        <p class="text-sm">Keranjang belanja Anda kosong</p>
-                        <p class="text-xs mt-1">Yuk, mulai belanja sekarang!</p>
+                        <p class="text-sm">{{ __('storefront.cart_empty') }}</p>
+                        <p class="text-xs mt-1">{{ __('storefront.cart_empty_hint') }}</p>
                     </div>
                 </div>
                 <div class="border-t border-stone-100 p-4">
                     <div class="flex justify-between text-sm mb-3">
-                        <span class="text-stone-500">Total (0 item)</span>
+                        <span class="text-stone-500">{{ __('storefront.cart_total_empty') }}</span>
                         <span class="font-bold text-lg">Rp 0</span>
                     </div>
-                    <button disabled class="w-full py-3 bg-stone-300 text-stone-500 rounded-xl text-sm font-semibold cursor-not-allowed">Keranjang Kosong</button>
+                    <button disabled class="w-full py-3 bg-stone-300 text-stone-500 rounded-xl text-sm font-semibold cursor-not-allowed">{{ __('storefront.cart_empty_btn') }}</button>
                 </div>
             </div>
         </div>
@@ -279,7 +288,7 @@
                             </div>
                             <template x-if="$store.quickView.product.variant_product && $store.quickView.product.stocks.length">
                                 <div class="mb-3">
-                                    <p class="text-xs font-semibold text-stone-600 mb-1.5">Varian:</p>
+                                    <p class="text-xs font-semibold text-stone-600 mb-1.5">{{ __('storefront.variant') }}:</p>
                                     <div class="flex gap-1.5 flex-wrap">
                                         <template x-for="stock in $store.quickView.product.stocks" :key="stock.id">
                                             <button @click="$store.quickView.selectedVariant = stock"
@@ -303,11 +312,11 @@
                                 <input type="hidden" name="price" :value="$store.quickView.effectivePrice">
                                 <input type="hidden" name="quantity" :value="qvQty">
                                 <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-brand-500 to-brand-600 text-white text-sm font-semibold rounded-lg hover:shadow-lg transition-all">
-                                    <i class="fas fa-cart-plus mr-1"></i> Keranjang
+                                    <i class="fas fa-cart-plus mr-1"></i> {{ __('storefront.add_to_cart_short') }}
                                 </button>
                             </form>
                         </div>
-                        <a :href="'/products/' + $store.quickView.product.slug" class="block text-center text-xs text-brand-600 hover:underline mt-3">Lihat Detail Lengkap →</a>
+                        <a :href="'/products/' + $store.quickView.product.slug" class="block text-center text-xs text-brand-600 hover:underline mt-3">{{ __('storefront.view_full_detail') }}</a>
                     </div>
                 </div>
                 </template>
@@ -328,7 +337,7 @@
                         <span class="font-display font-bold text-lg text-white">TokoOnline</span>
                     </div>
                     <p class="text-sm leading-relaxed text-stone-400 mb-4">
-                        Platform belanja online terpercaya di Indonesia. Menyediakan jutaan produk berkualitas dari ribuan penjual terbaik dengan pengiriman cepat ke seluruh Indonesia.
+                        {{ __('storefront.footer_about') }}
                     </p>
                     <div class="flex gap-3">
                         <a href="#" class="w-9 h-9 rounded-lg bg-stone-800 hover:bg-brand-600 flex items-center justify-center text-stone-400 hover:text-white transition-colors">
@@ -348,24 +357,24 @@
 
                 {{-- Bantuan (CMS: footerPages dari DB) --}}
                 <div>
-                    <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Bantuan</h4>
+                    <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">{{ __('storefront.footer_help') }}</h4>
                     <ul class="space-y-2.5 text-sm">
-                        <li><a href="{{ route('docs') }}" class="text-stone-400 hover:text-white transition-colors">Pusat Bantuan</a></li>
+                        <li><a href="{{ route('docs') }}" class="text-stone-400 hover:text-white transition-colors">{{ __('storefront.help_center') }}</a></li>
                         @if(isset($footerPages) && $footerPages->count())
                             @foreach($footerPages as $fp)
                             <li><a href="{{ route('page.show', $fp->slug) }}" class="text-stone-400 hover:text-white transition-colors">{{ $fp->title }}</a></li>
                             @endforeach
                         @else
-                            <li><a href="{{ route('page.show', 'tentang-kami') }}" class="text-stone-400 hover:text-white transition-colors">Tentang Kami</a></li>
-                            <li><a href="{{ route('page.show', 'syarat-ketentuan') }}" class="text-stone-400 hover:text-white transition-colors">Syarat & Ketentuan</a></li>
-                            <li><a href="{{ route('page.show', 'kebijakan-privasi') }}" class="text-stone-400 hover:text-white transition-colors">Kebijakan Privasi</a></li>
+                            <li><a href="{{ route('page.show', 'tentang-kami') }}" class="text-stone-400 hover:text-white transition-colors">{{ __('storefront.about_us') }}</a></li>
+                            <li><a href="{{ route('page.show', 'syarat-ketentuan') }}" class="text-stone-400 hover:text-white transition-colors">{{ __('storefront.terms') }}</a></li>
+                            <li><a href="{{ route('page.show', 'kebijakan-privasi') }}" class="text-stone-400 hover:text-white transition-colors">{{ __('storefront.privacy') }}</a></li>
                         @endif
                     </ul>
                 </div>
 
                 {{-- Kategori (CMS: footer_shop atau kategori top) --}}
                 <div>
-                    <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Kategori</h4>
+                    <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">{{ __('common.categories') }}</h4>
                     <ul class="space-y-2.5 text-sm">
                         @if(isset($footerShopMenus) && $footerShopMenus->count())
                             @foreach($footerShopMenus as $m)
@@ -375,26 +384,26 @@
                             @foreach(\App\Models\Category::where('top', true)->orderBy('name')->take(6)->get() as $cat)
                             <li><a href="{{ route('categories.show', $cat->slug) }}" class="text-stone-400 hover:text-white transition-colors">{{ $cat->name }}</a></li>
                             @endforeach
-                            <li><a href="{{ route('categories.index') }}" class="text-stone-400 hover:text-white transition-colors">Lihat Semua</a></li>
+                            <li><a href="{{ route('categories.index') }}" class="text-stone-400 hover:text-white transition-colors">{{ __('common.view_all') }}</a></li>
                         @endif
                     </ul>
                 </div>
 
                 {{-- Halaman (CMS: footer_help + tautan toko) --}}
                 <div>
-                    <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Halaman</h4>
+                    <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">{{ __('storefront.footer_pages') }}</h4>
                     <ul class="space-y-2.5 text-sm">
                         @if(isset($footerHelpMenus) && $footerHelpMenus->count())
                             @foreach($footerHelpMenus as $m)
                             <li><a href="{{ $m->url }}" @if($m->open_new_tab) target="_blank" rel="noopener" @endif class="text-stone-400 hover:text-white transition-colors">{{ $m->label }}</a></li>
                             @endforeach
                         @endif
-                        <li><a href="{{ route('products.index') }}" class="text-stone-400 hover:text-white transition-colors">Semua Produk</a></li>
-                        <li><a href="{{ route('brands.index') }}" class="text-stone-400 hover:text-white transition-colors">Brand</a></li>
-                        <li><a href="{{ route('blog.index') }}" class="text-stone-400 hover:text-white transition-colors">Blog</a></li>
-                        <li><a href="{{ route('coupons.index') }}" class="text-stone-400 hover:text-white transition-colors">Kupon</a></li>
+                        <li><a href="{{ route('products.index') }}" class="text-stone-400 hover:text-white transition-colors">{{ __('storefront.all_products') }}</a></li>
+                        <li><a href="{{ route('brands.index') }}" class="text-stone-400 hover:text-white transition-colors">{{ __('common.brands') }}</a></li>
+                        <li><a href="{{ route('blog.index') }}" class="text-stone-400 hover:text-white transition-colors">{{ __('common.blog') }}</a></li>
+                        <li><a href="{{ route('coupons.index') }}" class="text-stone-400 hover:text-white transition-colors">{{ __('common.coupons') }}</a></li>
                     </ul>
-                    <h4 class="text-white font-semibold text-sm mt-6 mb-3 uppercase tracking-wider">Pembayaran</h4>
+                    <h4 class="text-white font-semibold text-sm mt-6 mb-3 uppercase tracking-wider">{{ __('storefront.payment') }}</h4>
                     <div class="flex gap-1.5 flex-wrap">
                         <span class="px-2 py-1 bg-stone-800 rounded text-[10px] text-stone-400">BCA</span>
                         <span class="px-2 py-1 bg-stone-800 rounded text-[10px] text-stone-400">Mandiri</span>
@@ -413,7 +422,7 @@
                         <i class="fas fa-file-contract text-stone-400 text-sm"></i>
                     </div>
                     <div>
-                        <a href="{{ route('page.show', 'syarat-ketentuan') }}" class="text-stone-300 hover:text-white text-sm font-semibold transition-colors">Syarat & Ketentuan</a>
+                        <a href="{{ route('page.show', 'syarat-ketentuan') }}" class="text-stone-300 hover:text-white text-sm font-semibold transition-colors">{{ __('storefront.terms') }}</a>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -421,7 +430,7 @@
                         <i class="fas fa-undo-alt text-stone-400 text-sm"></i>
                     </div>
                     <div>
-                        <span class="text-stone-300 text-sm font-semibold">Garansi Pengembalian</span>
+                        <span class="text-stone-300 text-sm font-semibold">{{ __('storefront.return_guarantee') }}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -429,7 +438,7 @@
                         <i class="fas fa-headset text-stone-400 text-sm"></i>
                     </div>
                     <div>
-                        <span class="text-stone-300 text-sm font-semibold">Support 24/7</span>
+                        <span class="text-stone-300 text-sm font-semibold">{{ __('storefront.support_247') }}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -437,14 +446,14 @@
                         <i class="fas fa-shield-alt text-stone-400 text-sm"></i>
                     </div>
                     <div>
-                        <a href="{{ route('page.show', 'kebijakan-privasi') }}" class="text-stone-300 hover:text-white text-sm font-semibold transition-colors">Kebijakan Privasi</a>
+                        <a href="{{ route('page.show', 'kebijakan-privasi') }}" class="text-stone-300 hover:text-white text-sm font-semibold transition-colors">{{ __('storefront.privacy') }}</a>
                     </div>
                 </div>
             </div>
 
             <div class="border-t border-stone-800 pt-8 text-center text-xs text-stone-500">
-                <p>&copy; {{ date('Y') }} TokoOnline. Seluruh hak cipta dilindungi.</p>
-                <p class="mt-1">Dibangun dengan <span class="text-red-400">&hearts;</span> di Indonesia &middot; Powered by Laravel</p>
+                <p>&copy; {{ date('Y') }} TokoOnline. {{ __('storefront.copyright') }}</p>
+                <p class="mt-1">{{ __('storefront.built_with') }} <span class="text-red-400">&hearts;</span> {{ __('storefront.in_indonesia') }} &middot; Powered by Laravel</p>
             </div>
         </div>
     </footer>
@@ -452,7 +461,7 @@
     {{-- Floating WhatsApp CTA (konteks per-produk) --}}
     <a href="https://wa.me/6281234567890?text={{ urlencode('Halo TokoOnline, saya tanya stok ' . (isset($product) ? $product->name . ' ' . url()->current() : 'saya butuh bantuan')) }}"
        target="_blank" rel="noopener"
-       aria-label="Chat WhatsApp CS"
+       aria-label="{{ __('storefront.chat_cs') }}"
        class="fixed bottom-24 lg:bottom-6 right-6 z-40 w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full
               shadow-lg hover:shadow-xl flex items-center justify-center text-2xl
               transition-all hover:scale-110 card-lift">
@@ -466,24 +475,24 @@
         <div class="flex items-center justify-around h-14 px-2">
             <a href="{{ route('home') }}" class="flex flex-col items-center gap-0.5 text-brand-600 min-w-0 px-2">
                 <i class="fas fa-home text-lg"></i>
-                <span class="text-[10px] font-semibold">Home</span>
+                <span class="text-[10px] font-semibold">{{ __('common.home') }}</span>
             </a>
             <a href="{{ route('categories.index') }}" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-brand-600 min-w-0 px-2">
                 <i class="fas fa-th-large text-lg"></i>
-                <span class="text-[10px] font-medium">Kategori</span>
+                <span class="text-[10px] font-medium">{{ __('common.categories') }}</span>
             </a>
             <button @click="$store.cart.open = true" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-brand-600 min-w-0 px-2 relative">
                 <i class="fas fa-shopping-cart text-lg"></i>
                 <span x-text="$store.cart.count" class="absolute -top-1 right-0 min-w-[18px] h-[18px] bg-brand-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none px-1" x-show="$store.cart.count > 0">0</span>
-                <span class="text-[10px] font-medium">Keranjang</span>
+                <span class="text-[10px] font-medium">{{ __('common.cart') }}</span>
             </button>
             <a href="{{ auth()->check() ? route('customer.wishlist') : route('login') }}" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-brand-600 min-w-0 px-2">
                 <i class="far fa-heart text-lg"></i>
-                <span class="text-[10px] font-medium">Wishlist</span>
+                <span class="text-[10px] font-medium">{{ __('common.wishlist') }}</span>
             </a>
             <a href="{{ auth()->check() ? route('customer.dashboard') : route('login') }}" class="flex flex-col items-center gap-0.5 text-stone-400 hover:text-brand-600 min-w-0 px-2">
                 <i class="far fa-user text-lg"></i>
-                <span class="text-[10px] font-medium">Akun</span>
+                <span class="text-[10px] font-medium">{{ __('common.account') }}</span>
             </a>
         </div>
     </nav>
@@ -700,7 +709,7 @@
          x-effect="document.body.style.overflow = show ? 'hidden' : ''">
         <div class="absolute inset-0 bg-stone-900/60" @click="show = false"></div>
         <div class="relative bg-white rounded-2xl max-w-sm w-full shadow-2xl animate-scale-in overflow-hidden">
-            <button @click="show = false; sessionStorage.setItem('popup_dismissed', '1')" class="absolute top-3 right-3 z-10 w-7 h-7 min-w-[28px] min-h-[28px] bg-stone-100 hover:bg-stone-200 rounded-full flex items-center justify-center text-stone-400 text-xs" aria-label="Tutup popup">
+            <button @click="show = false; sessionStorage.setItem('popup_dismissed', '1')" class="absolute top-3 right-3 z-10 w-7 h-7 min-w-[28px] min-h-[28px] bg-stone-100 hover:bg-stone-200 rounded-full flex items-center justify-center text-stone-400 text-xs" aria-label="{{ __('common.close') }}">
                 <i class="fas fa-times"></i>
             </button>
             @if($popupBanner)
@@ -719,7 +728,7 @@
             @else
             <div class="p-5 text-center">
             @endif
-                <p class="text-sm text-stone-600 mb-4">Gunakan kode kupon saat checkout:</p>
+                <p class="text-sm text-stone-600 mb-4">{{ __('storefront.popup_use_code') }}</p>
                 <div class="bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 mb-4">
                     <span class="font-mono font-bold text-brand-600 text-lg tracking-wider">WELCOME20</span>
                 </div>
@@ -728,9 +737,9 @@
                 @endif
                 <button @click="navigator.clipboard.writeText('WELCOME20'); $el.innerHTML='<i class=\'fas fa-check mr-1\'></i>Tersalin!'; setTimeout(() => { show = false; sessionStorage.setItem('popup_dismissed', '1') }, 1000)"
                         class="w-full py-2.5 min-h-[44px] bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold text-sm rounded-xl hover:shadow-lg transition-all">
-                    <i class="fas fa-copy mr-1"></i> Salin Kode
+                    <i class="fas fa-copy mr-1"></i> {{ __('common.copy_code') }}
                 </button>
-                <button @click="show = false; sessionStorage.setItem('popup_dismissed', '1')" class="text-xs text-stone-400 hover:text-stone-600 mt-3 min-h-[44px] px-4">Tutup</button>
+                <button @click="show = false; sessionStorage.setItem('popup_dismissed', '1')" class="text-xs text-stone-400 hover:text-stone-600 mt-3 min-h-[44px] px-4">{{ __('common.close') }}</button>
             </div>
         </div>
     </div>

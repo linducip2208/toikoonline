@@ -1,6 +1,6 @@
 @extends('layouts.storefront')
 
-@section('title', 'Lupa Kata Sandi')
+@section('title', __('auth.forgot_title'))
 
 @section('content')
 <div class="min-h-[calc(100vh-200px)] flex items-center justify-center px-4 py-16">
@@ -10,9 +10,9 @@
             <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-100 rounded-2xl mb-4">
                 <i class="fas fa-key text-brand-600 text-2xl"></i>
             </div>
-            <h1 class="font-display text-3xl font-bold text-stone-900 mb-2">Lupa Kata Sandi?</h1>
+            <h1 class="font-display text-3xl font-bold text-stone-900 mb-2">{{ __('auth.forgot_heading') }}</h1>
             <p class="text-stone-500 text-sm leading-relaxed">
-                Masukkan email Anda dan kami akan mengirimkan link untuk mereset kata sandi Anda.
+                {{ __('auth.forgot_desc') }}
             </p>
         </div>
 
@@ -31,7 +31,7 @@
             <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-700">
                 <div class="flex items-center gap-2 mb-1">
                     <i class="fas fa-exclamation-circle text-red-500"></i>
-                    <span class="font-semibold">Oops! Ada yang salah</span>
+                    <span class="font-semibold">{{ __('auth.error_title') }}</span>
                 </div>
                 <ul class="list-disc list-inside mt-1 space-y-0.5 text-red-600">
                     @foreach ($errors->all() as $error)
@@ -63,7 +63,7 @@
                            text-white rounded-xl font-semibold text-sm shadow-lg shadow-brand-500/25
                            hover:shadow-brand-500/40 transition-all hover:-translate-y-0.5
                            active:translate-y-0 active:shadow-md">
-                <i class="fas fa-paper-plane mr-2"></i>Kirim Link Reset
+                <i class="fas fa-paper-plane mr-2"></i>{{ __('auth.send_reset_link') }}
             </button>
         </form>
 
@@ -71,7 +71,7 @@
         <div class="text-center mt-8">
             <a href="{{ route('login') }}" class="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-brand-600 font-medium transition-colors">
                 <i class="fas fa-arrow-left text-xs"></i>
-                Kembali ke halaman masuk
+                {{ __('auth.back_to_login') }}
             </a>
         </div>
     </div>

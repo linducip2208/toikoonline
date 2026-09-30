@@ -54,6 +54,14 @@ Route::middleware(['auth'])->prefix('account')->name('customer.')->group(functio
     Route::post('/orders/{order}/refund', [OrderController::class, 'refund'])->name('orders.refund');
     Route::get('/orders/{order}/invoice', [\App\Http\Controllers\Billing\InvoiceController::class, 'invoice'])->name('orders.invoice');
     Route::get('/orders/{order}/packing-slip', [\App\Http\Controllers\Billing\InvoiceController::class, 'packingSlip'])->name('orders.packing-slip');
+    Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::get('/addresses', [\App\Http\Controllers\Customer\AddressController::class, 'index'])->name('addresses');
+    Route::get('/addresses/create', [\App\Http\Controllers\Customer\AddressController::class, 'create'])->name('addresses.create');
+    Route::post('/addresses', [\App\Http\Controllers\Customer\AddressController::class, 'store'])->name('addresses.store');
+    Route::get('/addresses/{address}/edit', [\App\Http\Controllers\Customer\AddressController::class, 'edit'])->name('addresses.edit');
+    Route::put('/addresses/{address}', [\App\Http\Controllers\Customer\AddressController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{address}', [\App\Http\Controllers\Customer\AddressController::class, 'destroy'])->name('addresses.destroy');
+    Route::post('/addresses/{address}/default', [\App\Http\Controllers\Customer\AddressController::class, 'setDefault'])->name('addresses.default');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -128,6 +136,33 @@ Route::get('/iklan/{slug}', [App\Http\Controllers\Storefront\ClassifiedControlle
 Route::get('/api/shipping/cost', [App\Http\Controllers\Api\ShippingController::class, 'cost'])->name('api.shipping.cost');
 Route::get('/api/shipping/areas', [App\Http\Controllers\Api\ShippingController::class, 'areas'])->name('api.shipping.areas');
 Route::get('/api/shipping/track/{waybill}', [App\Http\Controllers\Api\ShippingController::class, 'track'])->name('api.shipping.track');
+
+// Contact + FAQ + offline (PWA)
+Route::get('/contact', [\App\Http\Controllers\Storefront\ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [\App\Http\Controllers\Storefront\ContactController::class, 'store'])->name('contact.store')->middleware('throttle:10,1');
+Route::get('/faq', [\App\Http\Controllers\Storefront\FaqController::class, 'index'])->name('faq.index');
+Route::get('/offline', fn() => view('pwa.offline'))->name('pwa.offline');
+
+// Installer (diamankan InstallLock + lock file, lihat docs/INSTALLATION.md)
+Route::prefix('install')->name('install.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Install\InstallController::class, 'index'])->name('index');
+    Route::post('/database', [\App\Http\Controllers\Install\InstallController::class, 'database'])->name('database');
+    Route::post('/admin', [\App\Http\Controllers\Install\InstallController::class, 'admin'])->name('admin');
+    Route::post('/store', [\App\Http\Controllers\Install\InstallController::class, 'store'])->name('store');
+});
+
+// Locale prefix opsional (/en/...) — default id tanpa prefix (backward compatible)
+Route::prefix('{locale}')->where(['locale' => 'en'])->name('locale.')->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('/categories/{slug}', [ProductController::class, 'category'])->name('categories.show');
+    Route::get('/brands/{slug}', [ProductController::class, 'brand'])->name('brands.show');
+    Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+    Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+    Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
+    Route::get('/search', [ProductController::class, 'search'])->name('search');
+});
 
 // License pairing
 require base_path('routes/pair-routes.php');

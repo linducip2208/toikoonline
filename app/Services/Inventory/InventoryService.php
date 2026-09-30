@@ -155,7 +155,7 @@ class InventoryService
             throw ValidationException::withMessages(['qty' => __('commerce.qty_positive')]);
         }
 
-        return DB::transaction(function () use ($productId, $stockId, $qty, $refType, $refId) {
+        $movement = DB::transaction(function () use ($productId, $stockId, $qty, $refType, $refId) {
             $wid = $this->defaultWarehouseId();
             $qtyAfter = null;
 
@@ -173,6 +173,33 @@ class InventoryService
 
             return $this->record($wid, $productId, $stockId, 'commit', -$qty, $qtyAfter, $refType, $refId);
         });
+
+        $this->dispatchStockLowIfNeeded($productId);
+
+        return $movement;
+    }
+
+    /** Emit StockLow bila stok tersedia menyentuh ambang — guarded, non-fatal. */
+    protected function dispatchStockLowIfNeeded(int $productId): void
+    {
+        try {
+            if (! class_exists(\App\Events\StockLow::class)) {
+                return;
+            }
+            $product = \App\Models\Product::find($productId);
+            if (! $product) {
+                return;
+            }
+            $threshold = (int) ($product->low_stock_qty ?? 0);
+            if ($threshold <= 0) {
+                return;
+            }
+            $available = (int) \App\Models\ProductStock::where('product_id', $productId)->sum('qty');
+            if ($available <= $threshold) {
+                event(new \App\Events\StockLow($product, $available));
+            }
+        } catch (\Throwable) {
+        }
     }
 
     public function transfer(int $productId, ?int $stockId, int $qty, int $fromWarehouseId, int $toWarehouseId, ?string $note = null): array

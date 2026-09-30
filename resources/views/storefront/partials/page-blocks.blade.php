@@ -8,7 +8,19 @@
                 <div class="flex flex-wrap gap-3 items-center">
                     @if(!empty($block['data']['cta_text']))
                     <a href="{{ $block['data']['cta_url'] ?? '#' }}" class="inline-flex items-center px-5 py-2.5 min-h-[44px] bg-white text-brand-700 text-sm font-bold rounded-xl">{{ $block['data']['cta_text'] }}</a>
-                    @endif
+        @elseif(($block['type'] ?? '') === 'global')
+            {{-- Blok global reusable: render inner blocks, maks 1 level nesting (global-di-dalam-global diabaikan). --}}
+            @php
+                $globalRef = null;
+                try {
+                    $globalRef = \App\Models\GlobalBlock::where('key', $block['data']['key'] ?? '')->where('is_active', true)->first();
+                } catch (\Throwable $e) { $globalRef = null; }
+                $globalInner = $globalRef ? array_values(array_filter($globalRef->innerBlocks(), fn ($b) => ($b['type'] ?? '') !== 'global')) : [];
+            @endphp
+            @if($globalInner !== [])
+                @include('storefront.partials.page-blocks', ['blocks' => $globalInner])
+            @endif
+        @endif
                     @if(!empty($block['data']['image']))<img src="{{ asset('storage/'.$block['data']['image']) }}" alt="" class="h-24 rounded-xl object-cover">@endif
                 </div>
             </section>
@@ -94,7 +106,7 @@
                     <input type="email" name="email" required placeholder="email@example.com" class="rounded-xl border border-stone-300 px-4 py-2.5 min-h-[44px] text-sm">
                     <button class="px-5 py-2.5 min-h-[44px] bg-brand-600 text-white text-sm font-bold rounded-xl w-fit">{{ __('cms.contact_form') }}</button>
                 </form>
-                <p class="text-xs text-stone-400 mt-2">Contact submissions are stored as newsletter subscribers (existing subscribers table).</p>
+                <p class="text-xs text-stone-400 mt-2">{{ __('storefront.blocks_contact_note') }}</p>
             </section>
         @elseif(($block['type'] ?? '') === 'gallery')
             <section class="mb-6">

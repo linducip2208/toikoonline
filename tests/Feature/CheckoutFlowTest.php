@@ -103,7 +103,9 @@ class CheckoutFlowTest extends TestCase
         ]);
         $this->assertSame(0, Cart::where('user_id', $this->user->id)->count());
         $order = Order::where('user_id', $this->user->id)->first();
-        $this->assertEquals(200000, (float) $order->grand_total);
+        // 200000 barang + 5000 fee COD (config/payment.php) — fee ikut ditagih.
+        $this->assertEquals(205000, (float) $order->grand_total);
+        $this->assertEquals(5000, (float) $order->payment_fee);
         $this->assertEquals(2, $this->product->fresh()->num_of_sale);
     }
 

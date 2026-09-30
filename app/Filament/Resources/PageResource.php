@@ -57,7 +57,7 @@ class PageResource extends Resource
                                 Forms\Components\Textarea::make('subheading')->rows(2),
                                 Forms\Components\TextInput::make('cta_text'),
                                 Forms\Components\TextInput::make('cta_url'),
-                                Forms\Components\FileUpload::make('image')->image()->directory('cms-pages'),
+                                Forms\Components\FileUpload::make('image')->image()->directory('cms-pages')->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])->maxSize(10240)->rules([new \App\Rules\SafeUpload]),
                             ]),
                         Forms\Components\Builder\Block::make('html')
                             ->label('HTML bebas')
@@ -70,7 +70,7 @@ class PageResource extends Resource
                                 Forms\Components\TextInput::make('title'),
                                 Forms\Components\Repeater::make('items')
                                     ->schema([
-                                        Forms\Components\FileUpload::make('image')->image()->directory('cms-pages'),
+                                        Forms\Components\FileUpload::make('image')->image()->directory('cms-pages')->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])->maxSize(10240)->rules([new \App\Rules\SafeUpload]),
                                         Forms\Components\TextInput::make('link'),
                                         Forms\Components\TextInput::make('caption'),
                                     ])->columns(3)->columnSpanFull(),
@@ -125,7 +125,7 @@ class PageResource extends Resource
                             ->schema([
                                 Forms\Components\TextInput::make('title'),
                                 Forms\Components\Repeater::make('images')->schema([
-                                    Forms\Components\FileUpload::make('image')->image()->directory('cms-pages')->required(),
+                                    Forms\Components\FileUpload::make('image')->image()->directory('cms-pages')->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])->maxSize(10240)->rules([new \App\Rules\SafeUpload])->required(),
                                     Forms\Components\TextInput::make('caption'),
                                 ])->columns(2)->columnSpanFull(),
                             ]),
@@ -148,6 +148,15 @@ class PageResource extends Resource
                                     Forms\Components\TextInput::make('cta_url'),
                                 ])->columns(2)->columnSpanFull(),
                             ]),
+                        Forms\Components\Builder\Block::make('global')
+                            ->label('Blok Global (reusable)')
+                            ->schema([
+                                Forms\Components\Select::make('key')
+                                    ->label('Blok global')
+                                    ->options(fn () => \App\Models\GlobalBlock::active()->pluck('title', 'key')->all())
+                                    ->searchable()->required()
+                                    ->helperText('Isi blok diambil dari referensi — maks 1 level nesting.'),
+                            ]),
                     ]),
                 Forms\Components\TextInput::make('meta_title')
                     ->columnSpanFull(),
@@ -156,7 +165,7 @@ class PageResource extends Resource
                 Forms\Components\TextInput::make('keywords')
                     ->maxLength(1000),
                 Forms\Components\FileUpload::make('meta_image')
-                    ->image(),
+                    ->image()->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])->maxSize(10240)->rules([new \App\Rules\SafeUpload]),
             ]);
     }
 

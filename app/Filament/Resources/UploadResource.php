@@ -22,7 +22,9 @@ class UploadResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\FileUpload::make('file_name')->label('File')->directory('cms-media')->required()->columnSpanFull(),
+            Forms\Components\FileUpload::make('file_name')->label('File')->directory('cms-media')->required()->columnSpanFull()
+                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'video/mp4', 'video/webm', 'audio/mpeg', 'audio/wav', 'application/pdf', 'text/plain', 'text/csv', 'application/zip'])
+                ->maxSize(10240)->rules([new \App\Rules\SafeUpload]),
             Forms\Components\TextInput::make('file_original_name')->maxLength(255),
             Forms\Components\Select::make('folder_id')->label('Folder')->options(fn () => \App\Models\MediaFolder::pluck('name', 'id')->all())->searchable()->nullable(),
             Forms\Components\TextInput::make('type')->maxLength(50)->placeholder('image'),

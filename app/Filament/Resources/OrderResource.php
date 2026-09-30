@@ -48,10 +48,14 @@ class OrderResource extends Resource
                             ->options([
                                 'pending' => 'Pending',
                                 'confirmed' => 'Dikonfirmasi',
+                                'packed' => 'Dikemas',
                                 'picked_up' => 'Diambil',
                                 'on_delivery' => 'Dalam Pengiriman',
                                 'delivered' => 'Terkirim',
+                                'completed' => 'Selesai',
                                 'cancelled' => 'Dibatalkan',
+                                'failed' => 'Gagal',
+                                'returned' => 'Diretur',
                             ])
                             ->required(),
                         Select::make('payment_type')
@@ -68,7 +72,9 @@ class OrderResource extends Resource
                             ->options([
                                 'unpaid' => 'Belum Dibayar',
                                 'paid' => 'Dibayar',
+                                'partially_refunded' => 'Direfund Sebagian',
                                 'refunded' => 'Direfund',
+                                'failed' => 'Gagal',
                             ])
                             ->required(),
                         TextInput::make('grand_total')
@@ -133,15 +139,23 @@ class OrderResource extends Resource
                 TextColumn::make('grand_total')
                     ->money('IDR')
                     ->sortable(),
+                TextColumn::make('promo_discount')
+                    ->money('IDR')
+                    ->toggleable()
+                    ->tooltip(fn($record) => $record->promo_names),
                 TextColumn::make('delivery_status')
                     ->badge()
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'gray',
                         'confirmed' => 'info',
+                        'packed' => 'info',
                         'picked_up' => 'warning',
                         'on_delivery' => 'primary',
                         'delivered' => 'success',
+                        'completed' => 'success',
                         'cancelled' => 'danger',
+                        'failed' => 'danger',
+                        'returned' => 'warning',
                         default => 'gray',
                     }),
                 TextColumn::make('payment_status')
@@ -149,7 +163,9 @@ class OrderResource extends Resource
                     ->color(fn(string $state): string => match ($state) {
                         'unpaid' => 'danger',
                         'paid' => 'success',
+                        'partially_refunded' => 'warning',
                         'refunded' => 'warning',
+                        'failed' => 'danger',
                         default => 'gray',
                     }),
                 TextColumn::make('courier')
@@ -169,16 +185,22 @@ class OrderResource extends Resource
                     ->options([
                         'pending' => 'Pending',
                         'confirmed' => 'Dikonfirmasi',
+                        'packed' => 'Dikemas',
                         'picked_up' => 'Diambil',
                         'on_delivery' => 'Dalam Pengiriman',
                         'delivered' => 'Terkirim',
+                        'completed' => 'Selesai',
                         'cancelled' => 'Dibatalkan',
+                        'failed' => 'Gagal',
+                        'returned' => 'Diretur',
                     ]),
                 SelectFilter::make('payment_status')
                     ->options([
                         'unpaid' => 'Belum Dibayar',
                         'paid' => 'Dibayar',
+                        'partially_refunded' => 'Direfund Sebagian',
                         'refunded' => 'Direfund',
+                        'failed' => 'Gagal',
                     ]),
             ])
             ->headerActions([

@@ -11,10 +11,14 @@ return [
     'delivery' => [
         'pending' => ['id' => 'Menunggu', 'en' => 'Pending'],
         'confirmed' => ['id' => 'Dikonfirmasi', 'en' => 'Confirmed'],
+        'packed' => ['id' => 'Dikemas', 'en' => 'Packed'],
         'picked_up' => ['id' => 'Diambil', 'en' => 'Picked up'],
         'on_delivery' => ['id' => 'Dalam Pengiriman', 'en' => 'On delivery'],
         'delivered' => ['id' => 'Terkirim', 'en' => 'Delivered'],
+        'completed' => ['id' => 'Selesai', 'en' => 'Completed'],
         'cancelled' => ['id' => 'Dibatalkan', 'en' => 'Cancelled'],
+        'failed' => ['id' => 'Gagal', 'en' => 'Failed'],
+        'returned' => ['id' => 'Diretur', 'en' => 'Returned'],
     ],
     'purchase_order' => [
         'draft' => ['id' => 'Draf', 'en' => 'Draft'],
@@ -41,5 +45,28 @@ return [
         'late_delivery' => ['id' => 'Terlambat tiba', 'en' => 'Late delivery'],
         'changed_mind' => ['id' => 'Berubah pikiran', 'en' => 'Changed mind'],
         'other' => ['id' => 'Lainnya', 'en' => 'Other'],
+    ],
+    // Guarded transition map — consumed by App\Services\Order\OrderStateService.
+    // Legacy jumps kept valid: confirmed→picked_up, pending/confirmed→on_delivery.
+    'transitions' => [
+        'payment' => [
+            'unpaid' => ['paid', 'failed'],
+            'paid' => ['refunded', 'partially_refunded'],
+            'partially_refunded' => ['refunded'],
+            'failed' => ['paid', 'unpaid'],
+            'refunded' => [],
+        ],
+        'delivery' => [
+            'pending' => ['confirmed', 'on_delivery', 'cancelled', 'failed'],
+            'confirmed' => ['packed', 'picked_up', 'on_delivery', 'cancelled', 'failed'],
+            'packed' => ['picked_up', 'cancelled'],
+            'picked_up' => ['on_delivery', 'cancelled'],
+            'on_delivery' => ['delivered', 'failed', 'returned'],
+            'delivered' => ['completed', 'returned'],
+            'completed' => [],
+            'cancelled' => [],
+            'failed' => [],
+            'returned' => [],
+        ],
     ],
 ];

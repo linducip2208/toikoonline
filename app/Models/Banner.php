@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Translatable;
 
 class Banner extends Model
 {
+    use Translatable;
+
+    protected array $translatableAttributes = ['title'];
     protected $fillable = [
         'title',
         'photo',
