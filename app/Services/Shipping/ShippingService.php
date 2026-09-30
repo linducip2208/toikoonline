@@ -39,6 +39,24 @@ class ShippingService
 
     public function getCost(int|string $originCityId, int|string $destinationCityId, int $weight, string $courier = ''): array
     {
+        // Zero-key flat-rate provider: rate from extra_params, no HTTP call
+        if ($this->config && strtolower((string) $this->config->provider_format) === 'local-flat') {
+            $extra = $this->config->extra_params ?? [];
+            $flat = (int) ($extra['flat_rate'] ?? $extra['rate'] ?? 0);
+
+            return [[
+                'code' => 'local',
+                'courier' => 'local',
+                'name' => $this->config->name ?? 'Local Flat',
+                'costs' => [[
+                    'service' => 'flat',
+                    'description' => (string) ($extra['label'] ?? 'Flat rate'),
+                    'cost' => $flat,
+                    'etd' => (string) ($extra['etd'] ?? '1-2'),
+                ]],
+            ]];
+        }
+
         // Biteship memakai area_id string (ex: JKT-...), RajaOngkir memakai city id int
         if ($this->isBiteship()) {
             $adapter = new BiteshipAdapter($this->config);
@@ -80,6 +98,25 @@ class ShippingService
             'courier' => $courier,
         ]);
         return $response['rajaongkir']['result'] ?? $response['data'] ?? [];
+    }
+
+    /**
+     * Normalized multi-provider quote with per-provider fallback.
+     * Delegates to ShippingManager (kept here for backward compat).
+     *
+     * @return array<int, array{provider_id:int, provider:string, courier:string, service:string, description:string, cost:int, etd:string}>
+     */
+    public function quote(string|int $origin, string|int $destination, int $weightGram, string $couriers = ''): array
+    {
+        return (new ShippingManager())->quote($origin, $destination, $weightGram, $couriers);
+    }
+
+    /**
+     * Shipment label data builder (Shipment model when present, else order).
+     */
+    public function labelData(int|string $orderId): array
+    {
+        return (new ShippingManager())->labelData($orderId);
     }
 
     protected function makeRequest(string $method, string $path, array $data = []): array

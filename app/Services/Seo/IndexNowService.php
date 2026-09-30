@@ -69,4 +69,31 @@ class IndexNowService
     {
         (new static())->submit($urls);
     }
+
+    /**
+     * Submit in API-friendly chunks (IndexNow caps urlList at 10k).
+     */
+    public function submitMany(array $urls, int $chunkSize = 1000): int
+    {
+        $count = 0;
+        foreach (array_chunk($urls, $chunkSize) as $chunk) {
+            $this->submit($chunk);
+            $count += count($chunk);
+        }
+
+        return $count;
+    }
+
+    /**
+     * Ping search engines that a sitemap changed (best-effort, never throws).
+     */
+    public function pingSitemap(string $sitemapUrl): void
+    {
+        foreach (['https://www.google.com/ping', 'https://www.bing.com/ping'] as $endpoint) {
+            try {
+                Http::timeout(10)->get($endpoint, ['sitemap' => $sitemapUrl]);
+            } catch (\Exception) {
+            }
+        }
+    }
 }

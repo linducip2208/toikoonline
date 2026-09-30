@@ -32,4 +32,9 @@ class Cart extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function stocks()
+    {
+        return $this->hasMany(ProductStock::class, 'product_id', 'product_id');
+    }
 }

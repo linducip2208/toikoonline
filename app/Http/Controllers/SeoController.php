@@ -92,8 +92,7 @@ class SeoController extends Controller
 
     /**
      * /beli-aplikasi-toko-online — Source code sales landing page
-     */
-    public function buySourceCode()
+     */    public function buySourceCode()
     {
         $meta = [
             'title' => 'Beli Aplikasi Toko Online / Source Code E-Commerce',
@@ -101,5 +100,43 @@ class SeoController extends Controller
         ];
 
         return view('pseo.buy-source-code', compact('meta'));
+    }
+
+    /**
+     * FAQ JSON-LD for a blog article. Returns a schema array the view can
+     * json_encode into a script tag. $faqs = [['q'=>..,'a'=>..], ...].
+     * Redirect-aware canonical: prefers $canonical when the URL was reached
+     * via redirect chain, else current url.
+     */
+    public function faqSchema(array $faqs): array
+    {
+        $entities = [];
+        foreach ($faqs as $f) {
+            $q = trim((string) ($f['q'] ?? $f['question'] ?? ''));
+            $a = trim((string) ($f['a'] ?? $f['answer'] ?? ''));
+            if ($q === '' || $a === '') {
+                continue;
+            }
+            $entities[] = [
+                '@type' => 'Question',
+                'name' => $q,
+                'acceptedAnswer' => ['@type' => 'Answer', 'text' => $a],
+            ];
+        }
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'mainEntity' => $entities,
+        ];
+    }
+
+    public function canonical(?string $preferred = null): string
+    {
+        if ($preferred && str_starts_with($preferred, 'http')) {
+            return $preferred;
+        }
+
+        return url($preferred ?? request()->path());
     }
 }

@@ -13,7 +13,7 @@
         <div class="bg-white border border-stone-200 rounded-2xl p-5 hover:shadow-md transition-shadow duration-200">
             <div class="flex items-center gap-3 mb-3">
                 <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 </div>
                 <span class="text-xs font-semibold text-stone-500 uppercase tracking-wide">Total Pesanan</span>
             </div>
@@ -23,7 +23,7 @@
         <div class="bg-white border border-stone-200 rounded-2xl p-5 hover:shadow-md transition-shadow duration-200">
             <div class="flex items-center gap-3 mb-3">
                 <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <span class="text-xs font-semibold text-stone-500 uppercase tracking-wide">Pesanan Aktif</span>
             </div>
@@ -33,7 +33,7 @@
         <div class="bg-white border border-stone-200 rounded-2xl p-5 hover:shadow-md transition-shadow duration-200">
             <div class="flex items-center gap-3 mb-3">
                 <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                 </div>
                 <span class="text-xs font-semibold text-stone-500 uppercase tracking-wide">Wallet Balance</span>
             </div>
@@ -43,7 +43,7 @@
         <div class="bg-white border border-stone-200 rounded-2xl p-5 hover:shadow-md transition-shadow duration-200">
             <div class="flex items-center gap-3 mb-3">
                 <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
                 </div>
                 <span class="text-xs font-semibold text-stone-500 uppercase tracking-wide">Poin Loyalty</span>
             </div>
@@ -92,13 +92,14 @@
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
+                        <caption class="sr-only">Lima pesanan terbaru Anda</caption>
                         <thead class="bg-stone-50 border-b border-stone-200">
                             <tr>
-                                <th class="text-left px-4 py-3 font-semibold text-stone-600">Kode</th>
-                                <th class="text-left px-4 py-3 font-semibold text-stone-600">Tanggal</th>
-                                <th class="text-left px-4 py-3 font-semibold text-stone-600">Status</th>
-                                <th class="text-right px-4 py-3 font-semibold text-stone-600">Total</th>
-                                <th class="text-right px-4 py-3 font-semibold text-stone-600"></th>
+                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">Kode</th>
+                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">Tanggal</th>
+                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">Status</th>
+                                <th scope="col" class="text-right px-4 py-3 font-semibold text-stone-600">Total</th>
+                                <th scope="col" class="text-right px-4 py-3 font-semibold text-stone-600"><span class="sr-only">Aksi</span></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -111,7 +112,7 @@
                                     </td>
                                     <td class="px-4 py-3 text-right font-semibold" x-text="'Rp ' + formatRupiah(order.total)"></td>
                                     <td class="px-4 py-3 text-right">
-                                        <a :href="'{{ route('customer.orders') }}/' + order.code" class="text-brand-600 hover:text-brand-700 text-xs font-bold">Detail</a>
+                                        <a :href="'{{ route('customer.orders') }}/' + order.id" class="text-brand-600 hover:text-brand-700 text-xs font-bold">Detail</a>
                                     </td>
                                 </tr>
                             </template>
@@ -132,8 +133,8 @@
                 </div>
                 <div class="p-4 space-y-3">
                     <template x-for="item in wishlistItems" :key="item.name">
-                        <a :href="'/produk/' + item.slug" class="flex items-center gap-3 p-2 rounded-xl hover:bg-stone-50 transition group">
-                            <img :src="item.image" :alt="item.name" class="w-14 h-14 rounded-xl object-cover bg-stone-100 flex-shrink-0">
+                        <a :href="'/products/' + item.slug" class="flex items-center gap-3 p-2 rounded-xl hover:bg-stone-50 transition group">
+                            <img :src="item.image || '{{ asset('marketing/products/placeholder.jpg') }}'" :alt="item.name" class="w-14 h-14 rounded-xl object-cover bg-stone-100 flex-shrink-0">
                             <div class="min-w-0 flex-1">
                                 <p class="text-sm font-semibold text-stone-800 truncate group-hover:text-brand-600 transition" x-text="item.name"></p>
                                 <p class="text-xs font-bold text-brand-600" x-text="'Rp ' + formatRupiah(item.price)"></p>
@@ -160,19 +161,8 @@
                 walletBalance: 0,
                 loyaltyPoints: {{ (int) ($loyaltyPoints ?? 0) }}
             },
-            recentOrders: [
-                { code: 'ORD-MZ9XK4L2', date: '10 Jun 2026', status: 'Menunggu Pembayaran', total: 1410800 },
-                { code: 'ORD-NY7WK3J1', date: '08 Jun 2026', status: 'Dikirim', total: 550000 },
-                { code: 'ORD-OX6VJ2H0', date: '05 Jun 2026', status: 'Selesai', total: 387000 },
-                { code: 'ORD-PW5UI1G9', date: '01 Jun 2026', status: 'Selesai', total: 1299000 },
-                { code: 'ORD-QV4TH0F8', date: '28 Mei 2026', status: 'Dibatalkan', total: 235000 },
-            ],
-            wishlistItems: [
-                { name: 'Sepatu Running Pro X', price: 450000, slug: 'sepatu-running-pro-x', image: 'https://placehold.co/112x112/e2e8f0/64748b?text=S' },
-                { name: 'Tas Ransel Urban', price: 275000, slug: 'tas-ransel-urban', image: 'https://placehold.co/112x112/e2e8f0/64748b?text=T' },
-                { name: 'Kaos Premium Cotton', price: 129000, slug: 'kaos-premium-cotton', image: 'https://placehold.co/112x112/e2e8f0/64748b?text=K' },
-                { name: 'Headphone Wireless', price: 890000, slug: 'headphone-wireless', image: 'https://placehold.co/112x112/e2e8f0/64748b?text=H' },
-            ],
+            recentOrders: @json($recentOrderRows ?? []),
+            wishlistItems: @json($wishlistRows ?? []),
 
             statusBadge(status) {
                 const map = {

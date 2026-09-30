@@ -29,10 +29,10 @@
 @section('content')
 <div class="bg-white border-b border-stone-100">
     <div class="max-w-7xl mx-auto px-4 py-4">
-        <nav class="flex items-center gap-2 text-sm text-stone-500">
+        <nav class="flex items-center gap-2 text-sm text-stone-500" aria-label="Breadcrumb">
             <a href="{{ route('home') }}" class="hover:text-brand-600 transition-colors">Home</a>
-            <i class="fas fa-chevron-right text-[10px]"></i>
-            <span class="text-stone-800 font-medium">Pencarian</span>
+            <i class="fas fa-chevron-right text-[10px]" aria-hidden="true"></i>
+            <span class="text-stone-800 font-medium" aria-current="page">Pencarian</span>
         </nav>
     </div>
 </div>
@@ -40,9 +40,10 @@
 <div class="max-w-7xl mx-auto px-4 py-8">
     {{-- Search bar --}}
     <div class="mb-8">
-        <form action="{{ url()->current() }}" class="relative max-w-2xl">
-            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-stone-400 text-lg"></i>
-            <input type="search" name="q" value="{{ request('q') }}"
+        <form action="{{ url()->current() }}" class="relative max-w-2xl" role="search" aria-label="Pencarian produk">
+            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-stone-400 text-lg" aria-hidden="true"></i>
+            <label for="q" class="sr-only">Kata kunci pencarian</label>
+            <input id="q" type="search" name="q" value="{{ request('q') }}"
                    placeholder="Cari produk, brand, atau kategori..."
                    class="w-full pl-14 pr-6 py-4 rounded-2xl border border-stone-300 bg-white text-lg
                           focus:outline-none focus:ring-3 focus:ring-brand-500/20 focus:border-brand-400
@@ -93,8 +94,8 @@
                                     {{ $product->name }}
                                 </h3>
                             </a>
-                            <div class="flex items-center gap-1 mt-1.5">
-                                <div class="flex items-center text-[9px] star-gold">
+                            <div class="flex items-center gap-1 mt-1.5" role="img" aria-label="Rating {{ round($product->rating ?? 0) }} dari 5">
+                                <div class="flex items-center text-[9px] star-gold" aria-hidden="true">
                                     @for($i = 0; $i < 5; $i++)
                                         <i class="{{ $i < round($product->rating ?? 0) ? 'fas' : 'far' }} fa-star"></i>
                                     @endfor
@@ -106,8 +107,9 @@
                                     Rp {{ number_format($product->unit_price, 0, ',', '.') }}
                                 </span>
                                 <button onclick="addToSearchCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->unit_price }})"
-                                        class="w-8 h-8 sm:w-9 sm:h-9 btn-gradient text-white rounded-lg flex items-center justify-center text-xs sm:text-sm hover:shadow-lg transition-all">
-                                    <i class="fas fa-shopping-cart"></i>
+                                        aria-label="Tambah {{ $product->name }} ke keranjang"
+                                        class="min-w-[44px] min-h-[44px] w-8 h-8 sm:w-9 sm:h-9 btn-gradient text-white rounded-lg flex items-center justify-center text-xs sm:text-sm hover:shadow-lg transition-all">
+                                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
                                 </button>
                             </div>
                             @if($product->num_of_sale > 0)
@@ -132,19 +134,19 @@
                 <div class="max-w-md mx-auto">
                     <p class="text-sm font-medium text-stone-700 mb-3">Saran pencarian:</p>
                     <div class="flex flex-wrap justify-center gap-2">
-                        <a href="?q=smartphone" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
+                        <a href="?q=smartphone" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                             Smartphone
                         </a>
-                        <a href="?q=sepatu" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
+                        <a href="?q=sepatu" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                             Sepatu
                         </a>
-                        <a href="?q=tas" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
+                        <a href="?q=tas" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                             Tas
                         </a>
-                        <a href="?q=baju" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
+                        <a href="?q=baju" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                             Baju
                         </a>
-                        <a href="?q=elektronik" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
+                        <a href="?q=elektronik" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                             Elektronik
                         </a>
                     </div>
@@ -168,19 +170,19 @@
             <div class="max-w-md mx-auto">
                 <p class="text-sm font-medium text-stone-700 mb-3">Pencarian populer:</p>
                 <div class="flex flex-wrap justify-center gap-2">
-                    <a href="?q=smartphone" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
+                    <a href="?q=smartphone" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                         Smartphone
                     </a>
-                    <a href="?q=sepatu" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
+                    <a href="?q=sepatu" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                         Sepatu
                     </a>
-                    <a href="?q=tas" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
+                    <a href="?q=tas" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                         Tas
                     </a>
-                    <a href="?q=baju" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
+                    <a href="?q=baju" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                         Baju
                     </a>
-                    <a href="?q=elektronik" class="px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
+                    <a href="?q=elektronik" class="inline-flex items-center min-h-[44px] px-4 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:border-brand-400 hover:text-brand-600 transition-colors">
                         Elektronik
                     </a>
                 </div>

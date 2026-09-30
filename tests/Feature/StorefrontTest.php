@@ -1,10 +1,27 @@
 <?php
+
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class StorefrontTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // License pairing is an environment concern, not storefront behavior.
+        $this->withoutMiddleware(\App\Http\Middleware\RequirePair::class);
+
+        foreach (['super_admin', 'admin', 'customer', 'staff'] as $role) {
+            Role::firstOrCreate(['name' => $role, 'guard_name' => 'web']);
+        }
+    }
+
     public function test_homepage_loads(): void
     {
         $response = $this->get('/');
@@ -56,9 +73,9 @@ class StorefrontTest extends TestCase
 
     public function test_auth_user_can_access_customer_dashboard(): void
     {
-        $user = \App\Models\User::factory()->create(['user_type'=>'customer']);
+        $user = \App\Models\User::factory()->create(['user_type' => 'customer']);
         $user->assignRole('customer');
-        
+
         $response = $this->actingAs($user)->get('/account');
         $response->assertStatus(200);
     }

@@ -103,6 +103,11 @@ class CategoryResource extends Resource
             ]);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['parent']);
+    }
+
     public static function getRelations(): array
     {
         return [

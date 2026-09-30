@@ -467,6 +467,11 @@ class ProductResource extends Resource
             ]);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['category', 'brand']);
+    }
+
     public static function getRelations(): array
     {
         return [];

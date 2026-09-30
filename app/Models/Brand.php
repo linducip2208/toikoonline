@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Translatable;
 
 class Brand extends Model
 {
+    use Translatable;
+
+    protected array $translatableAttributes = ['name', 'description'];
     protected $fillable = [
         'name',
         'logo',

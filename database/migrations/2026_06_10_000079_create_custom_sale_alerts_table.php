@@ -15,7 +15,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::statement('ALTER TABLE custom_sale_alerts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement('ALTER TABLE custom_sale_alerts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+        }
     }
 
     public function down(): void

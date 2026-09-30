@@ -200,3 +200,13 @@ See `docs/03-code-comparison.md` for full detailed analysis.
 - Routes: 4 organized files vs 30 addon-based files
 - Frontend: Zero JS bundle (CDN) vs large jQuery+Vue bundles
 - Services: Clean format-based adapters vs mixed patterns + hardcoded providers
+
+---
+
+## 2026-09-30 — MASTER COMMAND: Standalone Multilingual E-Commerce CMS
+4 agent paralel + integration pass. Test 39/39, build OK, 244 routes.
+- CMS/i18n: entity_translations + Translatable (Product, Category, Brand, Blog, Page, Menu), SetLocale (/id|/en opsional), lang/id+en.json, Translation/Theme/Redirect/MediaFolder admin, revisi + preview + jadwal + duplikat Page, translations:scan.
+- Commerce: warehouses, stock_movements, suppliers, PO + receiving, shipments + resi otomatis, CheckoutService (revalidasi harga & stok), RefundService, TaxService + TaxRate, CustomerGroup, Invoice/Packing PDF.
+- Platform: API v1 Sanctum (/api/v1), payment intents idempoten + reconcile + refund Midtrans, ShippingManager multi-provider + local-flat, OrderPaid/Shipped/Delivered events + mail-template {{var}}, outbound webhooks HMAC + retry, sitemap hreflang, flash-deal scheduler, cart-abandon.
+- Admin/UX: dashboard + AnalyticsDashboard (filter tanggal), ReportService, TrackPageView, 6 policies + 21 permissions, tests Unit/Feature/Security/Locale, a11y + empty states, invoice/resi/refund pelanggan (bayar-ulang Snap, konfirmasi terima, ajukan refund).
+- Integrasi: middleware locale/redirect/tracker, API routing, EventBridge provider, invoice route, webhook CSRF-except + throttle, policies, Translatable 6 model, lang commerce.*, bugfix HomeController/BlogCategory/webhook-commit/PSR-4.

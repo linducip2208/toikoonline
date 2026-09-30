@@ -62,7 +62,11 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\StatsOverview::class,
                 \App\Filament\Widgets\OrderChartWidget::class,
                 \App\Filament\Widgets\OrderStatusChart::class,
+                \App\Filament\Widgets\PaymentStatusChart::class,
                 \App\Filament\Widgets\TopProductsChart::class,
+                \App\Filament\Widgets\TopCategoriesChart::class,
+                \App\Filament\Widgets\LowStockWidget::class,
+                \App\Filament\Widgets\AbandonedCartsWidget::class,
                 \App\Filament\Widgets\RecentOrdersWidget::class,
             ])
             ->databaseNotifications()

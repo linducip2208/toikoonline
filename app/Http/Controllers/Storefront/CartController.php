@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Storefront;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\ProductStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +31,17 @@ class CartController extends Controller
             })->filter(fn($item) => $item->product !== null);
         }
 
-        return view('storefront.cart', compact('cartItems'));
+        // Payload Alpine dirakit di sini (Blade @json tidak tahan ekspresi bersarang).
+        $cartPayload = $cartItems->map(fn($item) => [
+            'product_id' => $item->product_id,
+            'variation' => $item->variation,
+            'name' => $item->product->name ?? 'Produk',
+            'price' => (int) $item->price,
+            'qty' => (int) $item->quantity,
+            'image' => $item->product->thumbnail_img ? asset($item->product->thumbnail_img) : null,
+        ])->values()->all();
+
+        return view('storefront.cart', compact('cartItems', 'cartPayload'));
     }
 
     public function add(Request $request)
@@ -52,6 +63,26 @@ class CartController extends Controller
             'shipping_cost' => $request->input('shipping_cost', 0),
             'quantity' => $request->input('quantity', 1),
         ];
+
+        // Stock-cap: jangan biarkan qty di keranjang melebihi stok gudang.
+        $product = Product::find($data['product_id']);
+        if ($product && ! $product->digital) {
+            $available = $this->availableStock($product->id, $data['variation']);
+            if (Auth::check()) {
+                $inCart = (int) Cart::where('user_id', Auth::id())
+                    ->where('product_id', $data['product_id'])
+                    ->where('variation', $data['variation'])
+                    ->sum('quantity');
+            } else {
+                $inCart = (int) collect(session()->get('cart', []))
+                    ->where('product_id', $data['product_id'])
+                    ->where('variation', $data['variation'])
+                    ->sum('quantity');
+            }
+            if ($inCart + (int) $data['quantity'] > $available) {
+                return redirect()->route('cart.index')->with('error', __('commerce.cart_stock_capped', ['qty' => $available]));
+            }
+        }
 
         if (Auth::check()) {
             $data['user_id'] = Auth::id();
@@ -107,6 +138,15 @@ class CartController extends Controller
         $productId = $request->input('product_id');
         $variation = $request->input('variation');
         $quantity = $request->input('quantity');
+
+        // Stock-cap saat update qty.
+        $product = Product::find($productId);
+        if ($product && ! $product->digital && $quantity > 0) {
+            $available = $this->availableStock($product->id, $variation);
+            if ($quantity > $available) {
+                return redirect()->route('cart.index')->with('error', __('commerce.cart_stock_capped', ['qty' => $available]));
+            }
+        }
 
         if (Auth::check()) {
             $cartItem = Cart::where('user_id', Auth::id())
@@ -167,5 +207,15 @@ class CartController extends Controller
         }
 
         return redirect()->route('cart.index')->with('success', 'Produk berhasil dihapus dari keranjang.');
+    }
+
+    protected function availableStock(int $productId, ?string $variation): int
+    {
+        $query = ProductStock::where('product_id', $productId);
+        if ($variation !== null && $variation !== '') {
+            $query->where('variant', $variation);
+        }
+
+        return (int) $query->sum('qty');
     }
 }

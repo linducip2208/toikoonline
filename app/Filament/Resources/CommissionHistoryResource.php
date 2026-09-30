@@ -7,6 +7,7 @@ use App\Models\CommissionHistory;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class CommissionHistoryResource extends Resource
 {
@@ -29,6 +30,11 @@ class CommissionHistoryResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['order', 'seller']);
     }
 
     public static function getRelations(): array

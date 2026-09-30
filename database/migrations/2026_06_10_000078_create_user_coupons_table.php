@@ -20,7 +20,9 @@ return new class extends Migration
             $table->integer('expiry_date');
         });
 
-        DB::statement('ALTER TABLE user_coupons CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement('ALTER TABLE user_coupons CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+        }
     }
 
     public function down(): void

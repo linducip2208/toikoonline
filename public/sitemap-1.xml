@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>http://localhost:8000</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en"/>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products"/>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/blog</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/blog"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/blog"/>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/docs</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/docs"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/docs"/>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/categories/elektronik</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/categories/elektronik"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/categories/elektronik"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/categories/fashion</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/categories/fashion"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/categories/fashion"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/categories/rumah-tangga</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/categories/rumah-tangga"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/categories/rumah-tangga"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/categories/kesehatan</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/categories/kesehatan"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/categories/kesehatan"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/brands/samsung</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/brands/samsung"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/brands/samsung"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/brands/apple</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/brands/apple"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/brands/apple"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/brands/nike</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/brands/nike"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/brands/nike"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/brands/adidas</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/brands/adidas"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/brands/adidas"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/brands/sony</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/brands/sony"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/brands/sony"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/brands/panasonic</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/brands/panasonic"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/brands/panasonic"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/samsung-galaxy-s24</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/samsung-galaxy-s24"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/samsung-galaxy-s24"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/iphone-15-pro</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/iphone-15-pro"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/iphone-15-pro"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/nike-air-max</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/nike-air-max"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/nike-air-max"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/blender-philips</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/blender-philips"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/blender-philips"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/raket-badminton</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/raket-badminton"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/raket-badminton"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/samsung-galaxy-buds3</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/samsung-galaxy-buds3"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/samsung-galaxy-buds3"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/macbook-air-m3</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/macbook-air-m3"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/macbook-air-m3"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/adidas-ultraboost</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/adidas-ultraboost"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/adidas-ultraboost"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/sony-wh1000xm5</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/sony-wh1000xm5"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/sony-wh1000xm5"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/panasonic-kulkas-2-pintu</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/panasonic-kulkas-2-pintu"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/panasonic-kulkas-2-pintu"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/nike-drifit-jersey</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/nike-drifit-jersey"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/nike-drifit-jersey"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/apple-watch-series-9</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/apple-watch-series-9"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/apple-watch-series-9"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/samsung-smart-tv-55</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/samsung-smart-tv-55"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/samsung-smart-tv-55"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/setrika-philips</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/setrika-philips"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/setrika-philips"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/adidas-predator-boots</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/adidas-predator-boots"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/adidas-predator-boots"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/sony-playstation-5</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/sony-playstation-5"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/sony-playstation-5"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/dumbbell-set-20kg</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/dumbbell-set-20kg"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/dumbbell-set-20kg"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/buku-atomic-habits</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/buku-atomic-habits"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/buku-atomic-habits"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/panasonic-ac-1pk</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/panasonic-ac-1pk"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/panasonic-ac-1pk"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/board-game-monopoly</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/board-game-monopoly"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/board-game-monopoly"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/oli-motor-castrol-1l</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/oli-motor-castrol-1l"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/oli-motor-castrol-1l"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/samsung-galaxy-tab-s9</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/samsung-galaxy-tab-s9"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/samsung-galaxy-tab-s9"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/masker-wajah-10pcs</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/masker-wajah-10pcs"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/masker-wajah-10pcs"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/air-fryer-low-watt</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/air-fryer-low-watt"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/air-fryer-low-watt"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/products/iphone-14-pro</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/products/iphone-14-pro"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/products/iphone-14-pro"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/blog/cara-belanja-online-aman</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/blog/cara-belanja-online-aman"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/blog/cara-belanja-online-aman"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/page/tentang-kami</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/page/tentang-kami"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/page/tentang-kami"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/page/syarat-ketentuan</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/page/syarat-ketentuan"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/page/syarat-ketentuan"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>http://localhost:8000/page/kebijakan-privasi</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="http://localhost:8000/id/page/kebijakan-privasi"/>
+    <xhtml:link rel="alternate" hreflang="en" href="http://localhost:8000/en/page/kebijakan-privasi"/>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>

@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Translatable;
 
 class Blog extends Model
 {
+    use Translatable;
+
+    protected array $translatableAttributes = ['title', 'content'];
     protected $fillable = [
         'category_id',
         'user_id',

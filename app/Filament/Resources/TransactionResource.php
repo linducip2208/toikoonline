@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class TransactionResource extends Resource
 {
@@ -31,6 +32,11 @@ class TransactionResource extends Resource
                 Tables\Filters\SelectFilter::make('gateway'),
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['user']);
     }
 
     public static function getRelations(): array

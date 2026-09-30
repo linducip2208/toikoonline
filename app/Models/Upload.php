@@ -13,14 +13,22 @@ class Upload extends Model
         'file_original_name',
         'file_name',
         'user_id',
+        'folder_id',
         'file_size',
         'extension',
         'type',
         'external_link',
+        'alt_text',
+        'caption',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function folder()
+    {
+        return $this->belongsTo(MediaFolder::class, 'folder_id');
     }
 }

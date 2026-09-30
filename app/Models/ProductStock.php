@@ -25,4 +25,9 @@ class ProductStock extends Model
     {
         return $this->belongsTo(Upload::class, 'image');
     }
+
+    public function movements()
+    {
+        return $this->hasMany(StockMovement::class, 'stock_id');
+    }
 }

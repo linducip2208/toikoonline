@@ -10,6 +10,8 @@ use App\Models\CouponUsage;
 use App\Models\DeliveryHistory;
 use App\Models\Order;
 use App\Models\PaymentGatewayConfig;
+use App\Models\PaymentLog;
+use App\Models\PaymentTransaction;
 use App\Services\Payment\PaymentGatewayService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -38,6 +40,10 @@ class WebhookController extends Controller
                     'gateway_id' => $gatewayId,
                     'order_id' => $payload['order_id'] ?? 'unknown',
                 ]);
+                $this->logAttempt(null, $gatewayId, false, null, $payload['transaction_status'] ?? $payload['status'] ?? null);
+                if (!empty($payload['order_id'])) {
+                    PaymentTransaction::where('order_code', $payload['order_id'])->increment('failed_signature_count');
+                }
                 return response()->json(['status' => 'invalid signature'], 403);
             }
 
@@ -60,13 +66,19 @@ class WebhookController extends Controller
                 'capture' => 'paid',
                 'settlement' => 'paid',
                 'success' => 'paid',
+                'paid' => 'paid',
+                'completed' => 'paid',
+                'paid_off' => 'paid',
                 'pending' => 'unpaid',
                 'deny' => 'unpaid',
                 'cancel' => 'unpaid',
                 'expire' => 'unpaid',
+                'expired' => 'unpaid',
                 'failure' => 'unpaid',
+                'failed' => 'unpaid',
                 'refund' => 'refunded',
                 'partial_refund' => 'refunded',
+                'refunded' => 'refunded',
             ];
 
             $mappedStatus = $paymentStatusMap[$transactionStatus] ?? 'unpaid';
@@ -76,6 +88,28 @@ class WebhookController extends Controller
                 'payment_status' => $mappedStatus,
                 'payment_details' => json_encode($payload),
             ]);
+
+            // Idempotent payment_transactions row (intent may not exist for legacy orders)
+            $txn = PaymentTransaction::firstOrCreate(
+                ['idempotency_key' => (string) $order->code],
+                [
+                    'order_id' => $order->id,
+                    'gateway_id' => $gateway->id,
+                    'order_code' => (string) $order->code,
+                    'amount' => (int) round((float) $order->grand_total),
+                    'currency' => 'IDR',
+                    'status' => 'pending',
+                ]
+            );
+            $txnStatus = $mappedStatus === 'paid' ? 'paid' : ($mappedStatus === 'refunded' ? 'refunded' : 'pending');
+            $txn->update([
+                'order_id' => $order->id,
+                'gateway_id' => $gateway->id,
+                'status' => $txnStatus,
+                'gateway_reference' => $payload['transaction_id'] ?? $txn->gateway_reference,
+                'raw' => $payload,
+            ]);
+            $this->logAttempt($txn->id, $gatewayId, true, $txnStatus, $transactionStatus);
 
             // Efek samping saat pertama kali lunas (idempoten via $wasPaid)
             if ($mappedStatus === 'paid' && ! $wasPaid) {
@@ -103,6 +137,32 @@ class WebhookController extends Controller
                     ['order_id' => $order->id, 'delivery_status' => 'confirmed'],
                     ['status' => 'Pembayaran diterima — pesanan dikonfirmasi', 'note' => 'Kode: '.$order->code]
                 );
+                // 4. Commit reserved stock (Agent 2 contract, guarded + non-fatal)
+                if (class_exists(\App\Services\Inventory\InventoryService::class)
+                    && method_exists(\App\Services\Inventory\InventoryService::class, 'commit')) {
+                    try {
+                        $inventory = app(\App\Services\Inventory\InventoryService::class);
+                        $order->loadMissing('orderDetails');
+                        foreach ($order->orderDetails as $detail) {
+                            $stockId = null;
+                            if ($detail->variation) {
+                                $stockId = \App\Models\ProductStock::where('product_id', $detail->product_id)
+                                    ->where('variant', $detail->variation)->value('id');
+                            }
+                            $inventory->commit((int) $detail->product_id, $stockId ? (int) $stockId : null, (int) $detail->quantity, 'order', $order->id);
+                        }
+                    } catch (\Exception $e) {
+                        Log::warning('Inventory commit failed (non-fatal)', ['order' => $order->code, 'error' => $e->getMessage()]);
+                    }
+                }
+                // 5. Emit OrderPaid (listeners notify + mail + outbound webhook, guarded)
+                if (class_exists(\App\Events\OrderPaid::class)) {
+                    try {
+                        event(new \App\Events\OrderPaid($order));
+                    } catch (\Exception $e) {
+                        Log::warning('OrderPaid dispatch failed (non-fatal)', ['order' => $order->code, 'error' => $e->getMessage()]);
+                    }
+                }
             }
 
             Log::info('Payment webhook: order updated', [
@@ -115,9 +175,29 @@ class WebhookController extends Controller
         } catch (\Exception $e) {
             Log::error('Payment webhook error: ' . $e->getMessage(), [
                 'gateway_id' => $gatewayId,
-                'payload' => $payload,
             ]);
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Append-only webhook audit row. Never stores secrets: only validity
+     * flags and status strings. Payload itself is stored on the
+     * payment_transactions row, not here.
+     */
+    protected function logAttempt(?int $transactionId, mixed $gatewayId, bool $signatureValid, ?string $mapped, ?string $rawStatus): void
+    {
+        try {
+            PaymentLog::create([
+                'payment_transaction_id' => $transactionId,
+                'gateway_id_raw' => (string) $gatewayId,
+                'event' => 'webhook',
+                'signature_valid' => $signatureValid,
+                'mapped_status' => $mapped,
+                'gateway_status_raw' => $rawStatus ? substr((string) $rawStatus, 0, 64) : null,
+            ]);
+        } catch (\Exception) {
+            // audit must never break the webhook response
         }
     }
 }

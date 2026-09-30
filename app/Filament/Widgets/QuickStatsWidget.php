@@ -3,8 +3,8 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\User;
+use App\Services\Analytics\ReportService;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -14,19 +14,20 @@ class QuickStatsWidget extends BaseWidget
 
     protected function getStats(): array
     {
+        [$start, $end] = ReportService::resolveRange('30d');
+
         $pendingOrders = Order::where('delivery_status', 'pending')->count();
         $totalCustomers = User::where('user_type', 'customer')->count();
-        $lowStock = Product::published()->approved()
-            ->whereHas('stocks', fn($q) => $q->where('qty', '>', 0)->where('qty', '<=', 10))->count();
-        $ordersThisMonth = Order::whereMonth('created_at', now()->month)->count();
+        $lowStock = ReportService::lowStockCount();
+        $ordersThisMonth = ReportService::orderCount($start, $end);
 
         return [
             Stat::make('Pesanan Pending', $pendingOrders)
                 ->description('Menunggu diproses')
                 ->descriptionIcon('heroicon-m-clock')
                 ->color($pendingOrders > 0 ? 'danger' : 'gray'),
-            Stat::make('Pesanan Bulan Ini', $ordersThisMonth)
-                ->description(date('F Y'))
+            Stat::make('Pesanan 30 Hari', $ordersThisMonth)
+                ->description($start->format('d M').' – '.$end->format('d M Y'))
                 ->descriptionIcon('heroicon-m-calendar')
                 ->color('info'),
             Stat::make('Total Pelanggan', $totalCustomers)
@@ -34,7 +35,7 @@ class QuickStatsWidget extends BaseWidget
                 ->descriptionIcon('heroicon-m-user-group')
                 ->color('success'),
             Stat::make('Stok Menipis', $lowStock)
-                ->description('Produk ≤ 10 unit')
+                ->description('Varian ≤ ambang batas')
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
                 ->color($lowStock > 0 ? 'warning' : 'gray'),
         ];

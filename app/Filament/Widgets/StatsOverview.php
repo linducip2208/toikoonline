@@ -2,12 +2,9 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\User;
+use App\Services\Analytics\ReportService;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Support\Facades\DB;
 
 class StatsOverview extends BaseWidget
 {
@@ -15,48 +12,43 @@ class StatsOverview extends BaseWidget
 
     protected function getStats(): array
     {
-        $totalRevenue = Order::where('payment_status', 'paid')->sum('grand_total');
-        $ordersToday = Order::whereDate('created_at', today())->count();
-        $pendingOrders = Order::where('delivery_status', 'pending')->count();
+        [$start, $end] = ReportService::resolveRange('30d');
+
+        $revenue = ReportService::revenueTotal($start, $end);
+        $orders = ReportService::orderCount($start, $end);
+        $customers = ReportService::customerCount($start, $end);
+        $aov = ReportService::averageOrderValue($start, $end);
+        $refunds = ReportService::refundsTotal($start, $end);
+        $pending = ReportService::ordersByDeliveryStatus($start, $end)['pending'] ?? 0;
+
+        $trend = ReportService::revenueByDay($start, $end)['data'];
 
         return [
-            Stat::make('Total Pendapatan', 'Rp ' . number_format($totalRevenue, 0, ',', '.'))
+            Stat::make('Pendapatan (30 hari)', 'Rp '.number_format($revenue, 0, ',', '.'))
                 ->description('Pesanan dibayar')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('success')
-                ->chart($this->getRevenueTrend()),
+                ->chart($trend),
 
-            Stat::make('Pesanan Hari Ini', $ordersToday)
-                ->description(date('l, d M Y'))
+            Stat::make('Pesanan (30 hari)', $orders)
+                ->description('Total pesanan masuk')
                 ->descriptionIcon('heroicon-m-shopping-cart')
                 ->color('info'),
 
-            Stat::make('Total Produk', Product::count())
-                ->description(Product::where('published', true)->count() . ' published')
-                ->descriptionIcon('heroicon-m-cube')
-                ->color('warning'),
-
-            Stat::make('Pelanggan', User::where('user_type', 'customer')->count())
-                ->description('Terdaftar')
+            Stat::make('Pelanggan Baru (30 hari)', $customers)
+                ->description('Pendaftar baru')
                 ->descriptionIcon('heroicon-m-users')
                 ->color('primary'),
 
-            Stat::make('Menunggu Diproses', $pendingOrders)
-                ->description('Pesanan pending')
-                ->descriptionIcon('heroicon-m-clock')
-                ->color($pendingOrders > 0 ? 'danger' : 'gray'),
-        ];
-    }
+            Stat::make('Rata-rata Order (AOV)', 'Rp '.number_format($aov, 0, ',', '.'))
+                ->description('30 hari terakhir')
+                ->descriptionIcon('heroicon-m-calculator')
+                ->color('warning'),
 
-    protected function getRevenueTrend(): array
-    {
-        return Order::where('payment_status', 'paid')
-            ->where('created_at', '>=', now()->subDays(7))
-            ->selectRaw('DATE(created_at) as date, SUM(grand_total) as total')
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->orderBy(DB::raw('DATE(created_at)'))
-            ->get()
-            ->pluck('total')
-            ->toArray();
+            Stat::make('Refund (30 hari)', 'Rp '.number_format($refunds, 0, ',', '.'))
+                ->description($pending.' pesanan pending')
+                ->descriptionIcon('heroicon-m-arrow-uturn-left')
+                ->color($refunds > 0 ? 'danger' : 'gray'),
+        ];
     }
 }

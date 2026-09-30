@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\Translatable;
 
 class Menu extends Model
 {
+    use Translatable;
+
+    protected array $translatableAttributes = ['label'];
     protected $fillable = [
         'location', 'label', 'url', 'icon',
         'parent_id', 'sort_order', 'is_active', 'open_new_tab',

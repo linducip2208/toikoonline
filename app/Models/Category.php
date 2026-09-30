@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Translatable;
 
 class Category extends Model
 {
+    use Translatable;
+
+    protected array $translatableAttributes = ['name', 'description'];
     protected $fillable = [
         'name',
         'parent_id',

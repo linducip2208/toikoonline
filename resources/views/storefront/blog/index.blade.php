@@ -26,10 +26,10 @@
 @section('content')
 <div class="bg-white border-b border-stone-100">
     <div class="max-w-7xl mx-auto px-4 py-4">
-        <nav class="flex items-center gap-2 text-sm text-stone-500">
+        <nav class="flex items-center gap-2 text-sm text-stone-500" aria-label="Breadcrumb">
             <a href="{{ route('home') }}" class="hover:text-brand-600 transition-colors">Home</a>
-            <i class="fas fa-chevron-right text-[10px]"></i>
-            <span class="text-stone-800 font-medium">Blog</span>
+            <i class="fas fa-chevron-right text-[10px]" aria-hidden="true"></i>
+            <span class="text-stone-800 font-medium" aria-current="page">Blog</span>
         </nav>
     </div>
 </div>
@@ -106,7 +106,7 @@
         </div>
 
         {{-- Sidebar --}}
-        <aside class="w-full lg:w-80 shrink-0">
+        <aside class="w-full lg:w-80 shrink-0" aria-label="Sidebar blog">
             <div class="sidebar-sticky space-y-6">
 
                 {{-- Search --}}
@@ -114,10 +114,11 @@
                     <h4 class="font-semibold text-stone-800 mb-3 flex items-center gap-2">
                         <i class="fas fa-search text-brand-500"></i>Cari Artikel
                     </h4>
-                    <form action="{{ route('blog.index') }}" class="relative">
-                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-                        <input type="search" name="q" value="{{ request('q') }}" placeholder="Cari artikel..."
-                               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm
+                    <form action="{{ route('blog.index') }}" method="GET" role="search" aria-label="Cari artikel" class="relative">
+                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm" aria-hidden="true"></i>
+                        <label for="blog-q" class="sr-only">Cari artikel</label>
+                        <input id="blog-q" type="search" name="q" value="{{ request('q') }}" placeholder="Cari artikel..."
+                               class="w-full pl-10 pr-4 py-2.5 min-h-[44px] rounded-xl border border-stone-200 bg-stone-50 text-sm
                                       focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400">
                     </form>
                 </div>
@@ -180,12 +181,14 @@
                         <i class="fas fa-paper-plane"></i>Newsletter
                     </h4>
                     <p class="text-sm text-brand-100 mb-4">Dapatkan tips belanja & promo terbaru langsung ke email Anda.</p>
-                    <form class="space-y-2">
-                        <input type="email" placeholder="Email Anda"
-                               class="w-full px-4 py-2.5 rounded-xl border border-brand-500 bg-brand-700/50 text-white text-sm
+                    <form action="{{ route('newsletter.subscribe') }}" method="POST" class="space-y-2" aria-label="Berlangganan newsletter">
+                        @csrf
+                        <label for="newsletter-email" class="sr-only">Alamat email</label>
+                        <input id="newsletter-email" type="email" name="email" required placeholder="Email Anda"
+                               class="w-full px-4 py-2.5 min-h-[44px] rounded-xl border border-brand-500 bg-brand-700/50 text-white text-sm
                                       placeholder:text-brand-300 focus:outline-none focus:ring-2 focus:ring-white/20">
                         <button type="submit"
-                                class="w-full py-2.5 bg-white text-brand-700 rounded-xl text-sm font-semibold hover:bg-brand-50 transition-colors">
+                                class="w-full py-2.5 min-h-[44px] bg-white text-brand-700 rounded-xl text-sm font-semibold hover:bg-brand-50 transition-colors">
                             Berlangganan
                         </button>
                     </form>

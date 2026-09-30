@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Address;
 use App\Models\PaymentGatewayConfig;
+use App\Services\Checkout\CheckoutService;
 use App\Services\CouponService;
 use App\Services\Payment\PaymentGatewayService;
 use Illuminate\Http\Request;
@@ -105,8 +106,15 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', 'Keranjang belanja Anda kosong.');
         }
 
-        $subtotal = $cartItems->sum(fn($item) => $item->price * $item->quantity);
-        $totalTax = $cartItems->sum(fn($item) => $item->tax * $item->quantity);
+        // Hardening: revalidasi harga dari products + ketersediaan stok SEBELUM order dibuat.
+        try {
+            $checked = app(CheckoutService::class)->validate($cartItems);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withInput()->with('error', implode(' ', $e->validator->errors()->all()));
+        }
+
+        $subtotal = (int) $checked['subtotal'];
+        $totalTax = (int) $checked['tax'];
         // Ongkir dari pilihan kurir di step pengiriman (bukan lagi 0 / dummy)
         $shippingCost = (int) $request->input('shipping_cost', 0);
 

@@ -2,36 +2,45 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Order;
+use App\Services\Analytics\ReportService;
 use Filament\Widgets\ChartWidget;
-use Illuminate\Support\Facades\DB;
 
 class OrderChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Pendapatan 30 Hari Terakhir';
+    protected static ?string $heading = 'Pendapatan';
 
     protected static ?int $sort = 2;
 
+    public ?string $filter = '30d';
+
+    protected function getFilters(): ?array
+    {
+        return [
+            'today' => 'Hari ini',
+            'yesterday' => 'Kemarin',
+            '7d' => '7 hari',
+            '30d' => '30 hari',
+            '90d' => '90 hari',
+            'year' => 'Tahun ini',
+        ];
+    }
+
     protected function getData(): array
     {
-        $orders = Order::where('payment_status', 'paid')
-            ->where('created_at', '>=', now()->subDays(30))
-            ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(grand_total) as total'))
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->orderBy(DB::raw('DATE(created_at)'))
-            ->get();
+        [$start, $end] = ReportService::resolveRange($this->filter ?? '30d');
+        $series = ReportService::revenueByDay($start, $end);
 
         return [
             'datasets' => [
                 [
                     'label' => 'Pendapatan (Rp)',
-                    'data' => $orders->pluck('total')->toArray(),
+                    'data' => $series['data'],
                     'fill' => 'start',
                     'backgroundColor' => 'rgba(99,102,241,.1)',
                     'borderColor' => '#6366f1',
                 ],
             ],
-            'labels' => $orders->pluck('date')->map(fn($d) => date('d M', strtotime($d)))->toArray(),
+            'labels' => $series['labels'],
         ];
     }
 

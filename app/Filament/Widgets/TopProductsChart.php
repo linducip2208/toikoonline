@@ -2,12 +2,13 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Product;
+use App\Services\Analytics\ReportService;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Str;
 
 class TopProductsChart extends ChartWidget
 {
-    protected static ?int $sort = 5;
+    protected static ?int $sort = 6;
     protected static ?string $heading = '10 Produk Terlaris';
     protected int|string|array $columnSpan = 1;
 
@@ -18,18 +19,18 @@ class TopProductsChart extends ChartWidget
 
     protected function getData(): array
     {
-        $products = Product::published()->approved()->orderBy('num_of_sale', 'desc')->take(10)->get();
+        $products = ReportService::topProducts(10);
 
         return [
             'datasets' => [
                 [
                     'label' => 'Terjual',
-                    'data' => $products->pluck('num_of_sale')->toArray(),
+                    'data' => array_column($products, 'sold'),
                     'backgroundColor' => '#6366f1',
                     'borderRadius' => 6,
                 ],
             ],
-            'labels' => $products->pluck('name')->map(fn($n) => \Illuminate\Support\Str::limit($n, 20))->toArray(),
+            'labels' => array_map(fn ($p) => Str::limit($p['name'], 20), $products),
         ];
     }
 

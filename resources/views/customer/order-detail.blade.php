@@ -27,15 +27,15 @@
                     <template x-for="(step, idx) in timeline" :key="idx">
                         <div class="flex gap-4 pb-8 last:pb-0">
                             <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-                                    :class="idx <= currentTimelineIdx ? 'bg-brand-600 text-white' : 'bg-stone-200 text-stone-400'">
-                                    <span x-show="idx < currentTimelineIdx" class="text-lg">✓</span>
-                                    <span x-html="idx <= currentTimelineIdx ? step.icon : step.icon"></span>
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all text-sm font-bold"
+                                    :class="step.done ? 'bg-brand-600 text-white' : 'bg-stone-200 text-stone-400'">
+                                    <span x-show="step.done">✓</span>
+                                    <span x-show="!step.done" x-text="idx + 1"></span>
                                 </div>
                                 <div x-show="idx < timeline.length - 1" class="w-0.5 flex-1 mt-2 transition-colors"
-                                    :class="idx < currentTimelineIdx ? 'bg-brand-500' : 'bg-stone-200'"></div>
+                                    :class="step.done ? 'bg-brand-500' : 'bg-stone-200'"></div>
                             </div>
-                            <div class="flex-1" :class="idx > currentTimelineIdx ? 'opacity-50' : ''">
+                            <div class="flex-1" :class="!step.done && idx > currentTimelineIdx ? 'opacity-50' : ''">
                                 <p class="font-bold text-stone-800" x-text="step.label"></p>
                                 <p class="text-sm text-stone-500" x-text="step.date || 'Menunggu'"></p>
                             </div>
@@ -50,12 +50,13 @@
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
+                        <caption class="sr-only">Rincian produk dalam pesanan</caption>
                         <thead class="bg-stone-50 border-b border-stone-200">
                             <tr>
-                                <th class="text-left px-4 py-3 font-semibold text-stone-600">Produk</th>
-                                <th class="text-center px-4 py-3 font-semibold text-stone-600">Qty</th>
-                                <th class="text-right px-4 py-3 font-semibold text-stone-600">Harga</th>
-                                <th class="text-right px-4 py-3 font-semibold text-stone-600">Subtotal</th>
+                                <th scope="col" class="text-left px-4 py-3 font-semibold text-stone-600">Produk</th>
+                                <th scope="col" class="text-center px-4 py-3 font-semibold text-stone-600">Qty</th>
+                                <th scope="col" class="text-right px-4 py-3 font-semibold text-stone-600">Harga</th>
+                                <th scope="col" class="text-right px-4 py-3 font-semibold text-stone-600">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,7 +64,7 @@
                                 <tr class="border-b border-stone-100 last:border-b-0">
                                     <td class="px-4 py-4">
                                         <div class="flex items-center gap-3">
-                                            <img :src="item.image" class="w-12 h-12 rounded-lg object-cover bg-stone-100 flex-shrink-0">
+                                            <img :src="item.image" :alt="item.name" class="w-12 h-12 rounded-lg object-cover bg-stone-100 flex-shrink-0">
                                             <div>
                                                 <p class="font-semibold text-stone-800" x-text="item.name"></p>
                                                 <p x-show="item.variant" class="text-xs text-stone-400 mt-0.5" x-text="item.variant"></p>
@@ -144,7 +145,7 @@
                 </h3>
                 <p class="text-xs text-stone-500 mb-4">Riwayat dari admin & kurir (diperbarui otomatis via webhook).</p>
                 @if(isset($trackingTimeline) && $trackingTimeline->count())
-                <ol class="relative border-l border-stone-200 ml-2 space-y-4">
+                <ol class="relative border-l border-stone-200 ml-2 space-y-4" aria-label="Riwayat pengiriman">
                     @foreach($trackingTimeline as $t)
                     <li class="ml-4">
                         <span class="absolute -left-[7px] mt-1 w-3 h-3 rounded-full bg-brand-500 ring-4 ring-brand-100"></span>
@@ -170,72 +171,76 @@
     </div>
 
     <div class="flex flex-wrap gap-3">
+        @if(session('success'))
+        <div class="w-full bg-green-50 border border-green-200 text-green-700 text-sm rounded-xl px-4 py-3" role="status">{{ session('success') }}</div>
+        @endif
+        @if(session('error'))
+        <div class="w-full bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3" role="alert">{{ session('error') }}</div>
+        @endif
+
         <template x-if="order.status === 'Menunggu Pembayaran'">
-            <a :href="'/customer/pesanan/bayar?order=' + order.code"
-                class="px-6 py-3 text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-brand-500 rounded-xl hover:from-brand-700 hover:to-brand-600 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                Upload Bukti Bayar
-            </a>
+            <div class="flex flex-wrap gap-3">
+                @if(!empty($snapToken))
+                <button @click="payNow()" class="px-6 py-3 min-h-[44px] text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-brand-500 rounded-xl hover:shadow-lg transition-all flex items-center gap-2">
+                    <i class="fas fa-qrcode"></i> Bayar Sekarang
+                </button>
+                @elseif($order->manual_payment)
+                <a href="https://wa.me/6281234567890?text={{ urlencode('Halo, konfirmasi pembayaran manual order '.$order->code) }}" target="_blank" rel="noopener"
+                    class="px-6 py-3 min-h-[44px] text-sm font-bold text-white bg-green-600 rounded-xl hover:bg-green-700 transition-all flex items-center gap-2">
+                    <i class="fab fa-whatsapp"></i> Konfirmasi via WhatsApp
+                </a>
+                @endif
+            </div>
         </template>
 
         <template x-if="order.status === 'Dikirim'">
-            <button @click="confirmReceived()"
-                class="px-6 py-3 text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-brand-500 rounded-xl hover:from-brand-700 hover:to-brand-600 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                Konfirmasi Terima
-            </button>
+            <form action="{{ route('customer.orders.receive', $order) }}" method="POST">
+                @csrf
+                <button type="submit" aria-label="Konfirmasi pesanan sudah diterima"
+                    class="min-h-[44px] px-6 py-3 text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-brand-500 rounded-xl hover:shadow-lg transition-all flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Konfirmasi Terima
+                </button>
+            </form>
         </template>
 
-        <template x-if="order.status === 'Selesai'">
-            <a href="" @click.prevent="requestRefund()"
-                class="px-6 py-3 text-sm font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-xl hover:bg-amber-100 hover:border-amber-300 transition flex items-center gap-2">
+        <div x-data="{ refundOpen: false }" x-show="order.status === 'Selesai'" class="flex flex-col gap-2">
+            <button @click="refundOpen = !refundOpen"
+                class="px-6 py-3 min-h-[44px] text-sm font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-xl hover:bg-amber-100 transition flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
                 Ajukan Refund
-            </a>
-        </template>
+            </button>
+            <form x-show="refundOpen" x-cloak action="{{ route('customer.orders.refund', $order) }}" method="POST" class="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-3 max-w-md">
+                @csrf
+                <div>
+                    <label class="block text-xs font-semibold text-amber-800 mb-1" for="refund_amount">Nominal (maks Rp {{ number_format($order->grand_total, 0, ',', '.') }})</label>
+                    <input id="refund_amount" type="number" name="refund_amount" min="1000" max="{{ (int) $order->grand_total }}" required class="w-full px-3 py-2.5 min-h-[44px] border border-amber-300 rounded-xl text-sm bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-amber-800 mb-1" for="refund_reason">Alasan</label>
+                    <textarea id="refund_reason" name="refund_reason" rows="3" required placeholder="Ceritakan kendalanya…" class="w-full px-3 py-2.5 border border-amber-300 rounded-xl text-sm bg-white"></textarea>
+                </div>
+                <button class="px-5 py-2.5 min-h-[44px] bg-amber-600 text-white text-sm font-bold rounded-xl">Kirim Pengajuan</button>
+            </form>
+        </div>
 
-        <a :href="'/customer/pesanan/' + order.code + '/invoice'"
-            class="px-6 py-3 text-sm font-bold text-stone-600 bg-stone-100 border border-stone-200 rounded-xl hover:bg-stone-200 hover:border-stone-300 transition flex items-center gap-2">
+        <a href="{{ route('customer.orders.invoice', $order) }}"
+            class="px-6 py-3 min-h-[44px] text-sm font-bold text-stone-600 bg-stone-100 border border-stone-200 rounded-xl hover:bg-stone-200 transition flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Download Invoice
         </a>
     </div>
 </div>
 
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
 <script>
     function orderDetailPage() {
+        const snapToken = @json($snapToken ?? null);
+        function payNow() { if (snapToken && window.snap) window.snap.pay(snapToken); }
         return {
-            order: {
-                code: 'ORD-MZ9XK4L2',
-                date: '10 Juni 2026, 14:35 WIB',
-                status: 'Dikirim',
-                subtotal: 1562000,
-                shippingCost: 35000,
-                discount: 156200,
-                total: 1410800,
-                items: [
-                    { name: 'Sepatu Running Pro X', variant: 'Warna: Hitam, Ukuran: 42', price: 450000, qty: 2, image: 'https://placehold.co/96x96/e2e8f0/64748b?text=S' },
-                    { name: 'Tas Ransel Urban Explorer', variant: null, price: 275000, qty: 1, image: 'https://placehold.co/96x96/e2e8f0/64748b?text=T' },
-                    { name: 'Kaos Premium Cotton', variant: 'Warna: Navy, Ukuran: L', price: 129000, qty: 3, image: 'https://placehold.co/96x96/e2e8f0/64748b?text=K' },
-                ],
-                shippingAddress: {
-                    name: 'Budi Santoso',
-                    phone: '0812-3456-7890',
-                    full: 'Jl. Merdeka No. 123, RT 04/05, Kec. Sukamaju, Jakarta Selatan, 12345'
-                },
-                paymentInfo: {
-                    method: 'Transfer Bank BCA',
-                    bankName: 'Bank BCA',
-                    accountNumber: '8721 1234 5678 9012'
-                },
-            },
-            timeline: [
-                { label: 'Pesanan Dibuat', date: '10 Jun 2026, 14:35', icon: '🛒' },
-                { label: 'Pembayaran Dikonfirmasi', date: '10 Jun 2026, 15:02', icon: '💰' },
-                { label: 'Diproses', date: '10 Jun 2026, 16:20', icon: '📦' },
-                { label: 'Dikirim', date: '11 Jun 2026, 08:15', icon: '🚚' },
-                { label: 'Selesai', date: null, icon: '✅' },
-            ],
+            payNow,
+            order: @json($orderPayload ?? []),
+            timeline: @json($timelineSteps ?? []),
 
             get currentTimelineIdx() {
                 const statusMap = {
@@ -260,16 +265,11 @@
             },
 
             confirmReceived() {
-                if (confirm('Konfirmasi bahwa pesanan sudah diterima?')) {
-                    alert('Pesanan dikonfirmasi! Terima kasih sudah berbelanja.');
-                    this.order.status = 'Selesai';
-                }
+                // Digantikan form POST ke orders.receive (server-side, tercatat di timeline).
             },
 
             requestRefund() {
-                if (confirm('Ajukan pengembalian dana untuk pesanan ini?')) {
-                    alert('Refund berhasil diajukan. Tim kami akan menghubungi kamu.');
-                }
+                // Digantikan form refund di bawah (POST ke orders.refund).
             },
 
             formatRupiah(n) {

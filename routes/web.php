@@ -43,12 +43,17 @@ Route::get('/blog/category/{slug}', [BlogController::class, 'category'])->name('
 
 // Static pages
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
+Route::get('/page/preview/{page}', [\App\Http\Controllers\Storefront\PagePreviewController::class, 'show'])->name('page.preview')->middleware('auth');
 
 // Customer portal (auth required)
 Route::middleware(['auth'])->prefix('account')->name('customer.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/receive', [OrderController::class, 'receive'])->name('orders.receive');
+    Route::post('/orders/{order}/refund', [OrderController::class, 'refund'])->name('orders.refund');
+    Route::get('/orders/{order}/invoice', [\App\Http\Controllers\Billing\InvoiceController::class, 'invoice'])->name('orders.invoice');
+    Route::get('/orders/{order}/packing-slip', [\App\Http\Controllers\Billing\InvoiceController::class, 'packingSlip'])->name('orders.packing-slip');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -101,8 +106,8 @@ Route::get('/beli-aplikasi-toko-online', [SeoController::class, 'buySourceCode']
 // Sitemap
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
-// Payment webhook
-Route::post('/webhooks/payment/{gatewayId}', [\App\Http\Controllers\Payment\WebhookController::class, 'handle'])->name('webhook.payment');
+// Payment webhook (CSRF-exempt + throttled, see bootstrap/app.php)
+Route::post('/webhooks/payment/{gatewayId}', [\App\Http\Controllers\Payment\WebhookController::class, 'handle'])->name('webhook.payment')->middleware('throttle:60,1');
 
 // Docs page
 Route::get('/docs', fn() => view('pseo.docs'))->name('docs');

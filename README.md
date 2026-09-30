@@ -1,3 +1,11 @@
+# TOIKONLINE — Standalone Multilingual E-Commerce CMS (Laravel 12 + Filament 3)
+
+> E-commerce + CMS + Page Builder + Theme Engine + Payment/Shipping Engine + SEO/PSEO + API v1 + Webhooks + Analytics. Standalone, tanpa WordPress/SaaS.
+
+**Mulai cepat:** `composer install` → `cp .env.example .env` → `php artisan key:generate` → `php artisan migrate --seed` → `php artisan db:seed --class=Database\Seeders\PermissionsSeeder` → `npm install && npm run build` → `php artisan serve`. Admin: `/admin`. API: `/api/v1`.
+
+**Dokumen:** `docs/08-api-v1.md` (API) · `docs/09-admin-guide.md` (Admin) · `docs/10-security.md` (Keamanan) · `docs/11-testing.md` (Testing) · `DEPLOYMENT.md` (Deploy) · `progress.md` (Jurnal). Lokalisasi: `lang/id.json`, `lang/en.json`, `php artisan translations:scan`.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

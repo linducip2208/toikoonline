@@ -7,8 +7,20 @@ use App\Models\DynamicPopup;
 use App\Models\Menu;
 use App\Models\Order;
 use App\Models\Page;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\User;
+use App\Models\Coupon;
+use App\Models\Blog;
 use App\Observers\OrderObserver;
+use App\Policies\CategoryPolicy;
+use App\Policies\CouponPolicy;
+use App\Policies\OrderPolicy;
+use App\Policies\PagePolicy;
+use App\Policies\ProductPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +41,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Order::observe(OrderObserver::class);
+
+        Gate::policy(Product::class, ProductPolicy::class);
+        Gate::policy(Order::class, OrderPolicy::class);
+        Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Category::class, CategoryPolicy::class);
+        Gate::policy(Coupon::class, CouponPolicy::class);
+        Gate::policy(Page::class, PagePolicy::class);
 
         // CMS versi kita: share popup + menu + footer pages ke semua storefront view.
         // Dibungkus try/catch + cache agar aman saat migrate/fresh install.

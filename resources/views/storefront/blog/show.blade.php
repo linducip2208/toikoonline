@@ -91,16 +91,16 @@
 {{-- Breadcrumb --}}
 <div class="bg-white border-b border-stone-100">
     <div class="max-w-7xl mx-auto px-4 py-4">
-        <nav class="flex items-center gap-2 text-sm text-stone-500 flex-wrap">
+        <nav class="flex items-center gap-2 text-sm text-stone-500 flex-wrap" aria-label="Breadcrumb">
             <a href="{{ route('home') }}" class="hover:text-brand-600 transition-colors">Home</a>
-            <i class="fas fa-chevron-right text-[10px]"></i>
+            <i class="fas fa-chevron-right text-[10px]" aria-hidden="true"></i>
             <a href="{{ route('blog.index') }}" class="hover:text-brand-600 transition-colors">Blog</a>
             @if($post->category)
-                <i class="fas fa-chevron-right text-[10px]"></i>
+                <i class="fas fa-chevron-right text-[10px]" aria-hidden="true"></i>
                 <a href="{{ route('blog.category', $post->category->slug) }}" class="hover:text-brand-600 transition-colors">{{ $post->category->name }}</a>
             @endif
-            <i class="fas fa-chevron-right text-[10px]"></i>
-            <span class="text-stone-800 font-medium truncate max-w-[200px]">{{ $post->title }}</span>
+            <i class="fas fa-chevron-right text-[10px]" aria-hidden="true"></i>
+            <span class="text-stone-800 font-medium truncate max-w-[200px]" aria-current="page">{{ $post->title }}</span>
         </nav>
     </div>
 </div>
@@ -159,25 +159,25 @@
                 {{-- Share buttons --}}
                 <div class="mt-10 pt-6 border-t border-stone-200">
                     <p class="text-sm font-semibold text-stone-800 mb-3">Bagikan artikel ini:</p>
-                    <div class="flex flex-wrap gap-2">
+                    <div class="flex flex-wrap gap-2" role="group" aria-label="Bagikan artikel">
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
-                           target="_blank" rel="noopener"
-                           class="share-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1877f2] text-white text-sm font-medium hover:bg-[#166fe5]">
-                            <i class="fab fa-facebook-f"></i> Facebook
+                           target="_blank" rel="noopener" aria-label="Bagikan ke Facebook"
+                           class="share-btn inline-flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-xl bg-[#1877f2] text-white text-sm font-medium hover:bg-[#166fe5]">
+                            <i class="fab fa-facebook-f" aria-hidden="true"></i> Facebook
                         </a>
                         <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($post->title) }}"
-                           target="_blank" rel="noopener"
-                           class="share-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black text-white text-sm font-medium hover:bg-stone-800">
-                            <i class="fab fa-x-twitter"></i> Twitter
+                           target="_blank" rel="noopener" aria-label="Bagikan ke X (Twitter)"
+                           class="share-btn inline-flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-xl bg-black text-white text-sm font-medium hover:bg-stone-800">
+                            <i class="fab fa-x-twitter" aria-hidden="true"></i> Twitter
                         </a>
                         <a href="https://wa.me/?text={{ urlencode($post->title . ' — ' . url()->current()) }}"
-                           target="_blank" rel="noopener"
-                           class="share-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#25d366] text-white text-sm font-medium hover:bg-[#22c55e]">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
+                           target="_blank" rel="noopener" aria-label="Bagikan via WhatsApp"
+                           class="share-btn inline-flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-xl bg-[#25d366] text-white text-sm font-medium hover:bg-[#22c55e]">
+                            <i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp
                         </a>
-                        <button onclick="copyLink()"
-                                class="share-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-stone-100 text-stone-700 text-sm font-medium hover:bg-stone-200">
-                            <i class="fas fa-link"></i> <span id="copyText">Salin Link</span>
+                        <button onclick="copyLink()" aria-label="Salin tautan artikel"
+                                class="share-btn inline-flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-xl bg-stone-100 text-stone-700 text-sm font-medium hover:bg-stone-200">
+                            <i class="fas fa-link" aria-hidden="true"></i> <span id="copyText" role="status">Salin Link</span>
                         </button>
                     </div>
                 </div>
@@ -232,7 +232,7 @@
         </div>
 
         {{-- Sidebar --}}
-        <aside class="w-full lg:w-80 shrink-0">
+        <aside class="w-full lg:w-80 shrink-0" aria-label="Sidebar artikel">
             <div class="sidebar-sticky space-y-6">
 
                 {{-- Search --}}
@@ -240,10 +240,11 @@
                     <h4 class="font-semibold text-stone-800 mb-3 flex items-center gap-2">
                         <i class="fas fa-search text-brand-500"></i>Cari Artikel
                     </h4>
-                    <form action="{{ route('blog.index') }}" class="relative">
-                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-                        <input type="search" name="q" placeholder="Cari artikel..."
-                               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm
+                    <form action="{{ route('blog.index') }}" method="GET" role="search" aria-label="Cari artikel" class="relative">
+                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm" aria-hidden="true"></i>
+                        <label for="artikel-q" class="sr-only">Cari artikel</label>
+                        <input id="artikel-q" type="search" name="q" placeholder="Cari artikel..."
+                               class="w-full pl-10 pr-4 py-2.5 min-h-[44px] rounded-xl border border-stone-200 bg-stone-50 text-sm
                                       focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400">
                     </form>
                 </div>

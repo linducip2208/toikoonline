@@ -20,8 +20,9 @@ class RecentOrdersWidget extends BaseWidget
     {
         return $table
             ->query(
-                Order::query()->with('user')->latest()->limit(10)
+                Order::query()->with(['user', 'orderDetails'])->latest()->limit(10)
             )
+            ->emptyStateHeading('Belum ada pesanan')
             ->columns([
                 TextColumn::make('code')
                     ->label('Kode')

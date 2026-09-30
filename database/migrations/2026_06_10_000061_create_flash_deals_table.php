@@ -23,7 +23,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::statement('ALTER TABLE flash_deals CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement('ALTER TABLE flash_deals CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+        }
     }
 
     public function down(): void

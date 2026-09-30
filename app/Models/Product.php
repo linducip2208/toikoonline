@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Translatable;
 
 class Product extends Model
 {
+    use Translatable;
+
+    protected array $translatableAttributes = ['name', 'description', 'meta_title', 'meta_description'];
     protected $fillable = [
         'name',
         'added_by',
@@ -123,6 +127,16 @@ class Product extends Model
     public function stocks()
     {
         return $this->hasMany(ProductStock::class);
+    }
+
+    public function stockMovements()
+    {
+        return $this->hasMany(StockMovement::class);
+    }
+
+    public function purchaseOrderItems()
+    {
+        return $this->hasMany(PurchaseOrderItem::class);
     }
 
     public function taxes()

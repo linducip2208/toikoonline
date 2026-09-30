@@ -98,6 +98,24 @@ class OrderResource extends Resource
                             ->numeric()
                             ->disabled(),
                     ])->columns(3),
+                Section::make('Pengiriman (Shipment)')
+                    ->description('Shipment tercatat otomatis mengisi resi order + timeline lacak.')
+                    ->schema([
+                        Forms\Components\Placeholder::make('shipments_info')
+                            ->label('Shipment')
+                            ->content(function (Order $record) {
+                                if (! $record->exists) {
+                                    return 'Simpan order dulu.';
+                                }
+                                $rows = \App\Models\Shipment::where('order_id', $record->id)
+                                    ->orderByDesc('id')->get();
+                                if ($rows->isEmpty()) {
+                                    return 'Belum ada shipment. Buat via menu Pesanan → Shipments.';
+                                }
+
+                                return $rows->map(fn ($s) => '#'.$s->id.' · '.($s->courier ?? '-').' · '.($s->tracking_number ?? '-').' · '.$s->status)->implode("\n");
+                            }),
+                    ]),
             ]);
     }
 
@@ -134,6 +152,13 @@ class OrderResource extends Resource
                         'refunded' => 'warning',
                         default => 'gray',
                     }),
+                TextColumn::make('courier')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('tracking_number')
+                    ->label('Resi')
+                    ->searchable()
+                    ->copyable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -172,7 +197,8 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\Resources\OrderResource\RelationManagers\DeliveryHistoriesRelationManager::class,
+            \App\Filament\Resources\OrderResource\RelationManagers\RefundRequestsRelationManager::class,
         ];
     }
 

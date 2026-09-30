@@ -41,7 +41,7 @@ class HomeController extends Controller
         // di DB tetap tampil di posisi default agar fresh install aman.
         $defaultOrder = ['hero', 'voucher_rail', 'flash_deals', 'todays_deal', 'banners_1', 'categories', 'featured_products', 'banners_2', 'best_sellers', 'banners_3', 'category_products', 'new_products', 'coupons', 'brands', 'newsletter', 'final_cta'];
         try {
-            $dbSections = CmsSection::ordered()->get()->keyBy('key');
+            $dbSections = CmsSection::ordered()->keyBy('key');
             $cmsSectionOrder = [];
             foreach ($dbSections as $row) {
                 if ($row->is_active && in_array($row->key, $defaultOrder, true)) {
